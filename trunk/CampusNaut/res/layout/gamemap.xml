@@ -9,9 +9,9 @@
         android:clickable="true"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:apiKey="08RM7dFnIzJESWEU2MJOxv2Ee6MQpE0isq6sQUg"
+        android:apiKey="@string/steve_key"
      />
-    
+
     <LinearLayout
       android:id="@+id/checkinLayout"
       android:layout_width="wrap_content"
