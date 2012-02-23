@@ -1,11 +1,26 @@
 package ut.ece1778.campusnaut;
 
-import android.os.Bundle;
+import java.util.ArrayList;
+import java.util.List;
 
+
+import android.graphics.drawable.Drawable;
+import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import com.google.android.maps.GeoPoint;
+import com.google.android.maps.ItemizedOverlay;
 import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapController;
 import com.google.android.maps.MapView;
 import com.google.android.maps.MyLocationOverlay;
+import com.google.android.maps.OverlayItem;
 
 /**
  * In-Game Map view activity that automatically locates the current user on the
@@ -14,7 +29,7 @@ import com.google.android.maps.MyLocationOverlay;
  * @author Steve Chun-Hao Hu, Leo ChenLiang Man
  */
 public class GameMapView extends MapActivity {
-	private static final int ZOOM_LEVEL = 19;
+	private static final int ZOOM_LEVEL = 18;
     private static final Double INITIAL_LATITUDE = 43.668663 * 1E6;
     private static final Double INITIAL_LONGITUDE = -79.404459 * 1E6;
     private static final Double END_LATITUDE = 43.658729 * 1E6;
@@ -23,6 +38,10 @@ public class GameMapView extends MapActivity {
     private MapView mapView = null;
     private MapController mapController = null;
     private MyLocationOverlay myLocation = null;
+    private Animation myAnimation_Alpha;
+    private LinearLayout checkinLayout;
+    private TextView goalTitle;
+    private Button cancelCheckin;
 
     /**
      * Called when the activity is first created.
@@ -51,6 +70,18 @@ public class GameMapView extends MapActivity {
 
         // Must call this to show user location overlay on map
         mapView.postInvalidate();
+        
+        checkinLayout = (LinearLayout)findViewById(R.id.checkinLayout);
+        goalTitle = (TextView)findViewById(R.id.goalTitile);
+        cancelCheckin = (Button)findViewById(R.id.cancelCheckin);
+        cancelCheckin.setOnClickListener(onCancelCheckin);
+        
+        Drawable goalMarker = getResources().getDrawable(R.drawable.goal_icon);
+        goalMarker.setBounds(0, 0, goalMarker.getIntrinsicWidth(), goalMarker.getIntrinsicHeight());
+        mapView.getOverlays().add(new CurrentGameOverlay(
+        		this,goalMarker ,this.checkinLayout,this.goalTitle));
+        
+        
     }
 
     /**
@@ -93,4 +124,11 @@ public class GameMapView extends MapActivity {
     protected boolean isRouteDisplayed() {
         return false;
     }
+    
+    OnClickListener onCancelCheckin = new OnClickListener(){
+		public void onClick(View v) {
+			// TODO Auto-generated method stub
+			checkinLayout.setVisibility(4);
+		}
+    };
 }
