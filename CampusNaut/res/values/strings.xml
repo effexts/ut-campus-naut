@@ -3,5 +3,7 @@
 
     <string name="hello">Hello World, GameMapView!</string>
     <string name="app_name">CampusNaut</string>
+    <string name="steve_key">0xijSB17S2g_heS1sZTVhQF5x67GeRaV9lo_1WA</string>
+    <string name="leo_key">08RM7dFnIzJESWEU2MJOxv2Ee6MQpE0isq6sQUg</string>
 
 </resources>
