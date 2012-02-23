@@ -14,12 +14,11 @@ import com.google.android.maps.MyLocationOverlay;
  * @author Steve Chun-Hao Hu, Leo ChenLiang Man
  */
 public class GameMapView extends MapActivity {
-
-    private static final int ZOOM_LEVEL = 19;
-    private static final Double INITIAL_LATITUDE = 43.666092 * 1E6; // modify this later to cover entire UofT region
-    private static final Double INITIAL_LONGITUDE = -79.403805 * 1E6;
-    private static final Double END_LATITUDE = 43.661734 * 1E6;
-    private static final Double END_LONGITUDE = -79.399341 * 1E6;
+	private static final int ZOOM_LEVEL = 19;
+    private static final Double INITIAL_LATITUDE = 43.668663 * 1E6;
+    private static final Double INITIAL_LONGITUDE = -79.404459 * 1E6;
+    private static final Double END_LATITUDE = 43.658729 * 1E6;
+    private static final Double END_LONGITUDE = -79.384868 * 1E6;
     private static final Double DIMENSION = 1000.00;
     private MapView mapView = null;
     private MapController mapController = null;
