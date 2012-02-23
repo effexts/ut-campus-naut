@@ -12,6 +12,7 @@ import android.location.Location;
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapView;
 import com.google.android.maps.MyLocationOverlay;
+import com.google.android.maps.Overlay;
 
 /**
  * Custom location overlay to display user location with a external image
@@ -40,30 +41,46 @@ public class MyCustomLocationOverlay extends MyLocationOverlay {
      */
     public void onLocationChanged(Location loc) {
         super.onLocationChanged(loc);
-        GeoPoint myGeoPoint = new GeoPoint((int) (loc.getLatitude() * 1E6),
-                (int) (loc.getLongitude() * 1E6));
+        int curLat = (int) (loc.getLatitude() * 1E6);
+        int curLong = (int) (loc.getLongitude() * 1E6);
+        GeoPoint myGeoPoint = new GeoPoint(curLat,
+                curLong);
         mapView.getController().animateTo(myGeoPoint);
+
+        // Remove the blackoverlay rectangle if user is within it
+        for (int i = 0; i < mapView.getOverlays().size(); i++) {
+            Overlay curOverlay = mapView.getOverlays().get(i);
+            if (curOverlay instanceof BlackOverlay) {
+                if ((curLat < ((BlackOverlay) curOverlay).getLeft())
+                        && (curLat > ((BlackOverlay) curOverlay).getRight())
+                        && (curLong > ((BlackOverlay) curOverlay).getTop())
+                        && (curLong < ((BlackOverlay) curOverlay).getBottom())) {
+                    mapView.getOverlays().remove(curOverlay);
+                    mapView.postInvalidate();
+                }
+            }
+        }
     }
 
     /**
      * Override the built-in blue pin with a PNG user_icon and set the rotation.
      */
     @Override
-    protected void drawMyLocation(Canvas canvas, MapView mapView, Location lastFix, 
-    		GeoPoint myLocation, long when) {
-        // translate the GeoPoint to screen pixels
+    protected void drawMyLocation(Canvas canvas, MapView mapView, Location lastFix,
+            GeoPoint myLocation, long when) {
+        // Translate the GeoPoint to screen pixels
         Point screenPts = mapView.getProjection().toPixels(myLocation, null);
 
-        // load the user icon
+        // Load the user icon
         Bitmap userBitmap = BitmapFactory.decodeResource(
                 context.getResources(), R.drawable.user_icon);
 
-        // make the user_icon image 5 times smaller 
+        // Make the user_icon image 5 times smaller 
         int newHeight = (int) Math.round((double) userBitmap.getHeight() / IMAGE_SCALE);
         int newWidth = (int) Math.round((double) userBitmap.getWidth() / IMAGE_SCALE);
         userBitmap = Bitmap.createScaledBitmap(userBitmap, newWidth, newHeight, true);
 
-        // draw a circle around the user icon
+        // Draw a circle around the user icon
         Paint circlePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         circlePaint.setColor(CIRCLE_COLOR);
         circlePaint.setStyle(Style.FILL_AND_STROKE);
@@ -73,7 +90,7 @@ public class MyCustomLocationOverlay extends MyLocationOverlay {
         circlePaint.setStyle(Style.STROKE);
         canvas.drawCircle(screenPts.x, screenPts.y, CIRCLE_RADIUS, circlePaint);
 
-        // draw user_icon on the map
+        // Draw user_icon on the map
         canvas.drawBitmap(userBitmap,
                 screenPts.x - (userBitmap.getWidth() / 2),
                 screenPts.y - (userBitmap.getHeight() / 2),
