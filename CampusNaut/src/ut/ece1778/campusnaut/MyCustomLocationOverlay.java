@@ -9,6 +9,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Matrix;
 
 import android.graphics.Point;
@@ -76,6 +77,10 @@ public class MyCustomLocationOverlay extends MyLocationOverlay {
                 }
             }
         }
+        
+        //it's necessary to set update when my location is jumping around
+        GameData.setUpdateGoal(false);
+        
     }
 
     /**
@@ -105,6 +110,7 @@ public class MyCustomLocationOverlay extends MyLocationOverlay {
 	    	// If no more goals, game over
 	    	if (curGoals.size() == 0) {
 	    		GameData.getCurGoalHeader().setText("Mission Accomplished");
+	    		GameData.getCurGoalHeader().setBackgroundColor(Color.RED);
 	    	}
     	}
         Point screenPts = mapView.getProjection().toPixels(myLocation, null);

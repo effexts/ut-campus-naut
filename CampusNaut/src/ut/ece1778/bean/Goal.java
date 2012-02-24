@@ -35,6 +35,10 @@ public class Goal {
 	public Goal(){
 		
 	}
+	
+	public Goal(String title){
+		this.title = title;
+	}
 	public GeoPoint getGeoPoint() {
 		return this.geoPoint;
 	}
@@ -70,6 +74,7 @@ public class Goal {
 	}
 	public void calculateDistance(Location loc) {
 		distance = loc.distanceTo(location);
+		
 	}
 	
 	

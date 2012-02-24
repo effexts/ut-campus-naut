@@ -49,7 +49,15 @@ public class Game {
 	public void setGoals(ArrayList<Goal> goals) {
 		this.goals = goals;
 	}
-
+	
+	@Override
+	public String toString(){
+		String str = this.getGoals().size() + " :";
+		for(Goal goal : this.getGoals()){
+			str += goal.getTitle();
+		}
+		return  str;
+	}
 
 	
 }

@@ -1,71 +1,94 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
-    
+    android:layout_height="fill_parent" >
+
     <com.google.android.maps.MapView
-        android:id="@+id/myMap" 
-        android:clickable="true"
+        android:id="@+id/myMap"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:apiKey="@string/steve_key"
-     />
-    
+        android:apiKey="@string/leo_key"
+        android:clickable="true" />
+
     <LinearLayout
-      android:id="@+id/checkinLayout"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_alignParentLeft="true"
-      android:layout_alignParentRight="true"
-      android:layout_below="@+id/textView1"
-      android:layout_marginTop="136dp"
-      android:background="#123567"
-      android:orientation="vertical"
-      android:visibility="invisible" >
-
-      <TextView
-          android:id="@+id/goalTitile"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_weight="5.74"
-          android:text="Large Text"
-          android:textAppearance="?android:attr/textAppearanceLarge" />
-
-      <LinearLayout
-          android:id="@+id/linearLayout1"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:orientation="horizontal"
-          android:layout_marginTop="50dp" >
-
-          <Button
-              android:id="@+id/checkin"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_weight="6.88"
-              android:text="Check In" />
-
-          <Button
-              android:id="@+id/cancelCheckin"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_weight="4.40"
-              android:text="Cancel" />
-
-      </LinearLayout>
-
-  </LinearLayout>
-
-    <TextView
-        android:id="@+id/header"
+        android:id="@+id/checkinLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/textView1"
+        android:layout_marginTop="136dp"
+        android:background="#123567"
+        android:orientation="vertical"
+        android:visibility="invisible" >
+
+        <TextView
+            android:id="@+id/goalTitile"
+            android:layout_width="wrap_content"
+            android:layout_height="0dip"
+            android:layout_weight="5.74"
+            android:text=""
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <LinearLayout
+            android:id="@+id/buttonsLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:orientation="horizontal" >
+
+            <Button
+                android:id="@+id/checkin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="60"
+                android:text="@string/button_checkin" />
+
+            <Button
+                android:id="@+id/cancelCheckin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="30"
+                android:text="@string/button_cancel" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/headerLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:text="@string/goal_header"
+        android:background="#e0999999"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/goal_header"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="#123456" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/trigger"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:text="@string/button_trigger" />
+
+    <TextView
+        android:id="@+id/scoreBoard"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:text="@string/score_board"
         android:textColor="#123456"
-        android:layout_gravity="center"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:textSize="30dp"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
 </RelativeLayout>
