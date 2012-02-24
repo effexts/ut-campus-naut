@@ -3,6 +3,9 @@ package ut.ece1778.campusnaut;
 import java.util.ArrayList;
 import java.util.List;
 
+import ut.ece1778.bean.Game;
+import ut.ece1778.bean.Goal;
+
 
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -13,6 +16,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.ItemizedOverlay;
@@ -41,7 +45,12 @@ public class GameMapView extends MapActivity {
     private Animation myAnimation_Alpha;
     private LinearLayout checkinLayout;
     private TextView goalTitle;
+    private Button checkin;
     private Button cancelCheckin;
+    private CurrentGameOverlay gameOverlay;
+    private Game game;
+    private ArrayList<Goal> goals;
+    private Drawable goalMarker;
 
     /**
      * Called when the activity is first created.
@@ -60,7 +69,7 @@ public class GameMapView extends MapActivity {
         // Draw multiple black overlays on top of map
         for (Double curLatitude = INITIAL_LATITUDE; curLatitude > END_LATITUDE; curLatitude -= DIMENSION) {
             for (Double curLongitude = INITIAL_LONGITUDE; curLongitude < END_LONGITUDE; curLongitude += DIMENSION) {
-                mapView.getOverlays().add(new BlackOverlay(curLatitude, curLongitude, curLatitude - DIMENSION, curLongitude + DIMENSION));
+                //mapView.getOverlays().add(new BlackOverlay(curLatitude, curLongitude, curLatitude - DIMENSION, curLongitude + DIMENSION));
             }
         }
 
@@ -71,17 +80,31 @@ public class GameMapView extends MapActivity {
         // Must call this to show user location overlay on map
         mapView.postInvalidate();
         
+        //Checkin panel
         checkinLayout = (LinearLayout)findViewById(R.id.checkinLayout);
         goalTitle = (TextView)findViewById(R.id.goalTitile);
+        checkin = (Button)findViewById(R.id.checkin);
+        checkin.setOnClickListener(onCheckin);
         cancelCheckin = (Button)findViewById(R.id.cancelCheckin);
         cancelCheckin.setOnClickListener(onCancelCheckin);
+
+       
+        game = new Game();
+        goals = new ArrayList<Goal>();
+        Goal goal = new Goal("Roberts Library",43664300,-79399400);
+        goals.add(goal);
+        goal = new Goal("Athlete Centre",43662700,-79401200);
+        goals.add(goal);
+        goal = new Goal("Grad House",43663500,-79401500);
+        goals.add(goal);
         
-        Drawable goalMarker = getResources().getDrawable(R.drawable.goal_icon);
+        game.setGoals(goals);
+        
+        //add game layer
+        goalMarker = getResources().getDrawable(R.drawable.goal_icon);
         goalMarker.setBounds(0, 0, goalMarker.getIntrinsicWidth(), goalMarker.getIntrinsicHeight());
-        mapView.getOverlays().add(new CurrentGameOverlay(
-        		this,goalMarker ,this.checkinLayout,this.goalTitle));
-        
-        
+        gameOverlay = new CurrentGameOverlay(this,goalMarker ,this.checkinLayout,this.goalTitle,game);
+        mapView.getOverlays().add(gameOverlay );
     }
 
     /**
@@ -125,6 +148,25 @@ public class GameMapView extends MapActivity {
         return false;
     }
     
+    /**
+     * disappear checkin panel
+     */
+    OnClickListener onCheckin = new OnClickListener(){
+		public void onClick(View v) {
+			// TODO Auto-generated method stub
+			checkinLayout.setVisibility(4);
+			Toast.makeText(GameMapView.this,gameOverlay.getFocus().getTitle()+" visited." , Toast.LENGTH_LONG).show();
+			game.getGoals().remove(gameOverlay.getLastFocusedIndex());
+			mapView.getOverlays().remove(gameOverlay);
+			
+			gameOverlay = new CurrentGameOverlay(GameMapView.this,goalMarker ,checkinLayout,goalTitle,game);
+	        mapView.getOverlays().add(gameOverlay );
+			
+		}
+    };
+    /**
+     * disappear checkin panel
+     */
     OnClickListener onCancelCheckin = new OnClickListener(){
 		public void onClick(View v) {
 			// TODO Auto-generated method stub

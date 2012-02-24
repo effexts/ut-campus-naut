@@ -9,9 +9,9 @@
         android:clickable="true"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:apiKey="@string/steve_key"
+        android:apiKey="08RM7dFnIzJESWEU2MJOxv2Ee6MQpE0isq6sQUg"
      />
-
+    
     <LinearLayout
       android:id="@+id/checkinLayout"
       android:layout_width="wrap_content"
@@ -56,4 +56,16 @@
       </LinearLayout>
 
   </LinearLayout>
+
+    <TextView
+        android:id="@+id/header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:text="Current Goal"
+        android:textColor="#123456"
+        android:layout_gravity="center"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
 </RelativeLayout>
