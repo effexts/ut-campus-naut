@@ -32,7 +32,7 @@ public class GameMapView extends MapActivity {
     private static final Double INITIAL_LONGITUDE = -79.404459 * 1E6;
     private static final Double END_LATITUDE = 43.658729 * 1E6;
     private static final Double END_LONGITUDE = -79.384868 * 1E6;
-    private static final Double DIMENSION = 1000.00;
+    private static final Double DIMENSION = (Double) (MyCustomLocationOverlay.getDimension() * 2.0);
     private MapView mapView = null;
     private MapController mapController = null;
     private MyLocationOverlay myLocation = null;
@@ -62,7 +62,7 @@ public class GameMapView extends MapActivity {
         // Draw multiple black overlays on top of map
         for (Double curLatitude = INITIAL_LATITUDE; curLatitude > END_LATITUDE; curLatitude -= DIMENSION) {
             for (Double curLongitude = INITIAL_LONGITUDE; curLongitude < END_LONGITUDE; curLongitude += DIMENSION) {
-                //mapView.getOverlays().add(new BlackOverlay(curLatitude, curLongitude, curLatitude - DIMENSION, curLongitude + DIMENSION));
+                mapView.getOverlays().add(new BlackOverlay(curLatitude, curLongitude, curLatitude - DIMENSION, curLongitude + DIMENSION));
             }
         }
 

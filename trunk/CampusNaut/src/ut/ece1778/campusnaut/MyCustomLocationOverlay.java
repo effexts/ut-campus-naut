@@ -22,10 +22,11 @@ import com.google.android.maps.Overlay;
  */
 public class MyCustomLocationOverlay extends MyLocationOverlay {
 
-    private static final int CIRCLE_RADIUS = 80;
+    private static final int CIRCLE_RADIUS = 50;
     private static final int CIRCLE_COLOR = 0x30000000;
     private static final int CIRCLE_STROKE_COLOR = 0x99000000;
     private static final double IMAGE_SCALE = 5.0;
+    private static final int DIMENSION = 350;
     private MapView mapView = null;
     private Context context = null;
 
@@ -51,10 +52,22 @@ public class MyCustomLocationOverlay extends MyLocationOverlay {
         for (int i = 0; i < mapView.getOverlays().size(); i++) {
             Overlay curOverlay = mapView.getOverlays().get(i);
             if (curOverlay instanceof BlackOverlay) {
-                if ((curLat < ((BlackOverlay) curOverlay).getLeft())
+            	if (((curLat-DIMENSION < ((BlackOverlay) curOverlay).getLeft())
+                        && (curLat+DIMENSION > ((BlackOverlay) curOverlay).getRight())
+                        && (curLong> ((BlackOverlay) curOverlay).getTop())
+                        && (curLong < ((BlackOverlay) curOverlay).getBottom()))|| 
+                        ((curLat < ((BlackOverlay) curOverlay).getLeft())
                         && (curLat > ((BlackOverlay) curOverlay).getRight())
                         && (curLong > ((BlackOverlay) curOverlay).getTop())
-                        && (curLong < ((BlackOverlay) curOverlay).getBottom())) {
+                        && (curLong < ((BlackOverlay) curOverlay).getBottom()))|| 
+                        ((curLat < ((BlackOverlay) curOverlay).getLeft())
+                        && (curLat > ((BlackOverlay) curOverlay).getRight())
+                        && (curLong+DIMENSION > ((BlackOverlay) curOverlay).getTop())
+                        && (curLong-DIMENSION < ((BlackOverlay) curOverlay).getBottom()))|| 
+                        ((curLat-DIMENSION < ((BlackOverlay) curOverlay).getLeft())
+                        && (curLat+DIMENSION > ((BlackOverlay) curOverlay).getRight())
+                        && (curLong+DIMENSION > ((BlackOverlay) curOverlay).getTop())
+                        && (curLong-DIMENSION < ((BlackOverlay) curOverlay).getBottom()))){
                     mapView.getOverlays().remove(curOverlay);
                     mapView.postInvalidate();
                 }
@@ -95,5 +108,13 @@ public class MyCustomLocationOverlay extends MyLocationOverlay {
                 screenPts.x - (userBitmap.getWidth() / 2),
                 screenPts.y - (userBitmap.getHeight() / 2),
                 null);
+    }
+    
+    /**
+     * 
+     * @return DIMENSION of square around user
+     */
+    public static int getDimension() {
+    	return DIMENSION;
     }
 }
