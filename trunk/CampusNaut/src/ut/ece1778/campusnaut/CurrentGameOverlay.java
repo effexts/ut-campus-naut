@@ -24,7 +24,7 @@ public class CurrentGameOverlay extends ItemizedOverlay<OverlayItem>{
 	private TextView goalTitle;
 	private Animation myAnimation_Alpha;
 	private List<OverlayItem> items = new ArrayList<OverlayItem>();
-	private Game game;
+	//private Game game;
 	
 	
 
@@ -34,7 +34,7 @@ public class CurrentGameOverlay extends ItemizedOverlay<OverlayItem>{
 		this.context = context;
 		this.checkinLayout = checkinLayout;
 		this.goalTitle = goalTitle;
-		this.game = game;
+		//this.game = game;
 		// TODO Auto-generated constructor stub
 		boundCenterBottom(marker);
 		ArrayList<Goal> goals = game.getGoals();
