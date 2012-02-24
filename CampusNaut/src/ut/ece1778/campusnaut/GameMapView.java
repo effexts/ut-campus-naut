@@ -1,7 +1,6 @@
 package ut.ece1778.campusnaut;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import ut.ece1778.bean.Game;
 import ut.ece1778.bean.Goal;
@@ -11,20 +10,15 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.maps.GeoPoint;
-import com.google.android.maps.ItemizedOverlay;
 import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapController;
 import com.google.android.maps.MapView;
 import com.google.android.maps.MyLocationOverlay;
-import com.google.android.maps.OverlayItem;
 
 /**
  * In-Game Map view activity that automatically locates the current user on the
@@ -42,7 +36,6 @@ public class GameMapView extends MapActivity {
     private MapView mapView = null;
     private MapController mapController = null;
     private MyLocationOverlay myLocation = null;
-    private Animation myAnimation_Alpha;
     private LinearLayout checkinLayout;
     private TextView goalTitle;
     private Button checkin;
