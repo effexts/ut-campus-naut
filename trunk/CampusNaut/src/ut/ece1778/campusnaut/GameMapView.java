@@ -45,6 +45,9 @@ public class GameMapView extends MapActivity {
     private Game game;
     private ArrayList<Goal> goals;
     private Drawable goalMarker;
+    private Button trigger;
+    private TextView scoreBoard;
+    private int score  = 0;
 
     /**
      * Called when the activity is first created.
@@ -70,6 +73,7 @@ public class GameMapView extends MapActivity {
         // User location overlay
         myLocation = new MyCustomLocationOverlay(this, mapView);
         mapView.getOverlays().add(myLocation);
+        myLocation.enableMyLocation();
 
         // Must call this to show user location overlay on map
         mapView.postInvalidate();
@@ -77,13 +81,24 @@ public class GameMapView extends MapActivity {
         //Checkin panel
         checkinLayout = (LinearLayout)findViewById(R.id.checkinLayout);
         goalTitle = (TextView)findViewById(R.id.goalTitile);
+        scoreBoard = (TextView)findViewById(R.id.scoreBoard);
         checkin = (Button)findViewById(R.id.checkin);
         checkin.setOnClickListener(onCheckin);
         cancelCheckin = (Button)findViewById(R.id.cancelCheckin);
         cancelCheckin.setOnClickListener(onCancelCheckin);
-        // Set the current goal header
+        trigger =  (Button)findViewById(R.id.trigger);
+        trigger.setOnClickListener(onTrigger);
+        // Set the current widget
         GameData.setCurGoalHeader((TextView)findViewById(R.id.header));
-       
+        GameOverlayOperation.setCheckinLayout(checkinLayout);
+        GameOverlayOperation.setGoalTitle(goalTitle);
+        
+      //load marker resource
+        goalMarker = getResources().getDrawable(R.drawable.goal_icon);
+        goalMarker.setBounds(0, 0, goalMarker.getIntrinsicWidth(), goalMarker.getIntrinsicHeight());
+        GameOverlayOperation.setGoalMarker(goalMarker);
+        
+        //Instantiate a Game
         game = new Game();
         goals = new ArrayList<Goal>();
         Goal goal = new Goal("Robarts Library",43.664300,-79.399400);
@@ -96,12 +111,8 @@ public class GameMapView extends MapActivity {
 
         // Add to temporary data store
         GameData.add(game);
+       
         
-        //add game layer
-        goalMarker = getResources().getDrawable(R.drawable.goal_icon);
-        goalMarker.setBounds(0, 0, goalMarker.getIntrinsicWidth(), goalMarker.getIntrinsicHeight());
-        gameOverlay = new CurrentGameOverlay(this,goalMarker ,this.checkinLayout,this.goalTitle,game);
-        mapView.getOverlays().add(gameOverlay );
     }
 
     /**
@@ -111,10 +122,19 @@ public class GameMapView extends MapActivity {
     public void onResume() {
         super.onResume();
         myLocation.enableMyLocation();
+        
         // Always center the user location on the map
         myLocation.runOnFirstFix(new Runnable() {
             public void run() {
                 mapController.setCenter(myLocation.getMyLocation());
+                
+                gameOverlay = new CurrentGameOverlay(
+                		GameMapView.this, goalMarker, checkinLayout, goalTitle, 
+                		GameData.getGameList().get(0), myLocation.getMyLocation());
+                //mapView.getOverlays().add(gameOverlay );
+                GameOverlayOperation.setMyLocation(myLocation.getMyLocation());
+                GameOverlayOperation.setGameOverlay(gameOverlay);
+                GameOverlayOperation.addGameOverlay(mapView);
             }
         });
     }
@@ -134,6 +154,9 @@ public class GameMapView extends MapActivity {
     public void onDestroy() {
         super.onDestroy();
         GameData.clear();
+        GameOverlayOperation.clear();
+        mapView.getOverlays().remove(gameOverlay);
+        mapView.getOverlays().clear();
     }
     /**
      * Must override this.
@@ -152,30 +175,45 @@ public class GameMapView extends MapActivity {
     }
     
     /**
-     * disappear checkin panel
+     * do check-in a goal
      */
     OnClickListener onCheckin = new OnClickListener(){
 		public void onClick(View v) {
 			// Update the nearby goal
 			GameData.setUpdateGoal(false);
-			// TODO Auto-generated method stub
 			checkinLayout.setVisibility(4);
-			Toast.makeText(GameMapView.this,gameOverlay.getFocus().getTitle()+" visited." , Toast.LENGTH_LONG).show();
-			game.getGoals().remove(gameOverlay.getLastFocusedIndex());
-			mapView.getOverlays().remove(gameOverlay);
 			
-			gameOverlay = new CurrentGameOverlay(GameMapView.this,goalMarker ,checkinLayout,goalTitle,game);
-	        mapView.getOverlays().add(gameOverlay );
+			Toast.makeText(GameMapView.this,GameOverlayOperation.getGameOverlay().getFocus().getTitle()+" visited." , Toast.LENGTH_LONG).show();
+		    //remove checked goal from GameData's games list
+			GameData.getGameList().get(0).getGoals().remove(
+							Integer.parseInt(GameOverlayOperation.getGameOverlay().getFocus().getSnippet()));
+			System.out.println(GameData.getGameList().get(0).toString());
+			//reload goals list into CurrentGameOverlay
+			GameOverlayOperation.updateGameOverlay(getApplicationContext(), mapView, myLocation.getMyLocation());
+			//update score board
+			score += 50;	
+			scoreBoard.setText("Score: " + score);
+			
+			
 			
 		}
     };
     /**
-     * disappear checkin panel
+     * disappear check-in panel
      */
     OnClickListener onCancelCheckin = new OnClickListener(){
 		public void onClick(View v) {
-			// TODO Auto-generated method stub
 			checkinLayout.setVisibility(4);
+		}
+    };
+    
+    /**
+     * search nearby goals , if there are , show their markers.
+     */
+    OnClickListener onTrigger = new OnClickListener(){
+		public void onClick(View v) {
+			GameOverlayOperation.updateGameOverlay(getApplicationContext(), mapView, myLocation.getMyLocation());
+			mapController.setCenter(myLocation.getMyLocation());
 		}
     };
 }

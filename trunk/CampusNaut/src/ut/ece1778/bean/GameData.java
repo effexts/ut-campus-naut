@@ -1,6 +1,7 @@
 package ut.ece1778.bean;
 
 import java.util.ArrayList;
+
 import android.widget.TextView;
 /**
  * Temporary Datastore for all the Game data.
@@ -13,6 +14,7 @@ public final class GameData {
 	private static TextView curGoalHeader = null; // Closest goal 
 	private static boolean updateGoal = false; // If check-in, we should update nearby goal
 	
+
 	public static ArrayList<Game> getGameList() {
 		return gamesList;
 	}
@@ -52,4 +54,7 @@ public final class GameData {
 	public static TextView getCurGoalHeader() {
 		return curGoalHeader;
 	}
+	
+	
+	
 }
