@@ -13,7 +13,6 @@ import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.google.android.maps.GeoPoint;
 import com.google.android.maps.ItemizedOverlay;
 import com.google.android.maps.OverlayItem;
 
@@ -40,8 +39,7 @@ public class CurrentGameOverlay extends ItemizedOverlay<OverlayItem>{
 		ArrayList<Goal> goals = game.getGoals();
 		
 		for(int i = 0;i < goals.size();i++){
-			items.add(new OverlayItem(new GeoPoint(goals.get(i).getGoalLat(),goals.get(i).getGoalLon())
-			,goals.get(i).getGoalTitle(),""));
+			items.add(new OverlayItem(goals.get(i).getGeoPoint(),goals.get(i).getTitle(),""));
 		}
 		/*
 		items.add(new OverlayItem(new GeoPoint(43664300,-79399400)

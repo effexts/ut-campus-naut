@@ -3,6 +3,7 @@ package ut.ece1778.campusnaut;
 import java.util.ArrayList;
 
 import ut.ece1778.bean.Game;
+import ut.ece1778.bean.GameData;
 import ut.ece1778.bean.Goal;
 
 
@@ -55,10 +56,10 @@ public class GameMapView extends MapActivity {
 
         mapView = (MapView) findViewById(R.id.myMap);
         mapView.setBuiltInZoomControls(true);
-
+        
+        
         mapController = mapView.getController();
         mapController.setZoom(ZOOM_LEVEL);
-
         // Draw multiple black overlays on top of map
         for (Double curLatitude = INITIAL_LATITUDE; curLatitude > END_LATITUDE; curLatitude -= DIMENSION) {
             for (Double curLongitude = INITIAL_LONGITUDE; curLongitude < END_LONGITUDE; curLongitude += DIMENSION) {
@@ -80,18 +81,21 @@ public class GameMapView extends MapActivity {
         checkin.setOnClickListener(onCheckin);
         cancelCheckin = (Button)findViewById(R.id.cancelCheckin);
         cancelCheckin.setOnClickListener(onCancelCheckin);
-
+        // Set the current goal header
+        GameData.setCurGoalHeader((TextView)findViewById(R.id.header));
        
         game = new Game();
         goals = new ArrayList<Goal>();
-        Goal goal = new Goal("Roberts Library",43664300,-79399400);
+        Goal goal = new Goal("Robarts Library",43.664300,-79.399400);
         goals.add(goal);
-        goal = new Goal("Athlete Centre",43662700,-79401200);
+        goal = new Goal("Athlete Centre",43.662700,-79.401200);
         goals.add(goal);
-        goal = new Goal("Grad House",43663500,-79401500);
+        goal = new Goal("Grad House",43.663500,-79.401500);
         goals.add(goal);
-        
         game.setGoals(goals);
+
+        // Add to temporary data store
+        GameData.add(game);
         
         //add game layer
         goalMarker = getResources().getDrawable(R.drawable.goal_icon);
@@ -109,7 +113,6 @@ public class GameMapView extends MapActivity {
         myLocation.enableMyLocation();
         // Always center the user location on the map
         myLocation.runOnFirstFix(new Runnable() {
-
             public void run() {
                 mapController.setCenter(myLocation.getMyLocation());
             }
@@ -124,7 +127,14 @@ public class GameMapView extends MapActivity {
         super.onPause();
         myLocation.disableMyLocation();
     }
-
+    /**
+     * Disable location tracker upon exit map.
+     */
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        GameData.clear();
+    }
     /**
      * Must override this.
      */
@@ -146,6 +156,8 @@ public class GameMapView extends MapActivity {
      */
     OnClickListener onCheckin = new OnClickListener(){
 		public void onClick(View v) {
+			// Update the nearby goal
+			GameData.setUpdateGoal(false);
 			// TODO Auto-generated method stub
 			checkinLayout.setVisibility(4);
 			Toast.makeText(GameMapView.this,gameOverlay.getFocus().getTitle()+" visited." , Toast.LENGTH_LONG).show();

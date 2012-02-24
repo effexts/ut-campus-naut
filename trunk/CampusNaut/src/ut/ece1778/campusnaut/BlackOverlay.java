@@ -64,6 +64,7 @@ public class BlackOverlay extends Overlay {
         paint.setFakeBoldText(true);
 
         canvas.drawRect(rectangle, paint);
+       
         super.draw(canvas, mapView, shadow);
     }
 

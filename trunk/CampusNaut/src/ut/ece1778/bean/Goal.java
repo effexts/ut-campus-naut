@@ -1,27 +1,32 @@
 package ut.ece1778.bean;
 
+import android.location.Location;
+
+import com.google.android.maps.GeoPoint;
+
+
 /**
  * Entity Class Goal
  *@author Steve Chun-Hao Hu, Leo ChenLiang Man
  */
 public class Goal {
 
-	private String goalTitle;	//Goal Title
-	private int goalLat;	//Goal's Latitude (eight digit Integer)
-	private int goalLon;	//Goal's Longitude (eight digit Integer)
+	private String title;	//Goal Title
+	private double latitude;	//Goal's Latitude (eight digit Integer)
+	private double longitude;	//Goal's Longitude (eight digit Integer)
 	private String picDir;	//picture directory of goal
-	
-	/**
-	 * Goal constructor
-	 * @param goalTitle
-	 * @param goalLat
-	 * @param goalLon
-	 */
-	public Goal(String goalTitle, int goalLat, int goalLon) {
-		super();
-		this.goalTitle = goalTitle;
-		this.goalLat = goalLat;
-		this.goalLon = goalLon;
+	private GeoPoint geoPoint; //Geopoint
+	private double distance = 0; // Distance to the user
+	private Location location; // Location for calculating distance
+
+	public Goal(String title, double latitude, double longitude) {
+		this.title = title;
+		this.latitude = latitude;
+		this.longitude = longitude;
+		this.geoPoint = new GeoPoint((int)(latitude*1E6), (int)(longitude*1E6));
+		this.location = new Location(title);
+		this.location.setLatitude(latitude);
+		this.location.setLongitude(longitude);
 	}
 	
 	/**
@@ -30,25 +35,28 @@ public class Goal {
 	public Goal(){
 		
 	}
+	public GeoPoint getGeoPoint() {
+		return this.geoPoint;
+	}
 	
 	//Getters & Setters
-	public String getGoalTitle() {
-		return goalTitle;
+	public String getTitle() {
+		return title;
 	}
-	public void setGoalTitle(String goalTitle) {
-		this.goalTitle = goalTitle;
+	public void setTitle(String title) {
+		this.title = title;
 	}
-	public int getGoalLat() {
-		return goalLat;
+	public double getLatitude() {
+		return latitude;
 	}
-	public void setGoalLat(int goalLat) {
-		this.goalLat = goalLat;
+	public void setLatitude(double latitude) {
+		this.latitude = latitude;
 	}
-	public int getGoalLon() {
-		return goalLon;
+	public double getLongitude() {
+		return longitude;
 	}
-	public void setGoalLon(int goalLon) {
-		this.goalLon = goalLon;
+	public void setLongitude(double longitude) {
+		this.longitude = longitude;
 	}
 	public String getPicDir() {
 		return picDir;
@@ -57,5 +65,12 @@ public class Goal {
 		this.picDir = picDir;
 	}
 
+	public double getDistance() {
+		return distance;
+	}
+	public void calculateDistance(Location loc) {
+		distance = loc.distanceTo(location);
+	}
+	
 	
 }
