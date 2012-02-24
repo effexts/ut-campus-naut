@@ -1,13 +1,20 @@
 package ut.ece1778.campusnaut;
 
+import java.util.ArrayList;
+
+import ut.ece1778.bean.Game;
+import ut.ece1778.bean.GameData;
+import ut.ece1778.bean.Goal;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.Point;
 import android.location.Location;
+import android.util.Log;
 
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapView;
@@ -22,11 +29,8 @@ import com.google.android.maps.Overlay;
  */
 public class MyCustomLocationOverlay extends MyLocationOverlay {
 
-    private static final int CIRCLE_RADIUS = 50;
-    private static final int CIRCLE_COLOR = 0x30000000;
-    private static final int CIRCLE_STROKE_COLOR = 0x99000000;
     private static final double IMAGE_SCALE = 5.0;
-    private static final int DIMENSION = 350;
+    private static final int DIMENSION = 500;
     private MapView mapView = null;
     private Context context = null;
 
@@ -81,9 +85,40 @@ public class MyCustomLocationOverlay extends MyLocationOverlay {
     @Override
     protected void drawMyLocation(Canvas canvas, MapView mapView, Location lastFix,
             GeoPoint myLocation, long when) {
-        // Translate the GeoPoint to screen pixels
+    	
+    	// Only update nearby Goal in the beginning or after checkedin goal
+    	if (!GameData.getUpdateGoal()) {
+    		GameData.setUpdateGoal(true); // disable update until next check in
+	    	
+    		Game curGame = GameData.getGameList().get(0);
+	    	ArrayList<Goal> curGoals = curGame.getGoals();
+	    	// Keep track of minimum distance goal
+	    	double minDistance = Double.MAX_VALUE;
+	    	for (int i = 0; i < curGoals.size(); i ++) {
+	    		Goal curGoal = curGoals.get(i);
+	    		curGoal.calculateDistance(lastFix);
+	    		if (curGoal.getDistance() < minDistance) {
+	    			minDistance = curGoal.getDistance();
+	    			GameData.setNearbyGoal(curGoal);
+	    			GameData.getCurGoalHeader().setText(curGoal.getTitle());
+	    		}
+	    	}
+	    	// If no more goals, game over
+	    	if (curGoals.size() == 0) {
+	    		GameData.getCurGoalHeader().setText("Mission Accomplished");
+	    	}
+    	}
         Point screenPts = mapView.getProjection().toPixels(myLocation, null);
-
+        Point goalPts =  mapView.getProjection().toPixels(GameData.getNearbyGoal().getGeoPoint(), null);
+        double dlon = goalPts.x -  screenPts.x;
+        double dlat = goalPts.y -  screenPts.y;
+        float angle = (float) (Math.atan2(dlat, dlon)* 180.00/Math.PI);
+        // Set up the rotation matrix to point user at the goal
+        Matrix matrix = new Matrix();
+        matrix.postTranslate(-screenPts.x, -screenPts.y);
+        matrix.postRotate(angle);
+        matrix.postRotate(90);
+        matrix.postTranslate(screenPts.x, screenPts.y);       
         // Load the user icon
         Bitmap userBitmap = BitmapFactory.decodeResource(
                 context.getResources(), R.drawable.user_icon);
@@ -93,18 +128,11 @@ public class MyCustomLocationOverlay extends MyLocationOverlay {
         int newWidth = (int) Math.round((double) userBitmap.getWidth() / IMAGE_SCALE);
         userBitmap = Bitmap.createScaledBitmap(userBitmap, newWidth, newHeight, true);
 
-        // Draw a circle around the user icon
-        Paint circlePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        circlePaint.setColor(CIRCLE_COLOR);
-        circlePaint.setStyle(Style.FILL_AND_STROKE);
-        canvas.drawCircle(screenPts.x, screenPts.y, CIRCLE_RADIUS, circlePaint);
-
-        circlePaint.setColor(CIRCLE_STROKE_COLOR);
-        circlePaint.setStyle(Style.STROKE);
-        canvas.drawCircle(screenPts.x, screenPts.y, CIRCLE_RADIUS, circlePaint);
+        // rotated bitmap with stretched size
+        Bitmap rotatedBitmap = Bitmap.createBitmap(userBitmap, 0, 0, userBitmap.getWidth(), userBitmap.getHeight(), matrix, true);
 
         // Draw user_icon on the map
-        canvas.drawBitmap(userBitmap,
+        canvas.drawBitmap(rotatedBitmap,
                 screenPts.x - (userBitmap.getWidth() / 2),
                 screenPts.y - (userBitmap.getHeight() / 2),
                 null);

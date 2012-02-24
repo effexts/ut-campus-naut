@@ -63,7 +63,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:text="Current Goal"
+        android:text="@string/goal_header"
         android:textColor="#123456"
         android:layout_gravity="center"
         android:textAppearance="?android:attr/textAppearanceLarge" />
