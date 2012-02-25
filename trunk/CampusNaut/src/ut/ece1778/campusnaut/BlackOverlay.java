@@ -22,6 +22,11 @@ public class BlackOverlay extends Overlay {
     private Double right;
     private Double top;
     private Double bottom;
+    private Paint paint = new Paint();
+    private Point point = new Point();
+    private RectF rectangle = new RectF();
+    private GeoPoint gpTopLeft = null; 
+    private GeoPoint gpBottomRight = null; 
 
     /**
      * Constructor which takes in starting top-left GPS coordinate and
@@ -37,28 +42,30 @@ public class BlackOverlay extends Overlay {
         this.right = right;
         this.bottom = bottom;
         this.top = top;
+        this.gpTopLeft = new GeoPoint(left.intValue(), top.intValue());
+        this.gpBottomRight = new GeoPoint(right.intValue(), bottom.intValue());
     }
 
     @Override
     public void draw(Canvas canvas, MapView mapView, boolean shadow) {
         // Convert the GPS coordinates to screen pixels 
         Projection projection = mapView.getProjection();
-        GeoPoint geoPoint = new GeoPoint(left.intValue(), top.intValue());
+
 
         // Top left boundary
-        Point point_topleft = new Point();
-        projection.toPixels(geoPoint, point_topleft);
-        geoPoint = new GeoPoint(right.intValue(), bottom.intValue());
-
+        //Point point_topleft = new Point();
+        projection.toPixels(gpTopLeft, point);
+        
+        rectangle.set(point.x, point.y, 0, 0);
         // Bottom right boundary
-        Point point_bottomright = new Point();
-        projection.toPixels(geoPoint, point_bottomright);
+        //Point point_bottomright = new Point();
+        
+        projection.toPixels(gpBottomRight, point);
 
-        RectF rectangle = new RectF(point_topleft.x, point_topleft.y,
-                point_bottomright.x, point_bottomright.y);
-
+        //RectF rectangle = new RectF(point_topleft.x, point_topleft.y,
+               // point_bottomright.x, point_bottomright.y);
+        rectangle.set(rectangle.left, rectangle.top, point.x, point.y);
         // Set the rectangle drawing property
-        Paint paint = new Paint();
         paint.setColor(Color.BLACK);
         paint.setAntiAlias(true);
         paint.setFakeBoldText(true);
