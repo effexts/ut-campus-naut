@@ -33,7 +33,7 @@ public class MyCustomLocationOverlay extends MyLocationOverlay {
     private static final int DIMENSION = 500;
     private MapView mapView = null;
     private Context context = null;
-
+    private Matrix matrix = new Matrix();
     public MyCustomLocationOverlay(Context context, MapView mapView) {
         super(context, mapView);
         this.context = context;
@@ -119,7 +119,8 @@ public class MyCustomLocationOverlay extends MyLocationOverlay {
         double dlat = goalPts.y -  screenPts.y;
         float angle = (float) (Math.atan2(dlat, dlon)* 180.00/Math.PI);
         // Set up the rotation matrix to point user at the goal
-        Matrix matrix = new Matrix();
+
+        matrix.reset();
         matrix.postTranslate(-screenPts.x, -screenPts.y);
         matrix.postRotate(angle);
         matrix.postRotate(90);
