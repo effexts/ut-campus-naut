@@ -56,22 +56,10 @@ public class MyCustomLocationOverlay extends MyLocationOverlay {
         for (int i = 0; i < mapView.getOverlays().size(); i++) {
             Overlay curOverlay = mapView.getOverlays().get(i);
             if (curOverlay instanceof BlackOverlay) {
-            	if (((curLat-DIMENSION < ((BlackOverlay) curOverlay).getLeft())
-                        && (curLat+DIMENSION > ((BlackOverlay) curOverlay).getRight())
-                        && (curLong> ((BlackOverlay) curOverlay).getTop())
-                        && (curLong < ((BlackOverlay) curOverlay).getBottom()))|| 
-                        ((curLat < ((BlackOverlay) curOverlay).getLeft())
-                        && (curLat > ((BlackOverlay) curOverlay).getRight())
-                        && (curLong > ((BlackOverlay) curOverlay).getTop())
-                        && (curLong < ((BlackOverlay) curOverlay).getBottom()))|| 
-                        ((curLat < ((BlackOverlay) curOverlay).getLeft())
-                        && (curLat > ((BlackOverlay) curOverlay).getRight())
-                        && (curLong+DIMENSION > ((BlackOverlay) curOverlay).getTop())
-                        && (curLong-DIMENSION < ((BlackOverlay) curOverlay).getBottom()))|| 
-                        ((curLat-DIMENSION < ((BlackOverlay) curOverlay).getLeft())
-                        && (curLat+DIMENSION > ((BlackOverlay) curOverlay).getRight())
-                        && (curLong+DIMENSION > ((BlackOverlay) curOverlay).getTop())
-                        && (curLong-DIMENSION < ((BlackOverlay) curOverlay).getBottom()))){
+            	if (curLong >= ((BlackOverlay) curOverlay).getLeft() && 
+            			curLong <= ((BlackOverlay) curOverlay).getRight() &&
+            			curLat >= ((BlackOverlay) curOverlay).getBottom() &&
+            					curLat	<= ((BlackOverlay) curOverlay).getTop()) {
                     mapView.getOverlays().remove(curOverlay);
                     mapView.postInvalidate();
                 }
