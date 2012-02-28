@@ -42,8 +42,8 @@ public class BlackOverlay extends Overlay {
         this.right = right;
         this.bottom = bottom;
         this.top = top;
-        this.gpTopLeft = new GeoPoint(left.intValue(), top.intValue());
-        this.gpBottomRight = new GeoPoint(right.intValue(), bottom.intValue());
+        this.gpTopLeft = new GeoPoint(top.intValue(),left.intValue());
+        this.gpBottomRight = new GeoPoint(bottom.intValue(),right.intValue());
     }
 
     @Override

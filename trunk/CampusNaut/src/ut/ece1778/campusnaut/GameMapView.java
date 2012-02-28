@@ -34,6 +34,8 @@ public class GameMapView extends MapActivity {
     private static final Double END_LATITUDE = 43.658729 * 1E6;
     private static final Double END_LONGITUDE = -79.384868 * 1E6;
     private static final Double DIMENSION = (Double) (MyCustomLocationOverlay.getDimension() * 2.0);
+    private static final Double LAT_D = DIMENSION * 1.5 ;
+    private static final Double LONG_D = DIMENSION * 2;
     private MapView mapView = null;
     private MapController mapController = null;
     private MyLocationOverlay myLocation = null;
@@ -60,13 +62,12 @@ public class GameMapView extends MapActivity {
         mapView = (MapView) findViewById(R.id.myMap);
         mapView.setBuiltInZoomControls(true);
         
-        
         mapController = mapView.getController();
         mapController.setZoom(ZOOM_LEVEL);
         // Draw multiple black overlays on top of map
-        for (Double curLatitude = INITIAL_LATITUDE; curLatitude > END_LATITUDE; curLatitude -= DIMENSION) {
-            for (Double curLongitude = INITIAL_LONGITUDE; curLongitude < END_LONGITUDE; curLongitude += DIMENSION) {
-                mapView.getOverlays().add(new BlackOverlay(curLatitude, curLongitude, curLatitude - DIMENSION, curLongitude + DIMENSION));
+        for (Double curLatitude = INITIAL_LATITUDE; curLatitude > END_LATITUDE; curLatitude -= LAT_D) {
+            for (Double curLongitude = INITIAL_LONGITUDE; curLongitude < END_LONGITUDE; curLongitude += LONG_D) {
+                mapView.getOverlays().add(new BlackOverlay(curLongitude, curLatitude , curLongitude + LONG_D, curLatitude - LAT_D ));
             }
         }
 
