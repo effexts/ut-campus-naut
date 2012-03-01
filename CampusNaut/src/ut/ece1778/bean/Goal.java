@@ -14,6 +14,8 @@ public class Goal {
 	private String title;	//Goal Title
 	private double latitude;	//Goal's Latitude (eight digit Integer)
 	private double longitude;	//Goal's Longitude (eight digit Integer)
+	private int state = 1; //finished goal or not(0,1)
+
 	private String picDir;	//picture directory of goal
 	private GeoPoint geoPoint; //Geopoint
 	private double distance = 0; // Distance to the user
@@ -27,6 +29,7 @@ public class Goal {
 		this.location = new Location(title);
 		this.location.setLatitude(latitude);
 		this.location.setLongitude(longitude);
+		
 	}
 	
 	/**
@@ -36,9 +39,13 @@ public class Goal {
 		
 	}
 	
-	public Goal(String title){
-		this.title = title;
+	public int getStates() {
+		return state;
 	}
+	public void toFinish(){
+		this.state = 0;
+	}
+	
 	public GeoPoint getGeoPoint() {
 		return this.geoPoint;
 	}
