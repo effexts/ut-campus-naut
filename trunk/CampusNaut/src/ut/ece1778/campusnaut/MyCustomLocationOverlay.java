@@ -68,7 +68,11 @@ public class MyCustomLocationOverlay extends MyLocationOverlay {
         
         //it's necessary to set update when my location is jumping around
         GameData.setUpdateGoal(false);
-        
+        try{
+        	GameOverlayOperation.updateGameOverlay(context, mapView, loc);
+        }catch(Exception e){
+        	e.printStackTrace();
+        }
     }
 
     /**

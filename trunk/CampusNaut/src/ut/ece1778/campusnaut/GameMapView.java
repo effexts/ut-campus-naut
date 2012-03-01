@@ -128,7 +128,7 @@ public class GameMapView extends MapActivity {
         myLocation.runOnFirstFix(new Runnable() {
             public void run() {
                 mapController.setCenter(myLocation.getMyLocation());
-                
+                mapView.getOverlays().remove(gameOverlay);
                 gameOverlay = new CurrentGameOverlay(
                 		GameMapView.this, goalMarker, checkinLayout, goalTitle, 
                 		GameData.getGameList().get(0), myLocation.getMyLocation());
@@ -186,8 +186,9 @@ public class GameMapView extends MapActivity {
 			
 			Toast.makeText(GameMapView.this,GameOverlayOperation.getGameOverlay().getFocus().getTitle()+" visited." , Toast.LENGTH_LONG).show();
 		    //remove checked goal from GameData's games list
-			GameData.getGameList().get(0).getGoals().remove(
-							Integer.parseInt(GameOverlayOperation.getGameOverlay().getFocus().getSnippet()));
+			/*GameData.getGameList().get(0).getGoals().remove(
+							Integer.parseInt(GameOverlayOperation.getGameOverlay().getFocus().getSnippet()));*/
+			GameData.getGameList().get(0).getGoals().get(GameOverlayOperation.getGameOverlay().getLastFocusedIndex());
 			System.out.println(GameData.getGameList().get(0).toString());
 			//reload goals list into CurrentGameOverlay
 			GameOverlayOperation.updateGameOverlay(getApplicationContext(), mapView, myLocation.getMyLocation());
@@ -214,7 +215,9 @@ public class GameMapView extends MapActivity {
     OnClickListener onTrigger = new OnClickListener(){
 		public void onClick(View v) {
 			GameOverlayOperation.updateGameOverlay(getApplicationContext(), mapView, myLocation.getMyLocation());
+			System.out.println(GameOverlayOperation.getGameOverlay().getItems().size());
 			mapController.setCenter(myLocation.getMyLocation());
+			//GameOverlayOperation.addGameOverlay(mapView);
 		}
     };
 }

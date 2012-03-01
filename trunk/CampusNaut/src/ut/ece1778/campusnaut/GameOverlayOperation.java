@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapView;
@@ -39,12 +40,17 @@ public final class GameOverlayOperation {
 	 */
 	public static void updateGameOverlay(Context context, MapView mapView,Location loc){
 		
-		mapView.getOverlays().remove(gameOverlay);
+		//mapView.getOverlays().remove(gameOverlay);
 		GeoPoint myGeoPoint = new GeoPoint((int) (loc.getLatitude() * 1E6),(int) (loc.getLongitude() * 1E6));
-		gameOverlay = new CurrentGameOverlay(
-				context ,goalMarker ,checkinLayout,goalTitle,GameData.getGameList().get(0), myGeoPoint);
-        mapView.getOverlays().add(gameOverlay );
+		/*gameOverlay = new CurrentGameOverlay(
+				context ,goalMarker ,checkinLayout,goalTitle,GameData.getGameList().get(0), myGeoPoint);*/
+        //mapView.getOverlays().add(gameOverlay );
+        gameOverlay.removeAll();
+        gameOverlay.loadItem(myGeoPoint);
         
+        if(gameOverlay.getItems().size()>0){
+        	Toast.makeText(context, "Goal found!", Toast.LENGTH_SHORT).show();
+        }
 	}
 	
 	/**
@@ -55,11 +61,12 @@ public final class GameOverlayOperation {
 	 */
 	public static void updateGameOverlay(Context context, MapView mapView,GeoPoint myLocation){
 		
-		mapView.getOverlays().remove(gameOverlay);		
+		/*mapView.getOverlays().remove(gameOverlay);		
 		gameOverlay = new CurrentGameOverlay(
 				context ,goalMarker ,checkinLayout,goalTitle,GameData.getGameList().get(0), myLocation);
-        mapView.getOverlays().add(gameOverlay );
-        
+        mapView.getOverlays().add(gameOverlay );*/
+        gameOverlay.removeAll();
+        gameOverlay.loadItem(myLocation);
 	}
 	
 	/**

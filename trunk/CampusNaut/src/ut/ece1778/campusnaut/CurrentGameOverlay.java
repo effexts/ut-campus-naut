@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ut.ece1778.bean.Game;
+import ut.ece1778.bean.GameData;
 import ut.ece1778.bean.Goal;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.view.animation.Animation;
@@ -30,6 +32,8 @@ public class CurrentGameOverlay extends ItemizedOverlay<OverlayItem>{
 	private TextView goalTitle;
 	private Animation myAnimation_Alpha;
 	private List<OverlayItem> items = new ArrayList<OverlayItem>();
+	ArrayList<Goal> goals = new ArrayList<Goal>();
+	Location location;
 	//private Game game;
 	public static final double VISUAL_FIELD = 100.0; // unit meter. any goal out of this range will not be shown.
 	
@@ -51,24 +55,44 @@ public class CurrentGameOverlay extends ItemizedOverlay<OverlayItem>{
 		this.goalTitle = goalTitle;
 		//this.game = game;
 		boundCenterBottom(marker);
-		ArrayList<Goal> goals = game.getGoals();
-		Location location = new Location("myLocation");
-		
+		goals = game.getGoals();
+		location = new Location("myLocation");
+		location.setLatitude(myLocation.getLatitudeE6()*1E-6);
+		location.setLongitude(myLocation.getLongitudeE6()*1E-6);
 		//add nearby goals(within VISUAL_FIELD) into layer items
 		for(int i = 0;i < goals.size();i++){	
-			location.setLatitude(myLocation.getLatitudeE6()*1E-6);
-			location.setLongitude(myLocation.getLongitudeE6()*1E-6);
+			
 			goals.get(i).calculateDistance(location);
 			if(goals.get(i).getDistance() < VISUAL_FIELD ){
 				items.add(new OverlayItem(goals.get(i).getGeoPoint(),goals.get(i).getTitle(),""+i));
 			}
 		}
-		
 		populate();
-		
-		
 	}
 
+	public void loadItem( GeoPoint myLocation){
+		for(int i = 0;i < goals.size();i++){	
+			location.setLatitude(myLocation.getLatitudeE6()*1E-6);
+			location.setLongitude(myLocation.getLongitudeE6()*1E-6);
+			goals.get(i).calculateDistance(location);
+			if(goals.get(i).getDistance() < VISUAL_FIELD &&
+					goals.get(i).getStates() == 1){
+				items.add(new OverlayItem(goals.get(i).getGeoPoint(),goals.get(i).getTitle(),""+i));
+			}
+			
+		}
+		populate();
+	}
+	//remove all items
+	public void removeAll(){
+		
+		if( this.size()>0 ){
+				items.clear();			
+			
+		}
+		populate();
+	}
+	
 	@Override
 	protected OverlayItem createItem(int i) {
 		// TODO Auto-generated method stub
@@ -85,7 +109,7 @@ public class CurrentGameOverlay extends ItemizedOverlay<OverlayItem>{
 	 * @see com.google.android.maps.ItemizedOverlay#onTap(int)
 	 */
     protected boolean onTap(int i) {
-
+/*
     	if(checkinLayout.getVisibility() == 4){
 			//show panel
     		checkinLayout.setVisibility(0);
@@ -96,7 +120,12 @@ public class CurrentGameOverlay extends ItemizedOverlay<OverlayItem>{
 			goalTitle.setText(" "+items.get(i).getTitle());
 		}else{
 			checkinLayout.setVisibility(4);
-		}
+		}*/
+    	//GameData.getGameList().get(0).getGoals().remove(Integer.parseInt(items.get(i).getSnippet()));
+    	Intent intent = new Intent(context, Checkin.class);
+    	intent.putExtra("focus", Integer.parseInt(items.get(i).getSnippet()));
+    	context.startActivity(intent);
+    	
       return( true);
     }
     
