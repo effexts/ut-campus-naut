@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ut.ece1778.bean.Game;
-import ut.ece1778.bean.GameData;
 import ut.ece1778.bean.Goal;
 
 import android.content.Context;
@@ -12,7 +11,6 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
