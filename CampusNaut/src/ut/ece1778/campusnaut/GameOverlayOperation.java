@@ -1,6 +1,5 @@
 package ut.ece1778.campusnaut;
 
-import ut.ece1778.bean.GameData;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
@@ -49,7 +48,7 @@ public final class GameOverlayOperation {
         gameOverlay.loadItem(myGeoPoint);
         
         if(gameOverlay.getItems().size()>0){
-        	Toast.makeText(context, "Goal found!", Toast.LENGTH_SHORT).show();
+        	//Toast.makeText(context, "Goal found!", Toast.LENGTH_SHORT).show();
         }
 	}
 	

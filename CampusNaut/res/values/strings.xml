@@ -1,6 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
+    <style name="buttontext">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">14dp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:shadowColor">#000000</item>
+        <item name="android:shadowDx">1</item>
+        <item name="android:shadowDy">1</item>
+        <item name="android:shadowRadius">2</item>
+    </style>
+    <color name="blue01">#12286D</color>
+    <color name="blue02">#1A3793</color>
+    <color name="blue03">#182D6E</color>
+    <color name="white01">#FFFFFF</color>
+    <color name="white02">#DDDDDD</color>
+    <color name="grey01">#ACA899</color>
     <string name="goal_header">Loading Nearby Goal</string>
     <string name="app_name">CampusNaut</string>
     <string name="steve_key">0xijSB17S2g_heS1sZTVhQF5x67GeRaV9lo_1WA</string>
@@ -9,5 +26,15 @@
     <string name="button_cancel">Cancel</string>
     <string name="button_trigger">Trigger</string>
     <string name="score_board">Score: 0</string>
-
+	<string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="create">Create</string>
+    <string name="age">Age Group</string>
+    <string name="accname">Account Name</string>
+    <string name="male">Male</string>
+    <string name="female">Female</string>
+    <string name="newacc">Create a new account</string>
+    <string name="salary">Salary Range</string>
+    <string name="cfpassword">Confirm Password</string>
 </resources>
