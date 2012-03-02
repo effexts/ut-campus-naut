@@ -27,6 +27,7 @@ public class BlackOverlay extends Overlay {
     private RectF rectangle = new RectF();
     private GeoPoint gpTopLeft = null; 
     private GeoPoint gpBottomRight = null; 
+    private final int COLOR = 0xff12286d;
 
     /**
      * Constructor which takes in starting top-left GPS coordinate and
@@ -66,7 +67,7 @@ public class BlackOverlay extends Overlay {
                // point_bottomright.x, point_bottomright.y);
         rectangle.set(rectangle.left, rectangle.top, point.x, point.y);
         // Set the rectangle drawing property
-        paint.setColor(Color.BLACK);
+        paint.setColor(COLOR);
         paint.setAntiAlias(true);
         paint.setFakeBoldText(true);
 

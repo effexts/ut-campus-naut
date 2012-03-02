@@ -29,10 +29,10 @@ import com.google.android.maps.MyLocationOverlay;
  */
 public class GameMapView extends MapActivity {
 	private static final int ZOOM_LEVEL = 18;
-    private static final Double INITIAL_LATITUDE = 43.668663 * 1E6;
-    private static final Double INITIAL_LONGITUDE = -79.404459 * 1E6;
-    private static final Double END_LATITUDE = 43.658729 * 1E6;
-    private static final Double END_LONGITUDE = -79.384868 * 1E6;
+    private static final Double INITIAL_LATITUDE = 43.669858 * 1E6;
+    private static final Double INITIAL_LONGITUDE = -79.40727 * 1E6;
+    private static final Double END_LATITUDE = 43.657859 * 1E6;
+    private static final Double END_LONGITUDE = -79.381928 * 1E6;
     private static final Double DIMENSION = (Double) (MyCustomLocationOverlay.getDimension() * 2.0);
     private static final Double LAT_D = DIMENSION * 1.5 ;
     private static final Double LONG_D = DIMENSION * 2;
