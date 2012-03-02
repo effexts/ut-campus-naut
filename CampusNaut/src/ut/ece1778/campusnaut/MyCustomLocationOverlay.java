@@ -30,7 +30,7 @@ import com.google.android.maps.Overlay;
 public class MyCustomLocationOverlay extends MyLocationOverlay {
 
     private static final double IMAGE_SCALE = 5.0;
-    private static final int DIMENSION = 500;
+    private static final int DIMENSION = 400;
     private MapView mapView = null;
     private Context context = null;
     private Matrix matrix = new Matrix();
