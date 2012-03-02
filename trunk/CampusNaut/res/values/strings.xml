@@ -25,7 +25,8 @@
     <string name="button_checkin">Check In</string>
     <string name="button_cancel">Cancel</string>
     <string name="button_trigger">Trigger</string>
-    <string name="score_board">Score: 0</string>
+    <string name="score_board">Scores: 0</string>
+    <string name="level_board">Levels: 1</string>
 	<string name="email">Email</string>
     <string name="password">Password</string>
     <string name="login">Login</string>

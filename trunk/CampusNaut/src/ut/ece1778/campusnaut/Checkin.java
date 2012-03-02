@@ -6,39 +6,43 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
 
 public class Checkin extends Activity{
 
-	private Button ck;
-	private Button bk;
+	private Button checkin;
+	private Button back;
+	private TextView checkinTitle;
+	private int gid;
 
 	 public void onCreate(Bundle savedInstanceState) {
 	        super.onCreate(savedInstanceState);
 	        setContentView(R.layout.checkin);
 	        
-	        ck = (Button)findViewById(R.id.CK);
-	        bk = (Button)findViewById(R.id.BK);
+	        checkin = (Button)findViewById(R.id.CK);
+	        back = (Button)findViewById(R.id.BK);
+	         checkin.setOnClickListener(onCheckin);
+	        back.setOnClickListener(onBack);
+	        checkinTitle = (TextView)findViewById(R.id.checkinTitle);
 	        
-	        ck.setOnClickListener(onCheckin);
-	        bk.setOnClickListener(onBack);
+	        Bundle bundle = getIntent().getExtras();
+	        gid = bundle.getInt("focus");
 	        
-	        
-	        
+	        checkinTitle.setText(GameData.getGameList().get(0).getGoals().get(gid).getTitle());
 	 }
 	 
 	 OnClickListener onCheckin = new OnClickListener(){
 
 		public void onClick(View v) {
 			// TODO Auto-generated method stub
-			Bundle bundle = getIntent().getExtras();
-	        int gid = bundle.getInt("focus");
+			
 	        Toast.makeText(Checkin.this,
 	        		GameData.getGameList().get(0).getGoals().get(gid).getTitle()+" visited." , Toast.LENGTH_LONG).show();
 	        GameData.getGameList().get(0).getGoals().remove(gid);
-			
+			GameData.setScores(GameData.getScores()+50);
 			finish();
 		}
 		 

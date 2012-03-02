@@ -10,7 +10,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
-import android.view.animation.Animation;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -26,9 +25,7 @@ import com.google.android.maps.OverlayItem;
 public class CurrentGameOverlay extends ItemizedOverlay<OverlayItem>{
 
 	private Context context;
-	private LinearLayout checkinLayout;
-	private TextView goalTitle;
-	private Animation myAnimation_Alpha;
+	
 	private List<OverlayItem> items = new ArrayList<OverlayItem>();
 	ArrayList<Goal> goals = new ArrayList<Goal>();
 	Location location;
@@ -49,8 +46,7 @@ public class CurrentGameOverlay extends ItemizedOverlay<OverlayItem>{
 			LinearLayout checkinLayout,TextView goalTitle, Game game , GeoPoint myLocation) {
 		super(marker);
 		this.context = context;
-		this.checkinLayout = checkinLayout;
-		this.goalTitle = goalTitle;
+		
 		//this.game = game;
 		boundCenterBottom(marker);
 		goals = game.getGoals();

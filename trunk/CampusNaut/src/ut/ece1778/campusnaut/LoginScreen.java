@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.Toast;
+
 /**
  * This activity allows the user to login with account. 
  * The activity is skipped if the user has previously
