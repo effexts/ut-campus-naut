@@ -41,15 +41,15 @@ public class GameMapView extends MapActivity {
     private MyLocationOverlay myLocation = null;
     private LinearLayout checkinLayout;
     private TextView goalTitle;
-    private Button checkin;
-    private Button cancelCheckin;
+    //private Button checkin;
+    //private Button cancelCheckin;
     private CurrentGameOverlay gameOverlay;
     private Game game;
     private ArrayList<Goal> goals;
     private Drawable goalMarker;
     private Button trigger;
     private TextView scoreBoard;
-    private int score  = 0;
+    
 
     /**
      * Called when the activity is first created.
@@ -60,7 +60,7 @@ public class GameMapView extends MapActivity {
         setContentView(R.layout.gamemap);
 
         mapView = (MapView) findViewById(R.id.myMap);
-        mapView.setBuiltInZoomControls(true);
+        mapView.setBuiltInZoomControls(false);
         
         mapController = mapView.getController();
         mapController.setZoom(ZOOM_LEVEL);
@@ -79,15 +79,18 @@ public class GameMapView extends MapActivity {
         // Must call this to show user location overlay on map
         mapView.postInvalidate();
         
-        //Checkin panel
+        //message panel
+        /*
         checkinLayout = (LinearLayout)findViewById(R.id.checkinLayout);
         goalTitle = (TextView)findViewById(R.id.goalTitile);
-        scoreBoard = (TextView)findViewById(R.id.scoreBoard);
+        
         checkin = (Button)findViewById(R.id.checkin);
         checkin.setOnClickListener(onCheckin);
         cancelCheckin = (Button)findViewById(R.id.cancelCheckin);
         cancelCheckin.setOnClickListener(onCancelCheckin);
-        trigger =  (Button)findViewById(R.id.trigger);
+        */
+        scoreBoard = (TextView)findViewById(R.id.scoreBoard);
+        trigger =  (Button)findViewById(R.id.trigge);
         trigger.setOnClickListener(onTrigger);
         // Set the current widget
         GameData.setCurGoalHeader((TextView)findViewById(R.id.header));
@@ -123,7 +126,7 @@ public class GameMapView extends MapActivity {
     public void onResume() {
         super.onResume();
         myLocation.enableMyLocation();
-        
+        scoreBoard.setText("Scores: " + GameData.getScores());
         // Always center the user location on the map
         myLocation.runOnFirstFix(new Runnable() {
             public void run() {
@@ -136,6 +139,8 @@ public class GameMapView extends MapActivity {
                 GameOverlayOperation.setMyLocation(myLocation.getMyLocation());
                 GameOverlayOperation.setGameOverlay(gameOverlay);
                 GameOverlayOperation.addGameOverlay(mapView);
+                
+
             }
         });
     }
@@ -193,8 +198,8 @@ public class GameMapView extends MapActivity {
 			//reload goals list into CurrentGameOverlay
 			GameOverlayOperation.updateGameOverlay(getApplicationContext(), mapView, myLocation.getMyLocation());
 			//update score board
-			score += 50;	
-			scoreBoard.setText("Score: " + score);
+			
+			
 			
 			
 			
@@ -211,13 +216,15 @@ public class GameMapView extends MapActivity {
     
     /**
      * search nearby goals , if there are , show their markers.
+     * center user's location
      */
     OnClickListener onTrigger = new OnClickListener(){
 		public void onClick(View v) {
 			GameOverlayOperation.updateGameOverlay(getApplicationContext(), mapView, myLocation.getMyLocation());
 			System.out.println(GameOverlayOperation.getGameOverlay().getItems().size());
-			mapController.setCenter(myLocation.getMyLocation());
-			//GameOverlayOperation.addGameOverlay(mapView);
+			//mapController.setCenter(myLocation.getMyLocation());
+			mapController.setZoom(19);
+			mapController.animateTo(myLocation.getMyLocation());
 		}
     };
 }

@@ -13,12 +13,20 @@ public final class GameData {
 	private static Goal nearbyGoal = new Goal();
 	private static TextView curGoalHeader = null; // Closest goal 
 	private static boolean updateGoal = false; // If check-in, we should update nearby goal
-	
+	private static int scores = 0;
 
 	public static ArrayList<Game> getGameList() {
 		return gamesList;
 	}
 	
+	public static int getScores() {
+		return scores;
+	}
+
+	public static void setScores(int scores) {
+		GameData.scores = scores;
+	}
+
 	public static void add(Game game) {
 		gamesList.add(game);
 	}

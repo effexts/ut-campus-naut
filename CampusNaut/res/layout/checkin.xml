@@ -1,26 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    >
+	<ScrollView
+            android:id="@+id/scrollView1"
+            android:layout_width="match_parent"
+            android:layout_height="0dp" 
+            android:layout_weight="90">
+	    <LinearLayout
+	        android:id="@+id/linearLayout1"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_marginTop="5dp"
+	        android:orientation="vertical"
+	        >
+	
+	        <TextView
+	            android:id="@+id/checkinTitle"
+	            android:text="Robarts Library"
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:textColor="#00aeff"
+	            android:textSize="20dp"
+	            />
+	
+	        <ImageView
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:src="@drawable/robarts" />
 
-    <Button
-        android:id="@+id/CK"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="16dp"
-        android:layout_marginRight="43dp"
-        android:text="Check in" />
+	        <TextView
+	            android:id="@+id/checkinIntro"
+	            android:text="The John P. Robarts Research Library, commonly referred to as Robarts Library, is the main humanities and social sciences library of the University of Toronto Libraries and the largest individual library in the university. Opened in 1973 and named for John Robarts, the 17th Premier of Ontario, the library contains more than 4.5 million bookform items, 4.1 million microform items and 740,000 other items."
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:textColor="#00aeff"
+	            android:layout_marginBottom="10dp"
+	            />
+	
+	    </LinearLayout>
+    </ScrollView>
+    
 
-    <Button
-        android:id="@+id/BK"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/CK"
-        android:layout_alignBottom="@+id/CK"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="34dp"
-        android:text="Back" />
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="10"
+        android:orientation="horizontal" >
+		<Button
+	        android:id="@+id/CK"
+	        android:layout_width="wrap_content"
+	        android:layout_weight="65"
+	        android:layout_height="50dp"        
+	        
+	        android:text="@string/button_checkin" />
+	
+	    <Button
+	        android:id="@+id/BK"
+	        android:layout_width="wrap_content"
+	        android:layout_weight="35"
+	        android:layout_height="50dp" 
+	        android:text="@string/button_cancel" />
+    </LinearLayout>
 
-</RelativeLayout>
+</LinearLayout>
