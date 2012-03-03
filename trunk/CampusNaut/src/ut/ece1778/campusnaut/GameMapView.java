@@ -7,7 +7,11 @@ import ut.ece1778.bean.GameData;
 import ut.ece1778.bean.Goal;
 
 
+import android.app.AlertDialog;
 import android.graphics.drawable.Drawable;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -28,7 +32,7 @@ import com.google.android.maps.MyLocationOverlay;
  * @author Steve Chun-Hao Hu, Leo ChenLiang Man
  */
 public class GameMapView extends MapActivity {
-	private static final int ZOOM_LEVEL = 18;
+	private static final int ZOOM_LEVEL = 19;
     private static final Double INITIAL_LATITUDE = 43.669858 * 1E6;
     private static final Double INITIAL_LONGITUDE = -79.40727 * 1E6;
     private static final Double END_LATITUDE = 43.657859 * 1E6;
@@ -49,7 +53,7 @@ public class GameMapView extends MapActivity {
     private Drawable goalMarker;
     private Button trigger;
     private TextView scoreBoard;
-    
+    private LocationManager locMngr;
 
     /**
      * Called when the activity is first created.
@@ -127,6 +131,8 @@ public class GameMapView extends MapActivity {
         super.onResume();
         myLocation.enableMyLocation();
         scoreBoard.setText("Scores: " + GameData.getScores());
+        locMngr = (LocationManager)this.getSystemService(LOCATION_SERVICE);
+        locMngr.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locListener);
         // Always center the user location on the map
         myLocation.runOnFirstFix(new Runnable() {
             public void run() {
@@ -152,6 +158,7 @@ public class GameMapView extends MapActivity {
     public void onPause() {
         super.onPause();
         myLocation.disableMyLocation();
+        
     }
     /**
      * Disable location tracker upon exit map.
@@ -197,12 +204,6 @@ public class GameMapView extends MapActivity {
 			System.out.println(GameData.getGameList().get(0).toString());
 			//reload goals list into CurrentGameOverlay
 			GameOverlayOperation.updateGameOverlay(getApplicationContext(), mapView, myLocation.getMyLocation());
-			//update score board
-			
-			
-			
-			
-			
 		}
     };
     /**
@@ -227,4 +228,36 @@ public class GameMapView extends MapActivity {
 			mapController.animateTo(myLocation.getMyLocation());
 		}
     };
+    
+    //set new goal detector
+    LocationListener locListener  = new LocationListener(){
+
+		public void onLocationChanged(Location location) {
+			try{
+					if(GameData.getDetector() < gameOverlay.getItems().size()){		
+						AlertDialog.Builder builder = new AlertDialog.Builder(GameMapView.this);
+						builder.setTitle("New place discovered!")
+									.setMessage(gameOverlay.getItem(gameOverlay.getItems().size()-1).getTitle())
+									.setIcon(R.drawable.goal_icon)
+									.setCancelable(true);
+						
+						AlertDialog alert = builder.create();
+						alert.show();
+						GameData.setDetector(gameOverlay.getItems().size());
+						}
+					}catch(Exception e){
+						e.printStackTrace();
+					}
+		}
+
+		public void onProviderDisabled(String provider) {
+		}
+
+		public void onProviderEnabled(String provider) {
+		}
+
+		public void onStatusChanged(String provider, int status, Bundle extras) {
+		}
+    };
+    
 }

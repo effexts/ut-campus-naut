@@ -1,5 +1,6 @@
 package ut.ece1778.campusnaut;
 
+
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
@@ -65,6 +66,9 @@ public final class GameOverlayOperation {
         mapView.getOverlays().add(gameOverlay );*/
         gameOverlay.removeAll();
         gameOverlay.loadItem(myLocation);
+        
+        
+
 	}
 	
 	/**
