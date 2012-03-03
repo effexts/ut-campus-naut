@@ -43,6 +43,7 @@ public class Checkin extends Activity{
 	        		GameData.getGameList().get(0).getGoals().get(gid).getTitle()+" visited." , Toast.LENGTH_LONG).show();
 	        GameData.getGameList().get(0).getGoals().remove(gid);
 			GameData.setScores(GameData.getScores()+50);
+			GameData.setDetector(GameData.getDetector()-1);
 			finish();
 		}
 		 

@@ -14,6 +14,15 @@ public final class GameData {
 	private static TextView curGoalHeader = null; // Closest goal 
 	private static boolean updateGoal = false; // If check-in, we should update nearby goal
 	private static int scores = 0;
+	private static int detector = 0;
+
+	public static int getDetector() {
+		return detector;
+	}
+
+	public static void setDetector(int detector) {
+		GameData.detector = detector;
+	}
 
 	public static ArrayList<Game> getGameList() {
 		return gamesList;
