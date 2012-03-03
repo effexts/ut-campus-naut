@@ -1,9 +1,16 @@
 package ut.ece1778.campusnaut;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -31,6 +38,9 @@ public class CreateAccount extends Activity {
     private String gender = "Male";
     private SharedPreferences prefs = null;
     private Editor editor = null;
+    private EditText name;
+    private EditText email;
+    private EditText passwd;
 
     /**
      * Called when the activity is first created.
@@ -61,6 +71,10 @@ public class CreateAccount extends Activity {
 
         RadioGroup genderRadio = (RadioGroup) findViewById(R.id.gender);
         genderRadio.setOnCheckedChangeListener(onGenderChec);
+        
+        name = (EditText) findViewById(R.id.accnameinput);
+        email = (EditText) findViewById(R.id.emailinput);
+        passwd = (EditText) findViewById(R.id.pwinput);
     }
     /**
      * Handle the event after user click on Create button
@@ -68,9 +82,7 @@ public class CreateAccount extends Activity {
     private OnClickListener onBtnClick = new OnClickListener() {
 
         public void onClick(View v) {
-            EditText name = (EditText) findViewById(R.id.accnameinput);
-            EditText email = (EditText) findViewById(R.id.emailinput);
-            EditText passwd = (EditText) findViewById(R.id.pwinput);
+            
 
             editor.putString("username", name.getText().toString());
             editor.putString("email", email.getText().toString());
@@ -81,10 +93,59 @@ public class CreateAccount extends Activity {
             editor.commit();
             
             // ***NOTE*** Upload the account information to MySQL database here.
+            NetAsyncTask task = new NetAsyncTask();
+            task.execute(new String[]{"http://ec2-184-73-31-146.compute-1.amazonaws.com:8080/CampusNaut/servlet/CreateAccount"});
+            
             Toast.makeText(CreateAccount.this, "Account Created Successfully", Toast.LENGTH_LONG).show();
             startActivity(new Intent(getApplicationContext(), GameMapView.class));
         }
     };
+    
+    //AsyncTask to sent create account request to server.
+    private class NetAsyncTask extends AsyncTask<String, Void, String>
+    {
+        ProgressDialog mProgressDialog;
+        @Override
+        protected void onPostExecute(String result) {
+            mProgressDialog.dismiss();
+            Toast.makeText(CreateAccount.this, result, Toast.LENGTH_LONG).show();     
+        }
+        @Override
+        protected void onPreExecute() {
+            mProgressDialog = ProgressDialog.show(CreateAccount.this, "Loading...", "Data is Loading...");
+        }
+        @Override
+        protected String doInBackground(String... u) {
+        	URL url = null;
+            HttpURLConnection httpConn = null;
+            String returnStr = "null";
+            try{
+            	url = new URL(u[0]);
+            	httpConn = (HttpURLConnection)url.openConnection();
+            	httpConn.setDoOutput(true);
+            	httpConn.setRequestMethod("POST");
+            	//Do post request.
+            	DataOutputStream out = new DataOutputStream(httpConn.getOutputStream());
+            	out.writeUTF(name.getText().toString());
+            	out.writeUTF(email.getText().toString());
+            	out.writeUTF(passwd.getText().toString());
+            	out.writeUTF(selectedAge);
+            	out.writeUTF(gender);
+            	out.flush();
+            	out.close();
+
+            	//Receiving response from server
+            	DataInputStream in = new DataInputStream(httpConn.getInputStream());  
+            	     returnStr = in.readUTF();
+         	     
+            }catch(Exception e){
+            	e.printStackTrace();
+            }
+            return returnStr;
+        }
+    }
+
+    
     /**
      * Listener for age drop down spinner
      */
