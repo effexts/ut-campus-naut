@@ -64,7 +64,7 @@
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <RadioButton
-            android:id="@+id/femal"
+            android:id="@+id/female"
             android:text="@string/female"
             android:textAppearance="?android:attr/textAppearanceMedium" />
     </RadioGroup>
@@ -88,31 +88,14 @@
         android:layout_below="@+id/age"
         android:drawSelectorOnTop="true" />
 
-    <TextView
-        android:id="@+id/salary"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/pwinput"
-        android:layout_below="@+id/agespinner"
-        android:text="@string/salary"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <Spinner
-        android:id="@+id/salaryspinner"
-        android:layout_width="300sp"
-        android:layout_height="36sp"
-        android:layout_below="@+id/salary"
-        android:drawSelectorOnTop="true" 
-        android:layout_alignLeft="@+id/pwinput"/>
-    
-    <Button
+     <Button
         android:id="@+id/buttonCreate"
         style="@style/buttontext"
-        android:layout_below="@+id/salaryspinner"
+        android:layout_below="@+id/agespinner"
         android:layout_width="300sp"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="60dp"
         android:background="@drawable/buttonselector"
         android:text="@string/create" />
 
