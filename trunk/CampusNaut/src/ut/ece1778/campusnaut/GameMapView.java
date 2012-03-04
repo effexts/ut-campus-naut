@@ -298,6 +298,7 @@ public class GameMapView extends MapActivity {
             	// Change the loggedin state to false and go back to login screen
                 editor.putBoolean("loggedin", false);
                 editor.commit();
+                finish();
                 startActivity(new Intent(getApplicationContext(), LoginScreen.class));
                 break;
             case R.id.tracker:
