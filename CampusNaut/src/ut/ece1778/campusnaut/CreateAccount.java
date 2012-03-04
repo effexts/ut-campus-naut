@@ -96,19 +96,29 @@ public class CreateAccount extends Activity {
             NetAsyncTask task = new NetAsyncTask();
             task.execute(new String[]{"http://ec2-184-73-31-146.compute-1.amazonaws.com:8080/CampusNaut/servlet/CreateAccount"});
             
-            Toast.makeText(CreateAccount.this, "Account Created Successfully", Toast.LENGTH_LONG).show();
-            startActivity(new Intent(getApplicationContext(), GameMapView.class));
+           // Toast.makeText(CreateAccount.this, "Account Created Successfully", Toast.LENGTH_LONG).show();
+            
         }
     };
     
-    //AsyncTask to sent create account request to server.
+    /**
+     * AsyncTask to sent create account request to server.
+     *
+     */
     private class NetAsyncTask extends AsyncTask<String, Void, String>
     {
         ProgressDialog mProgressDialog;
         @Override
         protected void onPostExecute(String result) {
             mProgressDialog.dismiss();
-            Toast.makeText(CreateAccount.this, result, Toast.LENGTH_LONG).show();     
+            if(result == null){
+            	Toast.makeText(CreateAccount.this, "Cannot access to server.", Toast.LENGTH_LONG).show();
+            }else if(result.equals("Failed") ){
+            	Toast.makeText(CreateAccount.this, "Username already existed.", Toast.LENGTH_LONG).show();   
+            }else{
+            	Toast.makeText(CreateAccount.this, result, Toast.LENGTH_LONG).show();     
+            	startActivity(new Intent(getApplicationContext(), GameMapView.class));
+            }
         }
         @Override
         protected void onPreExecute() {
