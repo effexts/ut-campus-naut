@@ -38,13 +38,17 @@ public class Checkin extends Activity{
 
 		public void onClick(View v) {
 			// TODO Auto-generated method stub
+			try{
+		        Toast.makeText(Checkin.this,
+		        		GameData.getGameList().get(0).getGoals().get(gid).getTitle()+" visited." , Toast.LENGTH_LONG).show();
+		        GameData.getGameList().get(0).getGoals().remove(gid);
+				GameData.setScores(GameData.getScores()+50);
+				GameData.setDetector(GameData.getDetector()-1);
+				finish();
+				}catch(Exception e){
+					e.printStackTrace();
+				}
 			
-	        Toast.makeText(Checkin.this,
-	        		GameData.getGameList().get(0).getGoals().get(gid).getTitle()+" visited." , Toast.LENGTH_LONG).show();
-	        GameData.getGameList().get(0).getGoals().remove(gid);
-			GameData.setScores(GameData.getScores()+50);
-			GameData.setDetector(GameData.getDetector()-1);
-			finish();
 		}
 		 
 	 };

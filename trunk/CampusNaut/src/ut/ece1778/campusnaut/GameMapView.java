@@ -8,6 +8,7 @@ import ut.ece1778.bean.Goal;
 
 
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -16,6 +17,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -150,17 +152,19 @@ public class GameMapView extends MapActivity {
         myLocation.runOnFirstFix(new Runnable() {
 
             public void run() {
-                mapController.setCenter(myLocation.getMyLocation());
-                mapView.getOverlays().remove(gameOverlay);
-                gameOverlay = new CurrentGameOverlay(
-                        GameMapView.this, goalMarker, checkinLayout, goalTitle,
-                        GameData.getGameList().get(0), myLocation.getMyLocation());
-                //mapView.getOverlays().add(gameOverlay );
-                GameOverlayOperation.setMyLocation(myLocation.getMyLocation());
-                GameOverlayOperation.setGameOverlay(gameOverlay);
-                GameOverlayOperation.addGameOverlay(mapView);
-
-
+            	try{
+	                mapController.setCenter(myLocation.getMyLocation());
+	                mapView.getOverlays().remove(gameOverlay);
+	                gameOverlay = new CurrentGameOverlay(
+	                        GameMapView.this, goalMarker, checkinLayout, goalTitle,
+	                        GameData.getGameList().get(0), myLocation.getMyLocation());
+	                //mapView.getOverlays().add(gameOverlay );
+	                GameOverlayOperation.setMyLocation(myLocation.getMyLocation());
+	                GameOverlayOperation.setGameOverlay(gameOverlay);
+	                GameOverlayOperation.addGameOverlay(mapView);
+            	}catch(Exception e){
+            		e.printStackTrace();
+            	}
             }
         });
     }
@@ -247,14 +251,29 @@ public class GameMapView extends MapActivity {
             mapController.animateTo(myLocation.getMyLocation());
         }
     };
-    //set new goal detector
+    
+    /**
+     * set new goal detector
+     */
     LocationListener locListener = new LocationListener() {
 
         public void onLocationChanged(Location location) {
             try {
                 if (GameData.getDetector() < gameOverlay.getItems().size()) {
+                	//call vibrate service
+                	Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
+                	vibrator.vibrate(1000);
+                	//show alert dialog
                     AlertDialog.Builder builder = new AlertDialog.Builder(GameMapView.this);
-                    builder.setTitle("New goal discovered!").setMessage(gameOverlay.getItem(gameOverlay.getItems().size() - 1).getTitle()).setIcon(R.drawable.goal_icon).setCancelable(true);
+                    builder.setTitle("New goal discovered!")
+                    .setMessage(gameOverlay.getItem(gameOverlay.getItems().size() - 1).getTitle())
+                    .setIcon(R.drawable.goal_icon)
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener(){
+						public void onClick(DialogInterface dialog, int which) {
+														
+						}                   	
+                    })
+                    .setCancelable(true);
 
                     AlertDialog alert = builder.create();
                     alert.show();
