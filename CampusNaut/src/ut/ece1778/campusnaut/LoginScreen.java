@@ -8,9 +8,12 @@ import java.net.URL;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -93,9 +96,13 @@ public class LoginScreen extends Activity {
             	
             	emailinput = (EditText) findViewById(R.id.emailinput);
                 passwdinput = (EditText) findViewById(R.id.pwinput);
-            	LoginAsyncTask task = new LoginAsyncTask();
-                task.execute(new String[]{"http://ec2-184-73-31-146.compute-1.amazonaws.com:8080/CampusNaut/servlet/AccountValidation"});
-                         	
+                if (isInternetOn()) {
+                	LoginAsyncTask task = new LoginAsyncTask();
+                	task.execute(new String[]{"http://ec2-184-73-31-146.compute-1.amazonaws.com:8080/CampusNaut/servlet/AccountValidation"});
+                } else {
+                	Toast.makeText(LoginScreen.this, "Failed to connect to CampusNaut Database. " +
+                			"\nPlease check your network settings and try again!", Toast.LENGTH_SHORT).show();
+                }
             }
 
         }
@@ -122,7 +129,7 @@ public class LoginScreen extends Activity {
         }
         @Override
         protected void onPreExecute() {
-            mProgressDialog = ProgressDialog.show(LoginScreen.this, "Loading...", "Syncing with Database...");
+            mProgressDialog = ProgressDialog.show(LoginScreen.this, "Loading...", "Please wait while connecting to Database...");
         }
         @Override
         protected String doInBackground(String... u) {
@@ -161,4 +168,14 @@ public class LoginScreen extends Activity {
             startActivity(new Intent(getApplicationContext(), CreateAccount.class));
         }
     };
+    
+    /**
+     *  Check both wifi and 3G connection
+     */
+    private boolean isInternetOn(){
+        ConnectivityManager connMgr = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo wifi = connMgr.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+        NetworkInfo mobile = connMgr.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+        return (wifi.isConnected() || mobile.isConnected());
+    }
 }

@@ -7,9 +7,12 @@ import java.net.URL;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -84,23 +87,25 @@ public class CreateAccount extends Activity {
     private OnClickListener onBtnClick = new OnClickListener() {
 
         public void onClick(View v) {
-            
-
-            editor.putString("username", name.getText().toString());
-            editor.putString("email", email.getText().toString());
-            editor.putString("password", passwd.getText().toString());
-            editor.putString("age", age.getText().toString());
-            editor.putString("major", selectedMajor);
-            editor.putString("gender", gender);
-            editor.putBoolean("loggedin", true);
-            editor.commit();
-            
-            // ***NOTE*** Upload the account information to MySQL database here.
-            NetAsyncTask task = new NetAsyncTask();
-            task.execute(new String[]{"http://ec2-184-73-31-146.compute-1.amazonaws.com:8080/CampusNaut/servlet/CreateAccount"});
-            
-           // Toast.makeText(CreateAccount.this, "Account Created Successfully", Toast.LENGTH_LONG).show();
-            
+            if (isInternetOn()) {
+	            editor.putString("username", name.getText().toString());
+	            editor.putString("email", email.getText().toString());
+	            editor.putString("password", passwd.getText().toString());
+	            editor.putString("age", age.getText().toString());
+	            editor.putString("major", selectedMajor);
+	            editor.putString("gender", gender);
+	            editor.putBoolean("loggedin", true);
+	            editor.commit();
+	            
+	            // ***NOTE*** Upload the account information to MySQL database here.
+	            NetAsyncTask task = new NetAsyncTask();
+	            task.execute(new String[]{"http://ec2-184-73-31-146.compute-1.amazonaws.com:8080/CampusNaut/servlet/CreateAccount"});
+	            
+	           // Toast.makeText(CreateAccount.this, "Account Created Successfully", Toast.LENGTH_LONG).show();
+            } else {
+            	Toast.makeText(CreateAccount.this, "Failed to connect to CampusNaut Database. " +
+            			"\nPlease check your network settings and try again!", Toast.LENGTH_SHORT).show();
+            }
         }
     };
     
@@ -125,7 +130,7 @@ public class CreateAccount extends Activity {
         }
         @Override
         protected void onPreExecute() {
-            mProgressDialog = ProgressDialog.show(CreateAccount.this, "Loading...", "Syncing with Database...");
+            mProgressDialog = ProgressDialog.show(CreateAccount.this, "Loading...", "Please wait while connecting to Database...");
         }
         @Override
         protected String doInBackground(String... u) {
@@ -198,5 +203,15 @@ public class CreateAccount extends Activity {
     @Override
     public void onBackPressed() {
         startActivity(new Intent(getApplicationContext(), LoginScreen.class));
+    }
+    
+    /**
+     *  Check both wifi and 3G connection
+     */
+    private boolean isInternetOn(){
+        ConnectivityManager connMgr = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo wifi = connMgr.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+        NetworkInfo mobile = connMgr.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+        return (wifi.isConnected() || mobile.isConnected());
     }
 }

@@ -9,7 +9,6 @@ import ut.ece1778.bean.Goal;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.graphics.drawable.Drawable;
@@ -17,7 +16,6 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.os.Vibrator;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -311,19 +309,12 @@ public class GameMapView extends MapActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.exit:
-                finish();
-                break;
             case R.id.logout:
             	// Change the loggedin state to false and go back to login screen
                 editor.putBoolean("loggedin", false);
                 editor.commit();
                 finish();
-                startActivity(new Intent(getApplicationContext(), LoginScreen.class));
                 break;
-            case R.id.tracker:
-            	// Future implementation
-            	break;
             case R.id.setting:
             	// Future implementation
             	break;
