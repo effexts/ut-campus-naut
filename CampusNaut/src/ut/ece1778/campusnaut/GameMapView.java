@@ -260,9 +260,9 @@ public class GameMapView extends MapActivity {
         public void onLocationChanged(Location location) {
             try {
                 if (GameData.getDetector() < gameOverlay.getItems().size()) {
-                	//call vibrate service
+                	/*call vibrate service
                 	Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
-                	vibrator.vibrate(1000);
+                	vibrator.vibrate(1000);*/
                 	//show alert dialog
                     AlertDialog.Builder builder = new AlertDialog.Builder(GameMapView.this);
                     builder.setTitle("New goal discovered!")
@@ -277,6 +277,7 @@ public class GameMapView extends MapActivity {
 
                     AlertDialog alert = builder.create();
                     alert.show();
+                    
                     GameData.setDetector(gameOverlay.getItems().size());
                 }
             } catch (Exception e) {
