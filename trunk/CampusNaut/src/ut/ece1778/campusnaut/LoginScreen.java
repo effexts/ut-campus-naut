@@ -112,9 +112,9 @@ public class LoginScreen extends Activity {
         protected void onPostExecute(String result) {
             mProgressDialog.dismiss();
             if(result.equals(null)){
-            	Toast.makeText(LoginScreen.this, "Cannot access to server.", Toast.LENGTH_LONG).show();
+            	Toast.makeText(LoginScreen.this, "Cannot access the server. \nPlease make sure your WI-FI is on.", Toast.LENGTH_LONG).show();
             }else if(result.equals("Failed") ){
-            	Toast.makeText(LoginScreen.this, "Please create an account first!", Toast.LENGTH_SHORT).show();   
+            	Toast.makeText(LoginScreen.this, "Your email is not registered. \nPlease create an account first.", Toast.LENGTH_SHORT).show();   
             }else{
             	Toast.makeText(LoginScreen.this, result, Toast.LENGTH_LONG).show();     
             	startActivity(new Intent(getApplicationContext(), GameMapView.class));
@@ -122,7 +122,7 @@ public class LoginScreen extends Activity {
         }
         @Override
         protected void onPreExecute() {
-            mProgressDialog = ProgressDialog.show(LoginScreen.this, "Loading...", "Data is Loading...");
+            mProgressDialog = ProgressDialog.show(LoginScreen.this, "Loading...", "Syncing with Database...");
         }
         @Override
         protected String doInBackground(String... u) {

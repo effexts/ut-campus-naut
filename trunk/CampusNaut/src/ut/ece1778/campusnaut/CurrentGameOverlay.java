@@ -30,7 +30,7 @@ public class CurrentGameOverlay extends ItemizedOverlay<OverlayItem>{
 	ArrayList<Goal> goals = new ArrayList<Goal>();
 	Location location;
 	//private Game game;
-	public static final double VISUAL_FIELD = 100.0; // unit meter. any goal out of this range will not be shown.
+	public static final double VISUAL_FIELD = 500.0; // unit meter. any goal out of this range will not be shown.
 	
 	/**
 	 * CurrentGameOverlay constructor

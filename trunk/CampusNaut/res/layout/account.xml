@@ -49,14 +49,24 @@
         android:inputType="textPassword" 
         android:layout_centerHorizontal="true"
         android:hint="@string/cfpassword"/>
-    
+    <EditText
+        android:id="@+id/ageinput"
+        android:layout_width="100sp"
+        android:layout_height="40sp"
+        android:layout_below="@id/cfpwinput"
+        android:layout_marginTop="10dp"
+        android:inputType="number" 
+        android:hint="@string/age"
+        android:layout_alignLeft="@+id/pwinput" />
     <RadioGroup
         android:id="@+id/gender"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/cfpwinput"
-        android:orientation="horizontal" 
-        android:layout_alignLeft="@+id/pwinput">
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="6dp"
+        android:layout_toRightOf="@+id/ageinput"
+        android:orientation="horizontal" >
 
         <RadioButton
             android:id="@+id/male"
@@ -71,27 +81,27 @@
 
 
     <TextView
-        android:id="@+id/age"
+        android:id="@+id/major"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/gender"
-        android:text="@string/age"
+        android:text="@string/major"
         android:textAppearance="?android:attr/textAppearanceMedium" 
         android:layout_alignLeft="@+id/pwinput"/>
 
 
     <Spinner
-        android:id="@+id/agespinner"
+        android:id="@+id/majorspinner"
         android:layout_width="300sp"
         android:layout_height="36sp"
         android:layout_alignLeft="@+id/pwinput"
-        android:layout_below="@+id/age"
+        android:layout_below="@+id/major"
         android:drawSelectorOnTop="true" />
 
      <Button
         android:id="@+id/buttonCreate"
         style="@style/buttontext"
-        android:layout_below="@+id/agespinner"
+        android:layout_below="@+id/majorspinner"
         android:layout_width="300sp"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
