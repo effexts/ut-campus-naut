@@ -31,7 +31,8 @@
     <string name="password">Password</string>
     <string name="login">Login</string>
     <string name="create">Create</string>
-    <string name="age">Age Group</string>
+    <string name="age">Age</string>
+    <string name="major">Major</string>
     <string name="accname">User Name</string>
     <string name="male">Male</string>
     <string name="female">Female</string>

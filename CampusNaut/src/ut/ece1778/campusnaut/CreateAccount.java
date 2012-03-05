@@ -32,15 +32,16 @@ import android.widget.Toast;
  */
 public class CreateAccount extends Activity {
 
-    private static final String[] AGE_GROUP = {"1 - 10", "11 - 17", "18 - 23",
-        "24 - 30", "31 - 40", "41 - 50", "50 - 64", "65+"};
-    private String selectedAge = AGE_GROUP[0];
+    private static final String[] MAJOR = {"BSc", "BASc", "BA", "CTEP",
+    	"BKIN", "BPHE", "BMus", "BC", "MusBac", "BCom"};
+    private String selectedMajor = MAJOR[0];
     private String gender = "Male";
     private SharedPreferences prefs = null;
     private Editor editor = null;
     private EditText name;
     private EditText email;
     private EditText passwd;
+    private EditText age;
 
     /**
      * Called when the activity is first created.
@@ -55,15 +56,15 @@ public class CreateAccount extends Activity {
         editor = prefs.edit();
 
         // Create a spinner for age group
-        Spinner spinAge = (Spinner) findViewById(R.id.agespinner);
-        spinAge.setOnItemSelectedListener(onAgeChose);
+        Spinner spinAge = (Spinner) findViewById(R.id.majorspinner);
+        spinAge.setOnItemSelectedListener(onMajorChose);
 
-        ArrayAdapter<String> ageAdapter = new ArrayAdapter<String>(this,
+        ArrayAdapter<String> majorAdapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item,
-                AGE_GROUP);
+                MAJOR);
 
-        ageAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinAge.setAdapter(ageAdapter);
+        majorAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinAge.setAdapter(majorAdapter);
 
         // Create account button
         Button creatAccButton = (Button) findViewById(R.id.buttonCreate);
@@ -75,6 +76,7 @@ public class CreateAccount extends Activity {
         name = (EditText) findViewById(R.id.accnameinput);
         email = (EditText) findViewById(R.id.emailinput);
         passwd = (EditText) findViewById(R.id.pwinput);
+        age = (EditText) findViewById(R.id.ageinput);
     }
     /**
      * Handle the event after user click on Create button
@@ -87,7 +89,8 @@ public class CreateAccount extends Activity {
             editor.putString("username", name.getText().toString());
             editor.putString("email", email.getText().toString());
             editor.putString("password", passwd.getText().toString());
-            editor.putString("age", selectedAge);
+            editor.putString("age", age.getText().toString());
+            editor.putString("major", selectedMajor);
             editor.putString("gender", gender);
             editor.putBoolean("loggedin", true);
             editor.commit();
@@ -112,9 +115,9 @@ public class CreateAccount extends Activity {
         protected void onPostExecute(String result) {
             mProgressDialog.dismiss();
             if(result == null){
-            	Toast.makeText(CreateAccount.this, "Cannot access to server.", Toast.LENGTH_LONG).show();
+            	Toast.makeText(CreateAccount.this, "Cannot access the server. \nPlease make sure your WI-FI is on.", Toast.LENGTH_LONG).show();
             }else if(result.equals("Failed") ){
-            	Toast.makeText(CreateAccount.this, "Username already existed.", Toast.LENGTH_LONG).show();   
+            	Toast.makeText(CreateAccount.this, "Username is taken!\nPlease enter another username.", Toast.LENGTH_LONG).show();   
             }else{
             	Toast.makeText(CreateAccount.this, result, Toast.LENGTH_LONG).show();     
             	startActivity(new Intent(getApplicationContext(), GameMapView.class));
@@ -122,7 +125,7 @@ public class CreateAccount extends Activity {
         }
         @Override
         protected void onPreExecute() {
-            mProgressDialog = ProgressDialog.show(CreateAccount.this, "Loading...", "Data is Loading...");
+            mProgressDialog = ProgressDialog.show(CreateAccount.this, "Loading...", "Syncing with Database...");
         }
         @Override
         protected String doInBackground(String... u) {
@@ -139,8 +142,9 @@ public class CreateAccount extends Activity {
             	out.writeUTF(name.getText().toString());
             	out.writeUTF(email.getText().toString());
             	out.writeUTF(passwd.getText().toString());
-            	out.writeUTF(selectedAge);
+            	out.writeUTF(age.getText().toString());
             	out.writeUTF(gender);
+            	out.writeUTF(selectedMajor);
             	out.flush();
             	out.close();
 
@@ -159,10 +163,10 @@ public class CreateAccount extends Activity {
     /**
      * Listener for age drop down spinner
      */
-    private OnItemSelectedListener onAgeChose = new OnItemSelectedListener() {
+    private OnItemSelectedListener onMajorChose = new OnItemSelectedListener() {
         public void onItemSelected(AdapterView<?> parent,
                 View v, int position, long id) {
-            selectedAge = AGE_GROUP[position];
+            selectedMajor = MAJOR[position];
         }
 
         public void onNothingSelected(AdapterView<?> parent) {
