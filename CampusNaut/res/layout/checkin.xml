@@ -4,7 +4,18 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     >
-	<ScrollView
+    
+	<TextView
+	            android:id="@+id/checkinTitle"
+	            android:text="Robarts Library"
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:layout_marginBottom="10dp"
+	            android:paddingLeft="10dp"
+	            android:textColor="#222222"
+	            android:textSize="20dp"
+	            android:background="#00aeff"
+	            />	<ScrollView
             android:id="@+id/scrollView1"
             android:layout_width="match_parent"
             android:layout_height="0dp" 
@@ -16,28 +27,22 @@
 	        android:layout_marginTop="5dp"
 	        android:orientation="vertical"
 	        >
-	
-	        <TextView
-	            android:id="@+id/checkinTitle"
-	            android:text="Robarts Library"
-	            android:layout_width="match_parent"
-	            android:layout_height="wrap_content"
-	            android:textColor="#00aeff"
-	            android:textSize="20dp"
-	            />
-	
+
 	        <ImageView
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
-	            android:src="@drawable/robarts" />
+	            android:src="@drawable/cedars"
+	            android:layout_marginBottom="10dp" />
 
 	        <TextView
 	            android:id="@+id/checkinIntro"
-	            android:text="The John P. Robarts Research Library, commonly referred to as Robarts Library, is the main humanities and social sciences library of the University of Toronto Libraries and the largest individual library in the university. Opened in 1973 and named for John Robarts, the 17th Premier of Ontario, the library contains more than 4.5 million bookform items, 4.1 million microform items and 740,000 other items."
+	            android:text="Outside the Anthropology Building at 19 Russell Street is Cedars (1962), a cast-bronze piece by Walter Yarwood. Yarwood originally intended the shapes to be much larger, producing a peering-through-the-trees effect from inside the building, but this smaller-scale version was ultimately commissioned. Horizon (1964), another Yarwood bronze, is mounted on the St. George Street façade of nearby Sidney Smith Hall."
 	            android:layout_width="match_parent"
 	            android:layout_height="wrap_content"
 	            android:textColor="#00aeff"
 	            android:layout_marginBottom="10dp"
+	            android:layout_marginLeft="5dp"
+	            android:layout_marginRight="5dp"
 	            />
 	
 	    </LinearLayout>

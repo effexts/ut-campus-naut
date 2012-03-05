@@ -81,7 +81,7 @@ public class GameMapView extends MapActivity {
 
         mapController = mapView.getController();
         mapController.setZoom(ZOOM_LEVEL);
-        // Draw multiple black overlays on top of map
+        //Draw multiple black overlays on top of map
         for (Double curLatitude = INITIAL_LATITUDE; curLatitude > END_LATITUDE; curLatitude -= LAT_D) {
             for (Double curLongitude = INITIAL_LONGITUDE; curLongitude < END_LONGITUDE; curLongitude += LONG_D) {
                 mapView.getOverlays().add(new BlackOverlay(curLongitude, curLatitude, curLongitude + LONG_D, curLatitude - LAT_D));
@@ -127,6 +127,8 @@ public class GameMapView extends MapActivity {
         goal = new Goal("Athlete Centre", 43.662700, -79.401200);
         goals.add(goal);
         goal = new Goal("Grad House", 43.663500, -79.401500);
+        goals.add(goal);
+        goal = new Goal("Cedars", 43.660000, -79.398500);
         goals.add(goal);
         game.setGoals(goals);
 
