@@ -44,12 +44,15 @@ public final class GameOverlayOperation {
 		/*gameOverlay = new CurrentGameOverlay(
 				context ,goalMarker ,checkinLayout,goalTitle,GameData.getGameList().get(0), myGeoPoint);*/
         //mapView.getOverlays().add(gameOverlay );
-        gameOverlay.removeAll();
-        gameOverlay.loadItem(myGeoPoint);
+		if (gameOverlay != null) {
+			gameOverlay.removeAll();
+	        gameOverlay.loadItem(myGeoPoint);
+	        
+	        if(gameOverlay.getItems().size()>0){
+	        	//Toast.makeText(context, "Goal found!", Toast.LENGTH_SHORT).show();
+	        }
+		}
         
-        if(gameOverlay.getItems().size()>0){
-        	//Toast.makeText(context, "Goal found!", Toast.LENGTH_SHORT).show();
-        }
 	}
 	
 	/**
@@ -64,9 +67,10 @@ public final class GameOverlayOperation {
 		gameOverlay = new CurrentGameOverlay(
 				context ,goalMarker ,checkinLayout,goalTitle,GameData.getGameList().get(0), myLocation);
         mapView.getOverlays().add(gameOverlay );*/
-        gameOverlay.removeAll();
-        gameOverlay.loadItem(myLocation);
-        
+		if (gameOverlay != null) {
+	        gameOverlay.removeAll();
+	        gameOverlay.loadItem(myLocation);
+		}
         
 
 	}

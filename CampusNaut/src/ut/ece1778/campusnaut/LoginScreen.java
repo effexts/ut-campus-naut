@@ -49,6 +49,7 @@ public class LoginScreen extends Activity {
         final boolean loggedin = prefs.getBoolean("loggedin", false);
         if (loggedin) {
             startActivity(new Intent(LoginScreen.this, GameMapView.class));
+            finish();
         }
         setContentView(R.layout.login);
         
@@ -86,6 +87,7 @@ public class LoginScreen extends Activity {
                     editor.putBoolean("loggedin", true);
                     editor.commit();
                     startActivity(new Intent(LoginScreen.this, GameMapView.class));
+                    finish();
                 } else if (!email.equals(emailinput.getText().toString())) { // Email does not match local stored one 
                 	// ***NOTE*** can validate email with MySQL database here.
                     Toast.makeText(LoginScreen.this, "Email address is not registered!", Toast.LENGTH_SHORT).show();
@@ -125,6 +127,7 @@ public class LoginScreen extends Activity {
             }else{
             	Toast.makeText(LoginScreen.this, result, Toast.LENGTH_LONG).show();     
             	startActivity(new Intent(getApplicationContext(), GameMapView.class));
+            	finish();
             }
         }
         @Override

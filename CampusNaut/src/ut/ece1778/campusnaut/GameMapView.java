@@ -122,6 +122,7 @@ public class GameMapView extends MapActivity {
         //Instantiate a Game
         game = new Game();
         goals = new ArrayList<Goal>();
+        /*
         Goal goal = new Goal("Robarts Library", 43.664300, -79.399400);
         goals.add(goal);
         goal = new Goal("Athlete Centre", 43.662700, -79.401200);
@@ -129,6 +130,14 @@ public class GameMapView extends MapActivity {
         goal = new Goal("Grad House", 43.663500, -79.401500);
         goals.add(goal);
         goal = new Goal("Cedars", 43.660000, -79.398500);
+        goals.add(goal);*/
+        Goal goal = new Goal("Becca's H, Robert Murray (1973)", 43.659955,-79.396584);
+        goals.add(goal);
+        goal = new Goal("Helix of Life, Ted Bieler (1967)", 43.660747,-79.393537);
+        goals.add(goal);
+        goal = new Goal("Cedars, Walter Yarwood (1962)", 43.660000, -79.398500);
+        goals.add(goal);
+        goal = new Goal("Untitled, Ron Bard (1964)", 43.658387,-79.393516);
         goals.add(goal);
         game.setGoals(goals);
 
@@ -245,10 +254,13 @@ public class GameMapView extends MapActivity {
 
         public void onClick(View v) {
             GameOverlayOperation.updateGameOverlay(getApplicationContext(), mapView, myLocation.getMyLocation());
-            System.out.println(GameOverlayOperation.getGameOverlay().getItems().size());
+            //System.out.println(GameOverlayOperation.getGameOverlay().getItems().size()); 
             //mapController.setCenter(myLocation.getMyLocation());
-            mapController.setZoom(19);
-            mapController.animateTo(myLocation.getMyLocation());
+            if (myLocation.getMyLocation() != null) {  //make sure location is available before calling method
+                mapController.setZoom(19);
+                mapController.animateTo(myLocation.getMyLocation());
+            }
+
         }
     };
     
