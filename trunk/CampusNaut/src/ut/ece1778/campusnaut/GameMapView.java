@@ -63,8 +63,6 @@ public class GameMapView extends MapActivity {
 	private MyLocationOverlay myLocation = null;
 	private LinearLayout checkinLayout;
 	private TextView goalTitle;
-	// private Button checkin;
-	// private Button cancelCheckin;
 	private CurrentGameOverlay gameOverlay;
 	private Game game;
 	private ArrayList<Goal> goals;
@@ -106,12 +104,12 @@ public class GameMapView extends MapActivity {
 		myLocation = new MyCustomLocationOverlay(this, mapView,INITIAL_LONGITUDE, INITIAL_LATITUDE, END_LONGITUDE, END_LATITUDE);
 		mapView.getOverlays().add(myLocation);
 		myLocation.enableMyLocation();
-		
+		/*
 		// *Mock GPS* Code for mock Location provider
 		mocLocationProvider = LocationManager.NETWORK_PROVIDER;
 		mockLocMgr = (LocationManager) getBaseContext().getSystemService(
 				Context.LOCATION_SERVICE);
-		mockLocMgr.clearTestProviderEnabled(mocLocationProvider);
+		//mockLocMgr.clearTestProviderEnabled(mocLocationProvider);
 		mockLocMgr.requestLocationUpdates(mocLocationProvider, 0, 0,
 				locListener);
 
@@ -122,20 +120,11 @@ public class GameMapView extends MapActivity {
 		Timer timer = new Timer();
 		timer.schedule(new MockGPSUpdateTimeTask(), 100, 1000);
 		// End of *Mock GPS* code
-		
+		*/
 		// Must call this to show user location overlay on map
 		mapView.postInvalidate();
 
-		// message panel
-		/*
-		 * checkinLayout = (LinearLayout)findViewById(R.id.checkinLayout);
-		 * goalTitle = (TextView)findViewById(R.id.goalTitile);
-		 * 
-		 * checkin = (Button)findViewById(R.id.checkin);
-		 * checkin.setOnClickListener(onCheckin); cancelCheckin =
-		 * (Button)findViewById(R.id.cancelCheckin);
-		 * cancelCheckin.setOnClickListener(onCancelCheckin);
-		 */
+		//tools of map view
 		scoreBoard = (TextView) findViewById(R.id.scoreBoard);
 		trigger = (Button) findViewById(R.id.trigge);
 		trigger.setOnClickListener(onTrigger);
@@ -250,46 +239,6 @@ public class GameMapView extends MapActivity {
 	}
 
 	/**
-	 * do check-in a goal
-	 */
-	OnClickListener onCheckin = new OnClickListener() {
-
-		public void onClick(View v) {
-			// Update the nearby goal
-			GameData.setUpdateGoal(false);
-			checkinLayout.setVisibility(4);
-
-			Toast.makeText(
-					GameMapView.this,
-					GameOverlayOperation.getGameOverlay().getFocus().getTitle()
-							+ " visited.", Toast.LENGTH_LONG).show();
-			// remove checked goal from GameData's games list
-			/*
-			 * GameData.getGameList().get(0).getGoals().remove(
-			 * Integer.parseInt(
-			 * GameOverlayOperation.getGameOverlay().getFocus().getSnippet()));
-			 */
-			GameData.getGameList()
-					.get(0)
-					.getGoals()
-					.get(GameOverlayOperation.getGameOverlay()
-							.getLastFocusedIndex());
-			System.out.println(GameData.getGameList().get(0).toString());
-			// reload goals list into CurrentGameOverlay
-			GameOverlayOperation.updateGameOverlay(getApplicationContext(),
-					mapView, myLocation.getMyLocation());
-		}
-	};
-	/**
-	 * disappear check-in panel
-	 */
-	OnClickListener onCancelCheckin = new OnClickListener() {
-
-		public void onClick(View v) {
-			checkinLayout.setVisibility(4);
-		}
-	};
-	/**
 	 * search nearby goals , if there are , show their markers. center user's
 	 * location
 	 */
@@ -299,7 +248,7 @@ public class GameMapView extends MapActivity {
 			GameOverlayOperation.updateGameOverlay(getApplicationContext(),
 					mapView, myLocation.getMyLocation());
 			// System.out.println(GameOverlayOperation.getGameOverlay().getItems().size());
-			// mapController.setCenter(myLocation.getMyLocation());
+			
 			if (myLocation.getMyLocation() != null) { // make sure location is
 														// available before
 														// calling method
