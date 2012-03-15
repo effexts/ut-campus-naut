@@ -29,9 +29,11 @@
 	        >
 
 	        <ImageView
-	            android:layout_width="wrap_content"
+	            
+	            android:id="@+id/checkinPic"
+	            android:layout_width="match_parent"
 	            android:layout_height="wrap_content"
-	            android:src="@drawable/cedars"
+	            android:src="@drawable/sci0omb"
 	            android:layout_marginBottom="10dp" />
 
 	        <TextView

@@ -177,6 +177,7 @@ public class MyCustomLocationOverlay extends MyLocationOverlay {
     protected void drawMyLocation(Canvas canvas, MapView mapView, Location lastFix,
             GeoPoint myLocation, long when) {
 
+        
     	// Only update nearby Goal in the beginning or after checkedin goal
     	if (!GameData.getUpdateGoal()) {
     		GameData.setUpdateGoal(true); // disable update until next check in
