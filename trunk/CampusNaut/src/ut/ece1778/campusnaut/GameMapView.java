@@ -97,14 +97,13 @@ public class GameMapView extends MapActivity {
 		// Draw multiple black overlays on top of map
 		for (Double curLatitude = INITIAL_LATITUDE; curLatitude > END_LATITUDE; curLatitude -= LAT_D) {
 			for (Double curLongitude = INITIAL_LONGITUDE; curLongitude < END_LONGITUDE; curLongitude += LONG_D) {
-				mapView.getOverlays().add(
-						new BlackOverlay(curLongitude, curLatitude,
-								curLongitude + LONG_D, curLatitude - LAT_D));
+				//mapView.getOverlays().add(new BlackOverlay(curLongitude, curLatitude,curLongitude + LONG_D, curLatitude - LAT_D));
 			}
 		}
 
 		// User location overlay
-		myLocation = new MyCustomLocationOverlay(this, mapView);
+		
+		myLocation = new MyCustomLocationOverlay(this, mapView,INITIAL_LONGITUDE, INITIAL_LATITUDE, END_LONGITUDE, END_LATITUDE);
 		mapView.getOverlays().add(myLocation);
 		myLocation.enableMyLocation();
 		
@@ -420,7 +419,6 @@ public class GameMapView extends MapActivity {
 							loc.setTime(System.currentTimeMillis());
 							loc.setLatitude(Double.parseDouble(result[0]));
 							loc.setLongitude(Double.parseDouble(result[1]));
-							System.out.println(result[0] + "," + result[1]);
 							loc.setAccuracy(10);
 							mockLocMgr.setTestProviderStatus(
 									mocLocationProvider,
