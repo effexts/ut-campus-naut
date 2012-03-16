@@ -12,6 +12,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.RadioGroup;
+import android.widget.RadioGroup.OnCheckedChangeListener;
 
 public class GPSControllerActivity extends Activity {
 	private final String OUR_URL = "http://ec2-184-73-31-146.compute-1.amazonaws.com:8080/CampusNaut/servlet/GPSInjection";
@@ -20,6 +22,7 @@ public class GPSControllerActivity extends Activity {
 	private static double longitude = 43.660887;
 	private static double laptitude = -79.398547;
 	private static final double RANGE = 0.000500;
+	private static String user="steve";
 
 	/** Called when the activity is first created. */
 	@Override
@@ -34,7 +37,27 @@ public class GPSControllerActivity extends Activity {
 		topButton.setOnClickListener(onTopClick);
 		Button downButton = (Button) findViewById(R.id.down);
 		downButton.setOnClickListener(onDownClick);
+		Button resetButton = (Button) findViewById(R.id.reset);
+		resetButton.setOnClickListener(onResetClick);
+		RadioGroup userRadio = (RadioGroup) findViewById(R.id.user);
+		userRadio.setOnCheckedChangeListener(onUserChec);
 	}
+    /**
+     * Listener for gender radio button 
+     */
+    private OnCheckedChangeListener onUserChec = new OnCheckedChangeListener() {
+
+        public void onCheckedChanged(RadioGroup group, int checkedId) {
+            switch (checkedId) {
+                case R.id.steve:
+                    user = "steve";
+                    break;
+                case R.id.leo:
+                    user = "leo";
+                    break;
+            }
+        }
+    };
 
 	private OnClickListener onLeftClick = new OnClickListener() {
 
@@ -68,6 +91,14 @@ public class GPSControllerActivity extends Activity {
 			task.execute(new String[] { "top" });
 		}
 	};
+	private OnClickListener onResetClick = new OnClickListener() {
+
+		public void onClick(View v) {
+			// ***NOTE*** Upload the account information to MySQL database here.
+			NetAsyncTask task = new NetAsyncTask();
+			task.execute(new String[] { "reset" });
+		}
+	};
 
 	private class NetAsyncTask extends AsyncTask<String, Void, String> {
 		@Override
@@ -99,6 +130,9 @@ public class GPSControllerActivity extends Activity {
 					longitude += RANGE;
 				} else if (u[0].equals("down")) {
 					longitude -= RANGE;
+				} else {
+					longitude = 43.660887;
+					laptitude = -79.398547;
 				}
 				DecimalFormat myFormatter = new DecimalFormat("#0.0000000");
 				String output = myFormatter.format(longitude) + ","
@@ -106,6 +140,7 @@ public class GPSControllerActivity extends Activity {
 				// Do post request.
 				DataOutputStream out = new DataOutputStream(
 						httpConn.getOutputStream());
+				out.writeUTF(user);
 				out.writeUTF(output);
 				out.flush();
 				out.close();
