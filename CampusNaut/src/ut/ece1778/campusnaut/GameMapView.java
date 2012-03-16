@@ -33,7 +33,6 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapController;
@@ -48,16 +47,13 @@ import com.google.android.maps.MyLocationOverlay;
  */
 public class GameMapView extends MapActivity {
 	// URL for remote GPS location
-	private static final String GPS_URL = "http://ec2-184-73-31-146.compute-1.amazonaws.com:8080/CampusNaut/gps.txt";
+	private static final String GPS_URL = "http://ec2-184-73-31-146.compute-1.amazonaws.com:8080/CampusNaut/steve.txt";
+	private static final int GPS_UPDATE_TIME = 3000;
 	private static final int ZOOM_LEVEL = 19;
 	private static final Double INITIAL_LATITUDE = 43.669858 * 1E6;
 	private static final Double INITIAL_LONGITUDE = -79.40727 * 1E6;
 	private static final Double END_LATITUDE = 43.657859 * 1E6;
 	private static final Double END_LONGITUDE = -79.381928 * 1E6;
-	private static final Double DIMENSION = (Double) (MyCustomLocationOverlay
-			.getDimension() * 2.0);
-	private static final Double LAT_D = DIMENSION * 1.5;
-	private static final Double LONG_D = DIMENSION * 2;
 	private MapView mapView = null;
 	private MapController mapController = null;
 	private MyLocationOverlay myLocation = null;
@@ -92,15 +88,8 @@ public class GameMapView extends MapActivity {
 
 		mapController = mapView.getController();
 		mapController.setZoom(ZOOM_LEVEL);
-		// Draw multiple black overlays on top of map
-		/*for (Double curLatitude = INITIAL_LATITUDE; curLatitude > END_LATITUDE; curLatitude -= LAT_D) {
-			for (Double curLongitude = INITIAL_LONGITUDE; curLongitude < END_LONGITUDE; curLongitude += LONG_D) {
-				//mapView.getOverlays().add(new BlackOverlay(curLongitude, curLatitude,curLongitude + LONG_D, curLatitude - LAT_D));
-			}
-		}*/
 
 		// User location overlay
-		
 		myLocation = new MyCustomLocationOverlay(this, mapView,INITIAL_LONGITUDE, INITIAL_LATITUDE, END_LONGITUDE, END_LATITUDE);
 		mapView.getOverlays().add(myLocation);
 		myLocation.enableMyLocation();
@@ -118,7 +107,7 @@ public class GameMapView extends MapActivity {
 		mockLocMgr.setTestProviderEnabled(mocLocationProvider, true);
 		// Pull the Location every 1 second
 		Timer timer = new Timer();
-		timer.schedule(new MockGPSUpdateTimeTask(), 100, 1000);
+		timer.schedule(new MockGPSUpdateTimeTask(), 100, GPS_UPDATE_TIME);
 		// End of *Mock GPS* code
 		
 		// Must call this to show user location overlay on map
