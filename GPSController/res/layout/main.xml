@@ -3,7 +3,12 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical" >
-
+
+
+
+
+
+
     <RelativeLayout
         android:id="@+id/relativeLayout1"
         android:layout_width="match_parent"
@@ -12,36 +17,69 @@
 
         <Button
             android:id="@+id/top"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:text="Top" />
+            android:text="Up" />
 
         <Button
             android:id="@+id/down"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:layout_alignLeft="@+id/top"
-            android:layout_alignParentBottom="true"
+            android:layout_below="@+id/reset"
             android:layout_marginBottom="20dp"
             android:text="Down" />
 
         <Button
             android:id="@+id/right"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:layout_alignParentRight="true"
             android:layout_below="@+id/top"
             android:text="Right" />
 
         <Button
             android:id="@+id/left"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:layout_alignParentLeft="true"
             android:layout_below="@+id/top"
             android:text="Left" />
+        <Button
+            android:id="@+id/reset"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_alignLeft="@+id/top"
+            android:layout_toRightOf="@+id/left"
+            android:layout_below="@+id/top"
+            android:text="Reset" />
+
+        <RadioGroup
+            android:id="@+id/user"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/top"
+            android:layout_below="@+id/down"
+            android:layout_marginLeft="14dp" 
+            android:orientation="vertical"
+            >
+
+            <RadioButton
+                android:id="@+id/steve"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="Steve Who" />
+
+            <RadioButton
+                android:id="@+id/leo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Leo Man" />
+
+        </RadioGroup>
 
     </RelativeLayout>
 
