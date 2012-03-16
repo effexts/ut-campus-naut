@@ -3,12 +3,13 @@ package ut.ece1778.campusnaut;
 import java.util.ArrayList;
 import java.util.List;
 
-import ut.ece1778.bean.Game;
+
 import ut.ece1778.bean.GameData;
 import ut.ece1778.bean.Goal;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
-import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
 import android.graphics.BlurMaskFilter;
 import android.graphics.Canvas;
@@ -16,19 +17,16 @@ import android.graphics.Color;
 import android.graphics.MaskFilter;
 import android.graphics.Matrix;
 import android.graphics.Paint;
-import android.graphics.Path;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
-import android.graphics.RectF;
 
 import android.graphics.Point;
 import android.location.Location;
-import android.os.SystemClock;
+import android.os.Vibrator;
 
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapView;
 import com.google.android.maps.MyLocationOverlay;
-import com.google.android.maps.Overlay;
 import com.google.android.maps.Projection;
 
 /**
@@ -126,16 +124,43 @@ public class MyCustomLocationOverlay extends MyLocationOverlay {
 										.getLongitudeE6()) >= DIMENSION))) {
 			gpList.add(myGeoPoint);
 		}
+    
+        //it's necessary to set update when my location is jumping around
+        GameData.setUpdateGoal(false);
+       
+        try{
+        	 //auto detect if there's new goals nearby 
+        	 GameOverlayOperation.getGameOverlay().loadItem(myGeoPoint);
+        	 //acquire size of discoverdList, if size changed then new goal found
+        	 int newSize = GameData.getDiscoveredList().size();
+        	 if (GameData.getDetector() < newSize){
+        		 //when new goal found ,inform with alert 
+        		 AlertDialog.Builder builder = new AlertDialog.Builder(
+        					context);
+        			builder.setTitle("Congratulations!")
+        					.setMessage("You just found: \n" + GameData.getDiscoveredList().get(newSize-1).getTitle() +" !!!")
+        					.setIcon(R.drawable.goal_icon)
+        					.setPositiveButton("OK",
+        							new DialogInterface.OnClickListener() {
+        								public void onClick(
+        										DialogInterface dialog,
+        										int which) {
+        								}
+        							}).setCancelable(true);
 
-		// it's necessary to set update when my location is jumping around
-		GameData.setUpdateGoal(false);
-
-		try {
-			GameOverlayOperation.updateGameOverlay(context, mapView, loc);
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+        			AlertDialog alert = builder.create();
+        			alert.show();
+        			//call vibrate service.
+        			Vibrator vibrator = (Vibrator)context.getSystemService(Context.VIBRATOR_SERVICE);
+      			    vibrator.vibrate(500);
+      				//refresh new goal detector	  
+        			GameData.setDetector(newSize);
+        	 }
+        	 
+        }catch(Exception e){
+        	e.printStackTrace();
+        }
+   
 	}
 
 	/**
@@ -149,8 +174,8 @@ public class MyCustomLocationOverlay extends MyLocationOverlay {
 		if (!GameData.getUpdateGoal()) {
 			GameData.setUpdateGoal(true); // disable update until next check in
 
-			Game curGame = GameData.getGameList().get(0);
-			ArrayList<Goal> curGoals = curGame.getGoals();
+			//Game curGame = GameData.getGameList().get(0);
+			ArrayList<Goal> curGoals = (ArrayList<Goal>)GameData.getTempList();
 			// Keep track of minimum distance goal
 			double minDistance = Double.MAX_VALUE;
 			for (int i = 0; i < curGoals.size(); i++) {
