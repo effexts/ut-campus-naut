@@ -14,9 +14,7 @@ import ut.ece1778.bean.Game;
 import ut.ece1778.bean.GameData;
 import ut.ece1778.bean.Goal;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.graphics.drawable.Drawable;
@@ -31,7 +29,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.android.maps.MapActivity;
@@ -47,8 +44,10 @@ import com.google.android.maps.MyLocationOverlay;
  */
 public class GameMapView extends MapActivity {
 	// URL for remote GPS location
-	private static final String GPS_URL = "http://ec2-184-73-31-146.compute-1.amazonaws.com:8080/CampusNaut/steve.txt";
+	
+	private static final String GPS_URL = "http://ec2-184-73-31-146.compute-1.amazonaws.com:8080/CampusNaut/leo.txt";
 	private static final int GPS_UPDATE_TIME = 3000;
+
 	private static final int ZOOM_LEVEL = 19;
 	private static final Double INITIAL_LATITUDE = 43.669858 * 1E6;
 	private static final Double INITIAL_LONGITUDE = -79.40727 * 1E6;
@@ -57,15 +56,12 @@ public class GameMapView extends MapActivity {
 	private MapView mapView = null;
 	private MapController mapController = null;
 	private MyLocationOverlay myLocation = null;
-	private LinearLayout checkinLayout;
-	private TextView goalTitle;
 	private CurrentGameOverlay gameOverlay;
 	private Game game;
 	private ArrayList<Goal> goals;
 	private Drawable goalMarker;
 	private Button trigger;
 	private TextView scoreBoard;
-	private LocationManager locMngr;
 	private SharedPreferences prefs = null;
 	private Editor editor = null;
 	private LocationManager mockLocMgr = null;
@@ -99,15 +95,15 @@ public class GameMapView extends MapActivity {
 		mockLocMgr = (LocationManager) getBaseContext().getSystemService(
 				Context.LOCATION_SERVICE);
 		//mockLocMgr.clearTestProviderEnabled(mocLocationProvider);
-		mockLocMgr.requestLocationUpdates(mocLocationProvider, 0, 0,
-				locListener);
+		//mockLocMgr.requestLocationUpdates(mocLocationProvider, 0, 0,
+				//locListener);
 
 		mockLocMgr.addTestProvider(mocLocationProvider, false, false, false,
 				false, true, true, true, 0, 5);
 		mockLocMgr.setTestProviderEnabled(mocLocationProvider, true);
 		// Pull the Location every 1 second
 		Timer timer = new Timer();
-		timer.schedule(new MockGPSUpdateTimeTask(), 100, GPS_UPDATE_TIME);
+		timer.schedule(new MockGPSUpdateTimeTask(), 500, GPS_UPDATE_TIME);
 		// End of *Mock GPS* code
 		
 		// Must call this to show user location overlay on map
@@ -119,8 +115,7 @@ public class GameMapView extends MapActivity {
 		trigger.setOnClickListener(onTrigger);
 		// Set the current widget
 		GameData.setCurGoalHeader((TextView) findViewById(R.id.header));
-		GameOverlayOperation.setCheckinLayout(checkinLayout);
-		GameOverlayOperation.setGoalTitle(goalTitle);
+		
 
 		// load marker resource
 		goalMarker = getResources().getDrawable(R.drawable.goal_icon);
@@ -138,21 +133,27 @@ public class GameMapView extends MapActivity {
 		 * 43.663500, -79.401500); goals.add(goal); goal = new Goal("Cedars",
 		 * 43.660000, -79.398500); goals.add(goal);
 		 */
-		Goal goal = new Goal("Becca's H, Robert Murray (1973)", 43.659955,
+		Goal goal = new Goal(101,"Becca's H, Robert Murray (1973)", 43.659955,
 				-79.396584);
 		goals.add(goal);
-		goal = new Goal("Helix of Life, Ted Bieler (1967)", 43.660747,
+		goal = new Goal(102,"Helix of Life, Ted Bieler (1967)", 43.660747,
 				-79.393537);
 		goals.add(goal);
-		goal = new Goal("Cedars, Walter Yarwood (1962)", 43.660000, -79.398500);
+		goal = new Goal(103,"Cedars, Walter Yarwood (1962)", 43.660000, -79.398500);
 		goals.add(goal);
-		goal = new Goal("Untitled, Ron Bard (1964)", 43.658387, -79.393516);
+		goal = new Goal(104,"Untitled, Ron Bard (1964)", 43.658387, -79.393516);
 		goals.add(goal);
 		game.setGoals(goals);
 
 		// Add to temporary data store
 		GameData.add(game);
 
+		GameData.setTempList(goals);
+		
+		gameOverlay = new CurrentGameOverlay(GameMapView.this,
+		 		goalMarker, GameData.getGameList().get(0));
+		GameOverlayOperation.setGameOverlay(gameOverlay);
+		GameOverlayOperation.addGameOverlay(mapView);
 	}
 
 	/**
@@ -163,25 +164,13 @@ public class GameMapView extends MapActivity {
 		super.onResume();
 		myLocation.enableMyLocation();
 		scoreBoard.setText("Score: " + GameData.getScores());
-		locMngr = (LocationManager) this.getSystemService(LOCATION_SERVICE);
-		locMngr.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0,
-				locListener);
 		// Always center the user location on the map
 		myLocation.runOnFirstFix(new Runnable() {
 
 			public void run() {
 				try {
 					mapController.setCenter(myLocation.getMyLocation());
-					mapView.getOverlays().remove(gameOverlay);
-					gameOverlay = new CurrentGameOverlay(GameMapView.this,
-							goalMarker, checkinLayout, goalTitle, GameData
-									.getGameList().get(0), myLocation
-									.getMyLocation());
-					// mapView.getOverlays().add(gameOverlay );
-					GameOverlayOperation.setMyLocation(myLocation
-							.getMyLocation());
-					GameOverlayOperation.setGameOverlay(gameOverlay);
-					GameOverlayOperation.addGameOverlay(mapView);
+					
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -228,16 +217,12 @@ public class GameMapView extends MapActivity {
 	}
 
 	/**
-	 * search nearby goals , if there are , show their markers. center user's
-	 * location
+	 * only center user's location
 	 */
 	OnClickListener onTrigger = new OnClickListener() {
 
 		public void onClick(View v) {
-			GameOverlayOperation.updateGameOverlay(getApplicationContext(),
-					mapView, myLocation.getMyLocation());
-			// System.out.println(GameOverlayOperation.getGameOverlay().getItems().size());
-			
+
 			if (myLocation.getMyLocation() != null) { // make sure location is
 														// available before
 														// calling method
@@ -249,44 +234,12 @@ public class GameMapView extends MapActivity {
 	};
 
 	/**
-	 * set new goal detector
+	 * Unused
 	 */
 	LocationListener locListener = new LocationListener() {
 
 		public void onLocationChanged(Location location) {
-			try {
-				if (GameData.getDetector() < gameOverlay.getItems().size()) {
-					/*
-					 * call vibrate service Vibrator vibrator = (Vibrator)
-					 * getSystemService(VIBRATOR_SERVICE);
-					 * vibrator.vibrate(1000);
-					 */
-					// show alert dialog
-					AlertDialog.Builder builder = new AlertDialog.Builder(
-							GameMapView.this);
-					builder.setTitle("New goal discovered!")
-							.setMessage(
-									gameOverlay.getItem(
-											gameOverlay.getItems().size() - 1)
-											.getTitle())
-							.setIcon(R.drawable.goal_icon)
-							.setPositiveButton("OK",
-									new DialogInterface.OnClickListener() {
-										public void onClick(
-												DialogInterface dialog,
-												int which) {
 
-										}
-									}).setCancelable(true);
-
-					AlertDialog alert = builder.create();
-					alert.show();
-
-					GameData.setDetector(gameOverlay.getItems().size());
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
 		}
 
 		public void onProviderDisabled(String provider) {
@@ -339,6 +292,7 @@ public class GameMapView extends MapActivity {
 	 * @author SteveWho
 	 *
 	 */
+	
 	class MockGPSUpdateTimeTask extends TimerTask {
 		public void run() {
 			try {

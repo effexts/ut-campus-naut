@@ -11,17 +11,27 @@ import com.google.android.maps.GeoPoint;
  */
 public class Goal {
 
+	private int gID; //Goal ID
+	
 	private String title;	//Goal Title
 	private double latitude;	//Goal's Latitude (eight digit Integer)
 	private double longitude;	//Goal's Longitude (eight digit Integer)
 	private int state = 1; //finished goal or not(0,1)
 
+	public int getState() {
+		return state;
+	}
+
+	public void setState(int state) {
+		this.state = state;
+	}
 	private String picDir;	//picture directory of goal
 	private GeoPoint geoPoint; //Geopoint
 	private double distance = 0; // Distance to the user
 	private Location location; // Location for calculating distance
 
-	public Goal(String title, double latitude, double longitude) {
+	public Goal(int gID ,String title, double latitude, double longitude) {
+		this.gID = gID;
 		this.title = title;
 		this.latitude = latitude;
 		this.longitude = longitude;
@@ -39,9 +49,14 @@ public class Goal {
 		
 	}
 	
-	public int getStates() {
-		return state;
+	public int getgID() {
+		return gID;
 	}
+
+	public void setgID(int gID) {
+		this.gID = gID;
+	}
+
 	public void toFinish(){
 		this.state = 0;
 	}

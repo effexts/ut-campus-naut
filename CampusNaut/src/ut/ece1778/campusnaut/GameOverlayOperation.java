@@ -45,7 +45,7 @@ public final class GameOverlayOperation {
 				context ,goalMarker ,checkinLayout,goalTitle,GameData.getGameList().get(0), myGeoPoint);*/
         //mapView.getOverlays().add(gameOverlay );
 		if (gameOverlay != null) {
-			gameOverlay.removeAll();
+			//gameOverlay.removeAll();
 	        gameOverlay.loadItem(myGeoPoint);
 	        
 	        if(gameOverlay.getItems().size()>0){
