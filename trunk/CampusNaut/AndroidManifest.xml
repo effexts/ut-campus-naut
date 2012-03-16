@@ -39,7 +39,7 @@
         <activity
             android:name=".GameMapView"
             android:label="@string/app_name" 
-            android:theme="@android:style/Theme.NoTitleBar"
+            android:theme="@style/Theme.NoBackground"
             android:configChanges="keyboardHidden|orientation" >
         </activity>
         <activity
