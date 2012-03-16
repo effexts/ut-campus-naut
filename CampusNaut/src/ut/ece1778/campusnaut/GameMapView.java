@@ -93,18 +93,18 @@ public class GameMapView extends MapActivity {
 		mapController = mapView.getController();
 		mapController.setZoom(ZOOM_LEVEL);
 		// Draw multiple black overlays on top of map
-		for (Double curLatitude = INITIAL_LATITUDE; curLatitude > END_LATITUDE; curLatitude -= LAT_D) {
+		/*for (Double curLatitude = INITIAL_LATITUDE; curLatitude > END_LATITUDE; curLatitude -= LAT_D) {
 			for (Double curLongitude = INITIAL_LONGITUDE; curLongitude < END_LONGITUDE; curLongitude += LONG_D) {
 				//mapView.getOverlays().add(new BlackOverlay(curLongitude, curLatitude,curLongitude + LONG_D, curLatitude - LAT_D));
 			}
-		}
+		}*/
 
 		// User location overlay
 		
 		myLocation = new MyCustomLocationOverlay(this, mapView,INITIAL_LONGITUDE, INITIAL_LATITUDE, END_LONGITUDE, END_LATITUDE);
 		mapView.getOverlays().add(myLocation);
 		myLocation.enableMyLocation();
-		/*
+		
 		// *Mock GPS* Code for mock Location provider
 		mocLocationProvider = LocationManager.NETWORK_PROVIDER;
 		mockLocMgr = (LocationManager) getBaseContext().getSystemService(
@@ -120,7 +120,7 @@ public class GameMapView extends MapActivity {
 		Timer timer = new Timer();
 		timer.schedule(new MockGPSUpdateTimeTask(), 100, 1000);
 		// End of *Mock GPS* code
-		*/
+		
 		// Must call this to show user location overlay on map
 		mapView.postInvalidate();
 

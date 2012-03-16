@@ -8,6 +8,7 @@ import ut.ece1778.bean.GameData;
 import ut.ece1778.bean.Goal;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
 import android.graphics.BlurMaskFilter;
 import android.graphics.Canvas;
@@ -22,6 +23,7 @@ import android.graphics.RectF;
 
 import android.graphics.Point;
 import android.location.Location;
+import android.os.SystemClock;
 
 
 import com.google.android.maps.GeoPoint;
@@ -54,6 +56,13 @@ public class MyCustomLocationOverlay extends MyLocationOverlay {
     private Path    mPath;
     private Paint   mBitmapPaint;
     private Paint       mPaint;
+    // TESTING FPS
+	private boolean mIsProfiling = false;
+	private long mTotal;
+	private int mFrameCount;
+	private long mLastProfile;
+	private String mLastTime = "0";
+	// END OF TEST
    // private GeoPoint myGeoPoint = null;
     private List<GeoPoint> gpList = new ArrayList<GeoPoint>();
     public MyCustomLocationOverlay(Context context, MapView mapView,Double left, Double top, Double right, Double bottom) {
@@ -71,15 +80,24 @@ public class MyCustomLocationOverlay extends MyLocationOverlay {
     }
     @Override
     public boolean draw(Canvas canvas, MapView mapView, boolean shadow, long when) {
+    	if (shadow == false) {
+    	System.err.println("shadow:  " + shadow + " when: "+ when);
     	//canvas.drawColor(0xFFAAAAAA);
+    	long start = System.nanoTime();
     	mBitmap = Bitmap.createBitmap(800, 1280, Bitmap.Config.ARGB_8888);
+    	
         //mCanvas = new Canvas(mBitmap);
-        mCanvas = new Canvas();
-        mCanvas.setBitmap(mBitmap);
+        mCanvas = new Canvas(mBitmap);
+        //mCanvas.
+       // mCanvas.setBitmap();
         RectF rectangle= new RectF();
         Projection projection = mapView.getProjection();
 
-
+    	
+		//canvas.drawBitmap(mImages[mCurrentImage], 0.0f, 0.0f, mPaint);
+		long end = System.nanoTime();
+		
+		
         // Top left boundary
         Point point = new Point();
         projection.toPixels(gpTopLeft, point);
@@ -91,13 +109,15 @@ public class MyCustomLocationOverlay extends MyLocationOverlay {
         // Set the rectangle drawing property
         Paint paint = new Paint();
         paint.setColor(Color.BLUE);
+        
         mCanvas.drawRect(rectangle, paint);
+        
         //mCanvas
         mPath = new Path();
-        mBitmapPaint = new Paint(Paint.DITHER_FLAG);
+        mBitmapPaint = new Paint();
         mPaint = new Paint();
-        mPaint.setAntiAlias(true);
-        mPaint.setDither(true);
+       // mPaint.setAntiAlias(true);
+       // mPaint.setDither(true);
         mPaint.setColor(0xFFFF0000);
         mPaint.setStyle(Paint.Style.FILL_AND_STROKE);
         mPaint.setStrokeJoin(Paint.Join.ROUND);
@@ -121,8 +141,23 @@ public class MyCustomLocationOverlay extends MyLocationOverlay {
         	mCanvas.drawCircle((float) point.x, (float) point.y, zoomlevel, mPaint);
         }
     	canvas.drawBitmap(mBitmap, 0, 0, mBitmapPaint);
-    	super.draw(canvas, mapView, shadow, when);
-        return true;
+    	
+    	// TESTING FPS
+		mFrameCount++;
+		mTotal += (end - start) / 1000 / 1000;
+		//canvas.drawText(mLastTime, 10.0f, 20.0f, mPaint);
+		System.err.println("FPPPPPPPPPS:  " + mLastTime);
+		if (SystemClock.elapsedRealtime() - mLastProfile > 1000) {
+			mLastTime = Float.toString(mTotal / (float) mFrameCount);
+			mTotal = 0;
+			mFrameCount = 0;
+			mLastProfile = SystemClock.elapsedRealtime();
+		}
+		// END OF TEST
+		super.draw(canvas, mapView, false, when);
+    	}
+    	
+        return false;
     }
     /**
      * Automatically re-locate the user location on the center of the map if
@@ -137,7 +172,7 @@ public class MyCustomLocationOverlay extends MyLocationOverlay {
         mapView.getController().animateTo(myGeoPoint);
 
         // Remove the blackoverlay rectangle if user is within it
-        for (int i = 0; i < mapView.getOverlays().size(); i++) {
+        /*for (int i = 0; i < mapView.getOverlays().size(); i++) {
             Overlay curOverlay = mapView.getOverlays().get(i);
             if (curOverlay instanceof BlackOverlay) {
             	if (curLong >= ((BlackOverlay) curOverlay).getLeft() && 
@@ -148,7 +183,7 @@ public class MyCustomLocationOverlay extends MyLocationOverlay {
                     mapView.postInvalidate();
                 }
             }
-        }
+        }*/
         Point point = new Point();
         if (gpList.size()==0) {
         	gpList.add(myGeoPoint);
@@ -177,7 +212,6 @@ public class MyCustomLocationOverlay extends MyLocationOverlay {
     protected void drawMyLocation(Canvas canvas, MapView mapView, Location lastFix,
             GeoPoint myLocation, long when) {
 
-        
     	// Only update nearby Goal in the beginning or after checkedin goal
     	if (!GameData.getUpdateGoal()) {
     		GameData.setUpdateGoal(true); // disable update until next check in
