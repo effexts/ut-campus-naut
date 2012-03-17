@@ -10,6 +10,8 @@ import android.widget.TextView;
  * @author Steve Chun-Hao Hu, Leo ChenLiang Man
  */
 public final class GameData {
+	private static User curUser = new User(); //Current login user
+	
 	private static ArrayList<Game> gamesList = new ArrayList<Game>();
 	private static List<Goal> tempList = new ArrayList<Goal>(); //used for keeping uncheck-in goals
 	private static List<Goal> discoveredList = new ArrayList<Goal>(); // used for populating the CurrentGameOverlay
@@ -100,7 +102,16 @@ public final class GameData {
 	public static TextView getCurGoalHeader() {
 		return curGoalHeader;
 	}
-	
+
+	public static User getCurUser() {
+		return curUser;
+	}
+
+	public static void setCurUser(User curUser) {
+		GameData.curUser = curUser;
+	}
+
+
 	/**
 	 * Get a goal object from goal list by ID
 	 * @param goal_id

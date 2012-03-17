@@ -9,7 +9,7 @@
         android:id="@+id/myMap"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:apiKey="@string/steve_key"
+        android:apiKey="@string/leo_key"
         android:clickable="true" />
 
 
@@ -24,12 +24,19 @@
 
         <TextView
             android:id="@+id/header"
-            android:layout_width="wrap_content"
+            android:singleLine="true"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit ="marquee_forever"
+        	android:focusableInTouchMode="true"
+        	android:focusable="true"
+        	android:scrollX="1dp"
+            android:scrollHorizontally="true"
+            android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:paddingTop="5dp"
+            android:layout_marginTop="10dp"
             android:text="@string/goal_header"
-            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="20dp"
             android:textColor="#00aeff" />
     </LinearLayout>
 
