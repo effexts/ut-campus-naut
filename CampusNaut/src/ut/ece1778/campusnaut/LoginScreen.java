@@ -48,7 +48,7 @@ public class LoginScreen extends Activity {
         // Skip to map view if user already login
         final boolean loggedin = prefs.getBoolean("loggedin", false);
         if (loggedin) {
-            startActivity(new Intent(LoginScreen.this, GameMapView.class));
+            startActivity(new Intent(LoginScreen.this, GoalPicker.class));
             finish();
         }
         setContentView(R.layout.login);
@@ -86,7 +86,7 @@ public class LoginScreen extends Activity {
                 if (email.equals(emailinput.getText().toString()) && passwd.equals(passwdinput.getText().toString())) {
                     editor.putBoolean("loggedin", true);
                     editor.commit();
-                    startActivity(new Intent(LoginScreen.this, GameMapView.class));
+                    startActivity(new Intent(LoginScreen.this, GoalPicker.class));
                     finish();
                 } else if (!email.equals(emailinput.getText().toString())) { // Email does not match local stored one 
                 	// ***NOTE*** can validate email with MySQL database here.
@@ -125,8 +125,7 @@ public class LoginScreen extends Activity {
             }else if(result.equals("Failed") ){
             	Toast.makeText(LoginScreen.this, "Your email is not registered. \nPlease create an account first.", Toast.LENGTH_SHORT).show();   
             }else{
-            	Toast.makeText(LoginScreen.this, result, Toast.LENGTH_LONG).show();     
-            	startActivity(new Intent(getApplicationContext(), GameMapView.class));
+            	startActivity(new Intent(getApplicationContext(), GoalPicker.class));
             	finish();
             }
         }

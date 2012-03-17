@@ -17,6 +17,7 @@ public final class GameData {
 	private static Goal nearbyGoal = new Goal();
 	private static TextView curGoalHeader = null; // Closest goal 
 	private static boolean updateGoal = false; // If check-in, we should update nearby goal
+	private static boolean firstTime = true; // Check if first time running the game
 	private static int scores = 0;
 	private static int detector = 0;
 
@@ -84,6 +85,12 @@ public final class GameData {
 	}
 	public static boolean getUpdateGoal () {
 		return updateGoal;
+	}
+	public static boolean getFirstTime() {
+		return firstTime;
+	}
+	public static void setFirstTime(boolean tag) {
+		firstTime = tag;
 	}
 	
 	public static void setCurGoalHeader (TextView header) {
