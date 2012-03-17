@@ -2,8 +2,11 @@ package ut.ece1778.campusnaut;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
@@ -13,7 +16,9 @@ import java.util.TimerTask;
 import ut.ece1778.bean.Game;
 import ut.ece1778.bean.GameData;
 import ut.ece1778.bean.Goal;
+import ut.ece1778.bean.User;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -22,6 +27,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.location.LocationProvider;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -30,6 +36,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapController;
@@ -45,7 +52,8 @@ import com.google.android.maps.MyLocationOverlay;
 public class GameMapView extends MapActivity {
 	// URL for remote GPS location
 	
-	private static final String GPS_URL = "http://ec2-184-73-31-146.compute-1.amazonaws.com:8080/CampusNaut/steve.txt";
+	private static final String GPS_URL = "http://ec2-184-73-31-146.compute-1.amazonaws.com:8080/CampusNaut/leo.txt";
+	private static final String UPD_PROG_URL = "http://ec2-184-73-31-146.compute-1.amazonaws.com:8080/CampusNaut/servlet/UpdateProgress";
 	private static final int GPS_UPDATE_TIME = 3000;
 
 	private static final int ZOOM_LEVEL = 19;
@@ -114,7 +122,9 @@ public class GameMapView extends MapActivity {
 		trigger = (Button) findViewById(R.id.trigge);
 		trigger.setOnClickListener(onTrigger);
 		// Set the current widget
-		GameData.setCurGoalHeader((TextView) findViewById(R.id.header));
+		TextView header = (TextView) findViewById(R.id.header);
+		//header.setMovementMethod(new ScrollingMovementMethod());
+		GameData.setCurGoalHeader(header);
 		
 
 		// load marker resource
@@ -133,21 +143,22 @@ public class GameMapView extends MapActivity {
 		 * 43.663500, -79.401500); goals.add(goal); goal = new Goal("Cedars",
 		 * 43.660000, -79.398500); goals.add(goal);
 		 */
-		Goal goal = new Goal(101,"Becca's H, Robert Murray (1973)", 43.659955,
+		Goal goal = new Goal(20001,"Becca's H, Robert Murray (1973)", 43.659955,
 				-79.396584);
 		goals.add(goal);
-		goal = new Goal(102,"Helix of Life, Ted Bieler (1967)", 43.660747,
+		goal = new Goal(20002,"Helix of Life, Ted Bieler (1967)", 43.660747,
 				-79.393537);
 		goals.add(goal);
-		goal = new Goal(103,"Cedars, Walter Yarwood (1962)", 43.660000, -79.398500);
+		goal = new Goal(20003,"Cedars, Walter Yarwood (1962)", 43.660000, -79.398500);
 		goals.add(goal);
-		goal = new Goal(104,"Untitled, Ron Bard (1964)", 43.658387, -79.393516);
+		goal = new Goal(20004,"Untitled, Ron Bard (1964)", 43.658387, -79.393516);
 		goals.add(goal);
 		game.setGoals(goals);
 
+		User curUser = new User(10001,"qwe",1,0);
 		// Add to temporary data store
+		GameData.setCurUser(curUser);
 		GameData.add(game);
-
 		GameData.setTempList(goals);
 		
 		gameOverlay = new CurrentGameOverlay(GameMapView.this,
@@ -283,6 +294,23 @@ public class GameMapView extends MapActivity {
 		case R.id.achievement:
 			// Future implementation
 			break;
+			
+		case R.id.upload:	//Positive update goal's state(user drive)
+			String updateData = "";
+			//Check if there's checked-in goal
+			for (Goal goal : GameData.getDiscoveredList()){
+				if (goal.getState() == 0){
+					updateData += goal.getgID()+"%";
+				}
+			}
+			if(updateData.equals("")){
+				Toast.makeText(GameMapView.this, "Go exploring! You don't have anything!", 1000).show();				
+			}else{
+				//Update check-in state with server DB
+				UpdateProgressAsyncTask task = new UpdateProgressAsyncTask();
+				task.execute(new String[]{updateData.substring(0, updateData.length()-1)});
+			}
+			break;
 		}
 		return true;
 	}
@@ -329,6 +357,73 @@ public class GameMapView extends MapActivity {
 				e.printStackTrace();
 			}
 
+		}
+	}
+	
+	/**
+	 * Update goal's state with DB on server
+	 * @author LeoMan
+	 */
+	private class UpdateProgressAsyncTask extends AsyncTask<String, Void, String> {
+		ProgressDialog mProgressDialog;
+
+		@Override
+		protected void onPostExecute(String result) {
+			mProgressDialog.dismiss();
+			if (result == null) {
+				Toast.makeText(
+						GameMapView.this,
+						"Cannot access the server. \nPlease make sure your WI-FI is on.",
+						Toast.LENGTH_LONG).show();
+			} else if (result.equals("Invalid")) {
+				Toast.makeText(GameMapView.this,
+						"Invalid Request.",
+						Toast.LENGTH_LONG).show();
+			} else {
+				Toast.makeText(GameMapView.this, result, Toast.LENGTH_LONG)
+						.show();
+				
+			}
+		}
+
+		@Override
+		protected void onPreExecute() {
+			mProgressDialog = ProgressDialog
+					.show(GameMapView.this, "Loading...",
+							"Please wait while connecting to Database...");
+		}
+
+		@Override
+		protected String doInBackground(String... u) {
+			URL url = null;
+			HttpURLConnection httpConn = null;
+			String returnStr = "null";
+			try {
+				url = new URL(UPD_PROG_URL);
+				httpConn = (HttpURLConnection) url.openConnection();
+				httpConn.setDoOutput(true);
+				httpConn.setRequestMethod("POST");
+				
+				
+				// Do post request.
+					DataOutputStream out = new DataOutputStream(
+							httpConn.getOutputStream());
+					out.writeUTF("<UPDATE>");
+					out.writeUTF(Integer.toString(GameData.getCurUser().getuID()));		
+					System.out.println(Integer.toString(GameData.getCurUser().getuID()));
+					out.writeUTF(u[0]);
+					out.flush();
+					out.close();
+				
+				// Receiving response from server
+				DataInputStream in = new DataInputStream(
+						httpConn.getInputStream());
+				returnStr = in.readUTF();
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return returnStr;
 		}
 	}
 }

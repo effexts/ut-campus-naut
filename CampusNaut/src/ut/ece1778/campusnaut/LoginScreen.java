@@ -30,6 +30,8 @@ import android.widget.Toast;
  */
 public class LoginScreen extends Activity {
 
+	private static final String ACC_VALI_URL = "http://ec2-184-73-31-146.compute-1.amazonaws.com:8080/CampusNaut/servlet/AccountValidation";
+	
     private SharedPreferences prefs = null; //Used for local datastore
     private Editor editor = null;
     private String email = null;
@@ -100,7 +102,7 @@ public class LoginScreen extends Activity {
                 passwdinput = (EditText) findViewById(R.id.pwinput);
                 if (isInternetOn()) {
                 	LoginAsyncTask task = new LoginAsyncTask();
-                	task.execute(new String[]{"http://ec2-184-73-31-146.compute-1.amazonaws.com:8080/CampusNaut/servlet/AccountValidation"});
+                	task.execute();
                 } else {
                 	Toast.makeText(LoginScreen.this, "Failed to connect to CampusNaut Database. " +
                 			"\nPlease check your network settings and try again!", Toast.LENGTH_SHORT).show();
@@ -139,7 +141,7 @@ public class LoginScreen extends Activity {
             HttpURLConnection httpConn = null;
             String returnStr = "null";
             try{
-            	url = new URL(u[0]);
+            	url = new URL(ACC_VALI_URL);
             	httpConn = (HttpURLConnection)url.openConnection();
             	httpConn.setDoOutput(true);
             	httpConn.setRequestMethod("POST");
