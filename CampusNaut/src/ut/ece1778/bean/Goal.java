@@ -17,7 +17,7 @@ public class Goal {
 	private String category; // Goal Category
 	private double latitude; // Goal's Latitude (eight digit Integer)
 	private double longitude; // Goal's Longitude (eight digit Integer)
-	private boolean state = false; // finished goal or not(0,1)
+	private boolean state = false; // false = user hasn't checked in, true = user has checked in
 	private boolean selected = false; // selected goal in goalpicker
 
 	private String picDir; // picture directory of goal

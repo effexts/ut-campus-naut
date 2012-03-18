@@ -74,13 +74,21 @@ public class GoalPicker extends ExpandableListActivity {
 
 	}
 
+	/**
+	 * When user click on Begin the journey, we upload the
+	 * selectedGoals in memory based on goals they checked
+	 * in the multi-level goal picker.
+	 */
 	private OnClickListener onGoClick = new OnClickListener() {
 		public void onClick(View v) {
+			// Clear the memory first
 			GameData.getSelectedGoal().clear();
+			@SuppressWarnings("rawtypes")
 			Iterator iterator = GameData.getAllGoals().entrySet().iterator();
-
 			while (iterator.hasNext()) {
+				@SuppressWarnings("rawtypes")
 				TreeMap.Entry entry = (TreeMap.Entry) iterator.next();
+				@SuppressWarnings("unchecked")
 				ArrayList<Goal> gList = (ArrayList<Goal>) entry.getValue();
 				for (int i = 0; i < gList.size(); i++) {
 					if (gList.get(i).getSelected()
@@ -89,15 +97,24 @@ public class GoalPicker extends ExpandableListActivity {
 						GameData.getSelectedGoal().add(gList.get(i));
 				}
 			}
-			startActivity(new Intent(getApplicationContext(), GameMapView.class));
-			finish();
+			if (GameData.getSelectedGoal().size()<=0) {
+				Toast.makeText(GoalPicker.this, "At least one objectives must be selected.",
+						Toast.LENGTH_LONG).show();
+			} else {
+				Toast.makeText(GoalPicker.this, "You have " + GameData.getSelectedGoal().size() + " objectives to complete.",
+						Toast.LENGTH_LONG).show();
+				startActivity(new Intent(getApplicationContext(), GameMapView.class));
+				finish();
+			}
 		}
 	};
+	/**
+	 * This method will be used in the future
 	private OnClickListener onUpdateClick = new OnClickListener() {
 		public void onClick(View v) {
 			new DBAsyncTask().execute();
 		}
-	};
+	};*/
 
 	/**
 	 * AsyncTask to sent create account request to server.
@@ -119,6 +136,7 @@ public class GoalPicker extends ExpandableListActivity {
 					GameData.setFirstTime(false);
 				Toast.makeText(GoalPicker.this, "No update available.",
 						Toast.LENGTH_LONG).show();
+				new ReadFromDBTask().execute();
 			} else {
 				// No need to autou pdate anymore if user already has data in
 				// local db
@@ -180,7 +198,6 @@ public class GoalPicker extends ExpandableListActivity {
 									// Field to store whether user has already
 									// check in and
 									// if the image is already on disk.
-
 									values.put("state", "false");
 									values.put("ondisk", "false");
 									dbHelper.getWritableDatabase().insert(
@@ -207,17 +224,19 @@ public class GoalPicker extends ExpandableListActivity {
 	 * AsyncTask to load goal data from local SQLITE database.
 	 * 
 	 */
+	@SuppressWarnings("rawtypes")
 	private class ReadFromDBTask extends
 			AsyncTask<String, TreeMap.Entry, String> {
-		// ProgressDialog mProgressDialog;
+		ProgressDialog mProgressDialog;
 
 		protected void onPostExecute(String result) {
-			// mProgressDialog.dismiss();
+			mProgressDialog.dismiss();
+			// Goal count is zero, nothing found in database
 			if (result.equals("0")) {
 				Toast.makeText(GoalPicker.this,
 						"Failed to populate objectives from local database.",
 						Toast.LENGTH_LONG).show();
-			} else {
+			} else { // Display multi-level goal checkbox
 				expListAdapter = new GoalAdapter(GoalPicker.this, categories,
 						goals);
 				setListAdapter(expListAdapter);
@@ -226,29 +245,20 @@ public class GoalPicker extends ExpandableListActivity {
 
 		@Override
 		protected void onPreExecute() {
-			/*
-			 * mProgressDialog = ProgressDialog.show(GoalPicker.this,
-			 * "Loading...",
-			 * "Please wait while populating goals from Database...");
-			 */
+			mProgressDialog = ProgressDialog.show(GoalPicker.this,
+					"Loading...",
+			 "Please wait while populating goals from Database...");
+			 
 			constantsCursor = dbHelper.getReadableDatabase().rawQuery(
 					"SELECT * FROM t_goals ORDER BY category", null);
 		}
 
+
 		@SuppressWarnings("unchecked")
 		@Override
-		protected void onProgressUpdate(TreeMap.Entry... item) {
-
-			ArrayList<Goal> gList = (ArrayList<Goal>) item[0].getValue();
-			String category = (String) item[0].getKey();
-
-			((GoalAdapter) getExpandableListAdapter()).addToGroup(category);
-			((GoalAdapter) getExpandableListAdapter()).addToGoal(gList);
-		}
-
-		@Override
 		protected String doInBackground(String... u) {
-			String responseMsg = "";
+			// Only traverse the local database for goals if the current goalCount
+			// in memory is not the same as the goal count in database
 			if (constantsCursor != null
 					&& constantsCursor.getCount() != GameData.getAllGoalCount()) {
 				// Means there is an update on the goals, so we refresh the
@@ -258,7 +268,6 @@ public class GoalPicker extends ExpandableListActivity {
 				constantsCursor.moveToFirst();
 				int count = 0;
 				while (constantsCursor.isAfterLast() == false) {
-
 					String category = constantsCursor.getString(5);
 					if (category != null && !category.isEmpty()
 							&& !GameData.getAllGoals().containsKey(category)) {
@@ -277,6 +286,7 @@ public class GoalPicker extends ExpandableListActivity {
 				}
 				constantsCursor.close();
 			}
+			// If there is goals available, display it on the app
 			if (GameData.getAllGoalCount() > 0) {
 				Iterator iterator = GameData.getAllGoals().entrySet()
 						.iterator();
@@ -289,7 +299,6 @@ public class GoalPicker extends ExpandableListActivity {
 					categories.add(category);
 				}
 			}
-
 			return "" + GameData.getAllGoalCount();
 		}
 	}

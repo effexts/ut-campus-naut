@@ -289,7 +289,6 @@ public class GameMapView extends MapActivity {
 			// Future implementation
 			break;
 		case R.id.editor:
-			// Future implementation
 			break;
 		case R.id.achievement:
 			// Future implementation

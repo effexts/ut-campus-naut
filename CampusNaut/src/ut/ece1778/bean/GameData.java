@@ -24,8 +24,8 @@ public final class GameData {
 																		// populating
 																		// the
 																		// CurrentGameOverlay
-	private static TreeMap<String, ArrayList<Goal>> allGoals = new TreeMap<String, ArrayList<Goal>>();
-	private static ArrayList<Goal> selectedGoals = new ArrayList<Goal>();
+	private static TreeMap<String, ArrayList<Goal>> allGoals = new TreeMap<String, ArrayList<Goal>>(); // used for mapping the category and goals inside the goal picker 
+	private static ArrayList<Goal> selectedGoals = new ArrayList<Goal>(); // SelectedGoals from goal picker
 	private static Goal nearbyGoal = new Goal();
 	private static TextView curGoalHeader = null; // Closest goal
 	private static boolean updateGoal = false; // If check-in, we should update
