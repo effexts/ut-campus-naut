@@ -194,7 +194,7 @@ public class MyCustomLocationOverlay extends MyLocationOverlay {
 			// If no more goals, game over
 			if (curGoals.size() == 0) {
 				GameData.getCurGoalHeader().setText("Mission Accomplished");
-				GameData.getCurGoalHeader().setBackgroundColor(Color.RED);
+				GameData.getCurGoalHeader().setTextColor(Color.RED);
 			}
 		}
 		Point screenPts = mapView.getProjection().toPixels(myLocation, null);
