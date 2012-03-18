@@ -153,6 +153,7 @@ public class GameMapView extends MapActivity {
 		 * goals.add(goal); goal = new Goal(20004,"Untitled, Ron Bard (1964)",
 		 * 43.658387, -79.393516); goals.add(goal);
 		 */
+		System.out.println("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF"+goals.get(0).getgID());
 		game.setGoals(goals);
 
 		User curUser = new User(10001, "qwe", 1, 0);
