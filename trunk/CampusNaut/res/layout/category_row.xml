@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content">
@@ -14,8 +14,17 @@
          android:shadowRadius="2"  
          android:shadowDx="1"  
          android:shadowDy="1" 
-         android:layout_width="fill_parent"
+         android:layout_width="wrap_content"
          android:layout_height="wrap_content"/>
-
-</LinearLayout>
+    <TextView android:id="@+id/selected"
+         android:layout_toRightOf="@+id/category"
+	     android:paddingTop="12sp"
+	     android:paddingBottom="12sp"
+         android:textSize="20sp"
+         android:textStyle="italic"
+         android:textColor= "#AED996"  
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+	/>
+</RelativeLayout>
 
