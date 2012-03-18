@@ -18,7 +18,7 @@ public class DBHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE t_goals (goal_id INTEGER PRIMARY KEY, title TEXT, description " +
-        		"TEXT, latitude TEXT, longitude TEXT, category TEXT);");
+        		"TEXT, latitude TEXT, longitude TEXT, category TEXT, state TEXT, ondisk TEXT);");
     }
 
     @Override

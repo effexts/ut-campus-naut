@@ -3,7 +3,6 @@ package ut.ece1778.campusnaut;
 import java.util.ArrayList;
 import java.util.List;
 
-
 import ut.ece1778.bean.GameData;
 import ut.ece1778.bean.Goal;
 import android.app.AlertDialog;
@@ -88,7 +87,8 @@ public class MyCustomLocationOverlay extends MyLocationOverlay {
 			float blursize = zoomlevel / 2f;
 
 			mCanvas.drawColor(Color.BLACK);
-			MaskFilter mBlur = new BlurMaskFilter(blursize,	BlurMaskFilter.Blur.NORMAL);
+			MaskFilter mBlur = new BlurMaskFilter(blursize,
+					BlurMaskFilter.Blur.NORMAL);
 			mPaint.setMaskFilter(mBlur);
 			// Retrieve visited Geopoints
 			for (int i = 0; i < gpList.size(); i++) {
@@ -124,43 +124,47 @@ public class MyCustomLocationOverlay extends MyLocationOverlay {
 										.getLongitudeE6()) >= DIMENSION))) {
 			gpList.add(myGeoPoint);
 		}
-    
-        //it's necessary to set update when my location is jumping around
-        GameData.setUpdateGoal(false);
-       
-        try{
-        	 //auto detect if there's new goals nearby 
-        	 GameOverlayOperation.getGameOverlay().loadItem(myGeoPoint);
-        	 //acquire size of discoverdList, if size changed then new goal found
-        	 int newSize = GameData.getDiscoveredList().size();
-        	 if (GameData.getDetector() < newSize){
-        		 //when new goal found ,inform with alert 
-        		 AlertDialog.Builder builder = new AlertDialog.Builder(
-        					context);
-        			builder.setTitle("Congratulations!")
-        					.setMessage("You just found: \n" + GameData.getDiscoveredList().get(newSize-1).getTitle() +" !!!")
-        					.setIcon(R.drawable.goal_icon)
-        					.setPositiveButton("OK",
-        							new DialogInterface.OnClickListener() {
-        								public void onClick(
-        										DialogInterface dialog,
-        										int which) {
-        								}
-        							}).setCancelable(true);
 
-        			AlertDialog alert = builder.create();
-        			alert.show();
-        			//call vibrate service.
-        			Vibrator vibrator = (Vibrator)context.getSystemService(Context.VIBRATOR_SERVICE);
-      			    vibrator.vibrate(500);
-      				//refresh new goal detector	  
-        			GameData.setDetector(newSize);
-        	 }
-        	 
-        }catch(Exception e){
-        	e.printStackTrace();
-        }
-   
+		// it's necessary to set update when my location is jumping around
+		GameData.setUpdateGoal(false);
+
+		try {
+			// auto detect if there's new goals nearby
+			GameOverlayOperation.getGameOverlay().loadItem(myGeoPoint);
+			// acquire size of discoverdList, if size changed then new goal
+			// found
+			int newSize = GameData.getDiscoveredList().size();
+			if (GameData.getDetector() < newSize) {
+				// when new goal found ,inform with alert
+				AlertDialog.Builder builder = new AlertDialog.Builder(context);
+				builder.setTitle("Congratulations!")
+						.setMessage(
+								"You just found: \n"
+										+ GameData.getDiscoveredList()
+												.get(newSize - 1).getTitle()
+										+ " !!!")
+						.setIcon(R.drawable.goal_icon)
+						.setPositiveButton("OK",
+								new DialogInterface.OnClickListener() {
+									public void onClick(DialogInterface dialog,
+											int which) {
+									}
+								}).setCancelable(true);
+
+				AlertDialog alert = builder.create();
+				alert.show();
+				// call vibrate service.
+				Vibrator vibrator = (Vibrator) context
+						.getSystemService(Context.VIBRATOR_SERVICE);
+				vibrator.vibrate(500);
+				// refresh new goal detector
+				GameData.setDetector(newSize);
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 	}
 
 	/**
@@ -174,8 +178,8 @@ public class MyCustomLocationOverlay extends MyLocationOverlay {
 		if (!GameData.getUpdateGoal()) {
 			GameData.setUpdateGoal(true); // disable update until next check in
 
-			//Game curGame = GameData.getGameList().get(0);
-			ArrayList<Goal> curGoals = (ArrayList<Goal>)GameData.getTempList();
+			// Game curGame = GameData.getGameList().get(0);
+			ArrayList<Goal> curGoals = (ArrayList<Goal>) GameData.getTempList();
 			// Keep track of minimum distance goal
 			double minDistance = Double.MAX_VALUE;
 			for (int i = 0; i < curGoals.size(); i++) {

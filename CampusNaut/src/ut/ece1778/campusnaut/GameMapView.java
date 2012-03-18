@@ -51,8 +51,8 @@ import com.google.android.maps.MyLocationOverlay;
  */
 public class GameMapView extends MapActivity {
 	// URL for remote GPS location
-	
-	private static final String GPS_URL = "http://ec2-184-73-31-146.compute-1.amazonaws.com:8080/CampusNaut/leo.txt";
+
+	private static final String GPS_URL = "http://ec2-184-73-31-146.compute-1.amazonaws.com:8080/CampusNaut/steve.txt";
 	private static final String UPD_PROG_URL = "http://ec2-184-73-31-146.compute-1.amazonaws.com:8080/CampusNaut/servlet/UpdateProgress";
 	private static final int GPS_UPDATE_TIME = 3000;
 
@@ -94,17 +94,19 @@ public class GameMapView extends MapActivity {
 		mapController.setZoom(ZOOM_LEVEL);
 
 		// User location overlay
-		myLocation = new MyCustomLocationOverlay(this, mapView,INITIAL_LONGITUDE, INITIAL_LATITUDE, END_LONGITUDE, END_LATITUDE);
+		myLocation = new MyCustomLocationOverlay(this, mapView,
+				INITIAL_LONGITUDE, INITIAL_LATITUDE, END_LONGITUDE,
+				END_LATITUDE);
 		mapView.getOverlays().add(myLocation);
 		myLocation.enableMyLocation();
-		
+
 		// *Mock GPS* Code for mock Location provider
 		mocLocationProvider = LocationManager.NETWORK_PROVIDER;
 		mockLocMgr = (LocationManager) getBaseContext().getSystemService(
 				Context.LOCATION_SERVICE);
-		//mockLocMgr.clearTestProviderEnabled(mocLocationProvider);
-		//mockLocMgr.requestLocationUpdates(mocLocationProvider, 0, 0,
-				//locListener);
+		// mockLocMgr.clearTestProviderEnabled(mocLocationProvider);
+		// mockLocMgr.requestLocationUpdates(mocLocationProvider, 0, 0,
+		// locListener);
 
 		mockLocMgr.addTestProvider(mocLocationProvider, false, false, false,
 				false, true, true, true, 0, 5);
@@ -113,19 +115,18 @@ public class GameMapView extends MapActivity {
 		Timer timer = new Timer();
 		timer.schedule(new MockGPSUpdateTimeTask(), 500, GPS_UPDATE_TIME);
 		// End of *Mock GPS* code
-		
+
 		// Must call this to show user location overlay on map
 		mapView.postInvalidate();
 
-		//tools of map view
+		// tools of map view
 		scoreBoard = (TextView) findViewById(R.id.scoreBoard);
 		trigger = (Button) findViewById(R.id.trigge);
 		trigger.setOnClickListener(onTrigger);
 		// Set the current widget
 		TextView header = (TextView) findViewById(R.id.header);
-		//header.setMovementMethod(new ScrollingMovementMethod());
+		// header.setMovementMethod(new ScrollingMovementMethod());
 		GameData.setCurGoalHeader(header);
-		
 
 		// load marker resource
 		goalMarker = getResources().getDrawable(R.drawable.goal_icon);
@@ -135,7 +136,7 @@ public class GameMapView extends MapActivity {
 
 		// Instantiate a Game
 		game = new Game();
-		goals = new ArrayList<Goal>();
+		goals = GameData.getSelectedGoal(); // Add the selected goal to our game
 		/*
 		 * Goal goal = new Goal("Robarts Library", 43.664300, -79.399400);
 		 * goals.add(goal); goal = new Goal("Athlete Centre", 43.662700,
@@ -143,26 +144,25 @@ public class GameMapView extends MapActivity {
 		 * 43.663500, -79.401500); goals.add(goal); goal = new Goal("Cedars",
 		 * 43.660000, -79.398500); goals.add(goal);
 		 */
-		Goal goal = new Goal(20001,"Becca's H, Robert Murray (1973)", 43.659955,
-				-79.396584);
-		goals.add(goal);
-		goal = new Goal(20002,"Helix of Life, Ted Bieler (1967)", 43.660747,
-				-79.393537);
-		goals.add(goal);
-		goal = new Goal(20003,"Cedars, Walter Yarwood (1962)", 43.660000, -79.398500);
-		goals.add(goal);
-		goal = new Goal(20004,"Untitled, Ron Bard (1964)", 43.658387, -79.393516);
-		goals.add(goal);
+		/*
+		 * Goal goal = new Goal(20001,"Becca's H, Robert Murray (1973)",
+		 * 43.659955, -79.396584); goals.add(goal); goal = new
+		 * Goal(20002,"Helix of Life, Ted Bieler (1967)", 43.660747,
+		 * -79.393537); goals.add(goal); goal = new
+		 * Goal(20003,"Cedars, Walter Yarwood (1962)", 43.660000, -79.398500);
+		 * goals.add(goal); goal = new Goal(20004,"Untitled, Ron Bard (1964)",
+		 * 43.658387, -79.393516); goals.add(goal);
+		 */
 		game.setGoals(goals);
 
-		User curUser = new User(10001,"qwe",1,0);
+		User curUser = new User(10001, "qwe", 1, 0);
 		// Add to temporary data store
 		GameData.setCurUser(curUser);
 		GameData.add(game);
 		GameData.setTempList(goals);
-		
-		gameOverlay = new CurrentGameOverlay(GameMapView.this,
-		 		goalMarker, GameData.getGameList().get(0));
+
+		gameOverlay = new CurrentGameOverlay(GameMapView.this, goalMarker,
+				GameData.getGameList().get(0));
 		GameOverlayOperation.setGameOverlay(gameOverlay);
 		GameOverlayOperation.addGameOverlay(mapView);
 	}
@@ -181,7 +181,7 @@ public class GameMapView extends MapActivity {
 			public void run() {
 				try {
 					mapController.setCenter(myLocation.getMyLocation());
-					
+
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -294,21 +294,23 @@ public class GameMapView extends MapActivity {
 		case R.id.achievement:
 			// Future implementation
 			break;
-			
-		case R.id.upload:	//Positive update goal's state(user drive)
+
+		case R.id.upload: // Positive update goal's state(user drive)
 			String updateData = "";
-			//Check if there's checked-in goal
-			for (Goal goal : GameData.getDiscoveredList()){
-				if (goal.getState() == 0){
-					updateData += goal.getgID()+"%";
+			// Check if there's checked-in goal
+			for (Goal goal : GameData.getDiscoveredList()) {
+				if (goal.getState()) {
+					updateData += goal.getgID() + "%";
 				}
 			}
-			if(updateData.equals("")){
-				Toast.makeText(GameMapView.this, "Go exploring! You don't have anything!", 1000).show();				
-			}else{
-				//Update check-in state with server DB
+			if (updateData.equals("")) {
+				Toast.makeText(GameMapView.this,
+						"Go exploring! You don't have anything!", 1000).show();
+			} else {
+				// Update check-in state with server DB
 				UpdateProgressAsyncTask task = new UpdateProgressAsyncTask();
-				task.execute(new String[]{updateData.substring(0, updateData.length()-1)});
+				task.execute(new String[] { updateData.substring(0,
+						updateData.length() - 1) });
 			}
 			break;
 		}
@@ -317,10 +319,11 @@ public class GameMapView extends MapActivity {
 
 	/**
 	 * Mock GPS signal timer task
+	 * 
 	 * @author SteveWho
-	 *
+	 * 
 	 */
-	
+
 	class MockGPSUpdateTimeTask extends TimerTask {
 		public void run() {
 			try {
@@ -359,12 +362,14 @@ public class GameMapView extends MapActivity {
 
 		}
 	}
-	
+
 	/**
 	 * Update goal's state with DB on server
+	 * 
 	 * @author LeoMan
 	 */
-	private class UpdateProgressAsyncTask extends AsyncTask<String, Void, String> {
+	private class UpdateProgressAsyncTask extends
+			AsyncTask<String, Void, String> {
 		ProgressDialog mProgressDialog;
 
 		@Override
@@ -376,13 +381,12 @@ public class GameMapView extends MapActivity {
 						"Cannot access the server. \nPlease make sure your WI-FI is on.",
 						Toast.LENGTH_LONG).show();
 			} else if (result.equals("Invalid")) {
-				Toast.makeText(GameMapView.this,
-						"Invalid Request.",
+				Toast.makeText(GameMapView.this, "Invalid Request.",
 						Toast.LENGTH_LONG).show();
 			} else {
 				Toast.makeText(GameMapView.this, result, Toast.LENGTH_LONG)
 						.show();
-				
+
 			}
 		}
 
@@ -403,18 +407,18 @@ public class GameMapView extends MapActivity {
 				httpConn = (HttpURLConnection) url.openConnection();
 				httpConn.setDoOutput(true);
 				httpConn.setRequestMethod("POST");
-				
-				
+
 				// Do post request.
-					DataOutputStream out = new DataOutputStream(
-							httpConn.getOutputStream());
-					out.writeUTF("<UPDATE>");
-					out.writeUTF(Integer.toString(GameData.getCurUser().getuID()));		
-					System.out.println(Integer.toString(GameData.getCurUser().getuID()));
-					out.writeUTF(u[0]);
-					out.flush();
-					out.close();
-				
+				DataOutputStream out = new DataOutputStream(
+						httpConn.getOutputStream());
+				out.writeUTF("<UPDATE>");
+				out.writeUTF(Integer.toString(GameData.getCurUser().getuID()));
+				System.out.println(Integer.toString(GameData.getCurUser()
+						.getuID()));
+				out.writeUTF(u[0]);
+				out.flush();
+				out.close();
+
 				// Receiving response from server
 				DataInputStream in = new DataInputStream(
 						httpConn.getInputStream());

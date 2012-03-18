@@ -38,4 +38,5 @@
     <string name="female">Female</string>
     <string name="newacc">Create a new account</string>
     <string name="cfpassword">Confirm Password</string>
+    <string name="start">Begin the Journey</string>
 </resources>
