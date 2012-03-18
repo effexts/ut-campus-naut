@@ -29,7 +29,7 @@ public class GoalAdapter extends BaseExpandableListAdapter {
 	private int checkBoxCounter = 0;
 	private int checkBoxInitialized = 0;
 	static ViewHolder holder;
-
+	static ParentViewHolder parentHolder;
 	/**
 	 * Constructor for GoalAdapter
 	 */
@@ -67,13 +67,20 @@ public class GoalAdapter extends BaseExpandableListAdapter {
 	}
 
 	/**
-	 * Used to save the View state
+	 * Used to save the ChildView state
 	 */
 	static class ViewHolder {
 		protected TextView text;
 		protected CheckBox checkbox;
 	}
 
+	/**
+	 * Used to save the ParentView state
+	 */
+	static class ParentViewHolder {
+		protected TextView categoryText;
+		protected TextView selectedText;
+	}
 	/**
 	 * Define the view for the 2nd level goals
 	 */
@@ -133,6 +140,17 @@ public class GoalAdapter extends BaseExpandableListAdapter {
 		return goals.get(groupPosition).size();
 	}
 
+	/**
+	 * Count number of goal selected in each category.
+	 */
+	public int getChildrenSelectedCount(int groupPosition) {
+		int count = 0;
+		for (int i = 0; i < goals.get(groupPosition).size(); i++) {
+			if (goals.get(groupPosition).get(i).getSelected())
+				count++;
+		}
+		return count;
+	}
 	public Object getGroup(int groupPosition) {
 		return categories.get(groupPosition);
 	}
@@ -150,6 +168,55 @@ public class GoalAdapter extends BaseExpandableListAdapter {
 	 */
 	public View getGroupView(int groupPosition, boolean isExpanded,
 			View convertView, ViewGroup parent) {
+		if (convertView == null) { // Create a new view and remember state
+			final ParentViewHolder viewHolder = new ParentViewHolder();
+			convertView = inflater.inflate(R.layout.category_row, parent, false);
+			viewHolder.categoryText = (TextView) convertView.findViewById(R.id.category);
+			viewHolder.selectedText =  (TextView) convertView.findViewById(R.id.selected);
+			convertView.setTag(viewHolder);
+			viewHolder.categoryText.setText((String) getGroup(groupPosition));
+			
+			viewHolder.selectedText.setTag(getChildrenSelectedCount(groupPosition));
+			String categoryTitle = (String) getGroup(groupPosition);
+			
+			if (categoryTitle != null) {
+				// Only display selected count if it is greater than 0
+				if (getChildrenSelectedCount(groupPosition) > 0) {
+					viewHolder.categoryText.setText(categoryTitle);
+					viewHolder.selectedText.setText(" ("+ getChildrenSelectedCount(groupPosition) + " selected) " );
+				}
+				else {
+					viewHolder.categoryText.setText(categoryTitle);
+					viewHolder.selectedText.setText("");
+				}
+			}
+		}
+		else { // retrieve state from previous view
+			((ParentViewHolder) convertView.getTag()).selectedText.setTag(getChildrenSelectedCount(groupPosition));
+		}
+		ParentViewHolder viewHolder = (ParentViewHolder) convertView.getTag();
+		String categoryTitle = (String) getGroup(groupPosition);
+		
+		if (categoryTitle != null) {
+			// Only display selected count if it is greater than 0
+			if (getChildrenSelectedCount(groupPosition) > 0) {
+				viewHolder.categoryText.setText(categoryTitle);
+				viewHolder.selectedText.setText(" ("+ getChildrenSelectedCount(groupPosition) + " selected) " );
+			}
+			else {
+				viewHolder.categoryText.setText(categoryTitle);
+				viewHolder.selectedText.setText("" );
+			}
+		}
+
+		return convertView;
+	}
+	
+	/**
+	 * Define the view for the 1st level category
+	 */
+	public View getGroupView2(int groupPosition, boolean isExpanded,
+			View convertView, ViewGroup parent) {
 		View v = null;
 		if (convertView != null)
 			v = convertView;
@@ -157,8 +224,16 @@ public class GoalAdapter extends BaseExpandableListAdapter {
 			v = inflater.inflate(R.layout.category_row, parent, false);
 		String categoryTitle = (String) getGroup(groupPosition);
 		TextView textCategory = (TextView) v.findViewById(R.id.category);
-		if (categoryTitle != null)
-			textCategory.setText(categoryTitle);
+		TextView textSelected = (TextView) v.findViewById(R.id.selected);
+		if (categoryTitle != null) {
+			if (getChildrenSelectedCount(groupPosition) > 0) {
+				textCategory.setText(categoryTitle);
+				textSelected.setText(" ("+ getChildrenSelectedCount(groupPosition) + " selected)" );
+			}
+			else
+				textCategory.setText(categoryTitle);
+		}
+
 		return v;
 	}
 
