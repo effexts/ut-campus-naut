@@ -37,9 +37,21 @@ import android.widget.Toast;
  */
 public class CreateAccount extends Activity {
 	private static final String CREATE_ACC_URL = "http://ec2-184-73-31-146.compute-1.amazonaws.com:8080/CampusNaut/servlet/CreateAccount";
-	private static final String[] MAJOR = { "BSc", "BASc", "BA", "CTEP",
-			"BKIN", "BPHE", "BMus", "BC", "MusBac", "BCom" };
-	private String selectedMajor = MAJOR[0];
+	private static final String[] ETHNICITY = {"Aboriginal origins",
+		"African origins",
+		"Arab origins",
+		"British Isles origins",
+		"Caribbean origins",
+		"East and Southeast Asian origins",
+		"European origins",
+		"French origins",
+		"Latin, Central and South American origins",
+		"Oceania origins",
+		"South Asian origins",
+		"West Asian origins"
+ };
+	
+	private String selectedEthnicity = ETHNICITY[0];
 	private String gender = "Male";
 	private SharedPreferences prefs = null;
 	private Editor editor = null;
@@ -60,16 +72,16 @@ public class CreateAccount extends Activity {
 		// editor is used to modify the local datastore
 		editor = prefs.edit();
 
-		// Create a spinner for age group
-		Spinner spinAge = (Spinner) findViewById(R.id.majorspinner);
-		spinAge.setOnItemSelectedListener(onMajorChose);
+		// Create a spinner for ethinity group
+		Spinner spinEthnicity = (Spinner) findViewById(R.id.ethnicityspinner);
+		spinEthnicity.setOnItemSelectedListener(onEthnicityChose);
 
-		ArrayAdapter<String> majorAdapter = new ArrayAdapter<String>(this,
-				android.R.layout.simple_spinner_item, MAJOR);
+		ArrayAdapter<String> ethnicityAdapter = new ArrayAdapter<String>(this,
+				android.R.layout.simple_spinner_item, ETHNICITY);
 
-		majorAdapter
+		ethnicityAdapter
 				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		spinAge.setAdapter(majorAdapter);
+		spinEthnicity.setAdapter(ethnicityAdapter);
 
 		// Create account button
 		Button creatAccButton = (Button) findViewById(R.id.buttonCreate);
@@ -95,7 +107,7 @@ public class CreateAccount extends Activity {
 				editor.putString("email", email.getText().toString());
 				editor.putString("password", passwd.getText().toString());
 				editor.putString("age", age.getText().toString());
-				editor.putString("major", selectedMajor);
+				editor.putString("ethnicity", selectedEthnicity);
 				editor.putString("gender", gender);
 				editor.putBoolean("loggedin", true);
 				editor.commit();
@@ -170,7 +182,7 @@ public class CreateAccount extends Activity {
 				out.writeUTF(passwd.getText().toString());
 				out.writeUTF(age.getText().toString());
 				out.writeUTF(gender);
-				out.writeUTF(selectedMajor);
+				out.writeUTF(selectedEthnicity);
 				out.flush();
 				out.close();
 
@@ -189,10 +201,10 @@ public class CreateAccount extends Activity {
 	/**
 	 * Listener for age drop down spinner
 	 */
-	private OnItemSelectedListener onMajorChose = new OnItemSelectedListener() {
+	private OnItemSelectedListener onEthnicityChose = new OnItemSelectedListener() {
 		public void onItemSelected(AdapterView<?> parent, View v, int position,
 				long id) {
-			selectedMajor = MAJOR[position];
+			selectedEthnicity = ETHNICITY[position];
 		}
 
 		public void onNothingSelected(AdapterView<?> parent) {
