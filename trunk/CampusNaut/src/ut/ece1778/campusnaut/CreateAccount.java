@@ -6,6 +6,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import ut.ece1778.bean.GameData;
+import ut.ece1778.bean.User;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -190,7 +191,15 @@ public class CreateAccount extends Activity {
 				DataInputStream in = new DataInputStream(
 						httpConn.getInputStream());
 				returnStr = in.readUTF();
-
+				User curUser = new User();
+				int uID = Integer.parseInt(in.readUTF());
+				System.out.println("CurRRRRRRRRRRRRUUUUUUUUUUUUU"+uID);
+				curUser.setuID(uID);
+				GameData.setCurUser(curUser);
+				
+				editor.putInt("user_id",uID );
+				editor.commit();
+				
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

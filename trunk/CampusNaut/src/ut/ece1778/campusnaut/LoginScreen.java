@@ -5,6 +5,9 @@ import java.io.DataOutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import ut.ece1778.bean.GameData;
+import ut.ece1778.bean.User;
+
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -150,6 +153,10 @@ public class LoginScreen extends Activity {
 						"Your email is not registered. \nPlease create an account first.",
 						Toast.LENGTH_SHORT).show();
 			} else {
+				Toast.makeText(
+						LoginScreen.this,
+						result,
+						Toast.LENGTH_SHORT).show();
 				startActivity(new Intent(getApplicationContext(),
 						GoalPicker.class));
 				finish();
@@ -185,6 +192,11 @@ public class LoginScreen extends Activity {
 				DataInputStream in = new DataInputStream(
 						httpConn.getInputStream());
 				returnStr = in.readUTF();
+				User curUser = new User();
+				int uID = Integer.parseInt(in.readUTF());
+				System.out.println("CurRRRRRRRRRRRRUUUUUUUUUUUUU"+uID);
+				curUser.setuID(uID);
+				GameData.setCurUser(curUser);
 
 			} catch (Exception e) {
 				e.printStackTrace();
