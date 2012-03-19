@@ -67,9 +67,9 @@ public class Checkin extends Activity {
 		gid = bundle.getInt("focus");
 		inRange = bundle.getInt("inRange");
 		// Load the image from web
-		try{
+		try {
 			new LoadImage(checkinPic).execute(IMAGE_FOLDER_URL + gid + ".jpg");
-		}catch(Exception e){
+		} catch (Exception e) {
 			checkinPic.setImageResource(R.drawable.p20019);
 		}
 		// Load the description from SQLite Database
@@ -143,18 +143,22 @@ public class Checkin extends Activity {
 							.openConnection().getInputStream());
 					// Scale original photo according to screen and maintain
 					// original ratio
-					double oldy = bitmap.getHeight();
-					double oldx = bitmap.getWidth();
-					double ratio = oldy / oldx;
+					Bitmap scaledBitmap = null;
+					if (bitmap != null) {
+						double oldy = bitmap.getHeight();
+						double oldx = bitmap.getWidth();
+						double ratio = oldy / oldx;
 
-					// find the width and height of the screen:
-					Display d = getWindowManager().getDefaultDisplay();
-					int y = d.getWidth();
-					int x = (int) (Math.round((double) y * ratio));
+						// find the width and height of the screen:
+						Display d = getWindowManager().getDefaultDisplay();
+						int y = d.getWidth();
+						int x = (int) (Math.round((double) y * ratio));
 
-					Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, y,
-							x, true);
+						scaledBitmap = Bitmap.createScaledBitmap(bitmap, y, x,
+								true);
+					}
 					return scaledBitmap;
+
 				} else { // No internet so cannot get image from web
 					return null;
 				}
@@ -231,10 +235,11 @@ public class Checkin extends Activity {
 
 	}
 
-	public void onPanuse(){
+	public void onPanuse() {
 		super.onPause();
-		
+
 	}
+
 	/**
 	 * Close database connection
 	 */
