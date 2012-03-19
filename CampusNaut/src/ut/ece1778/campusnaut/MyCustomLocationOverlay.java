@@ -189,6 +189,7 @@ public class MyCustomLocationOverlay extends MyLocationOverlay {
 					minDistance = curGoal.getDistance();
 					GameData.setNearbyGoal(curGoal);
 					GameData.getCurGoalHeader().setText(curGoal.getTitle());
+					GameData.getCurGoalDistance().setText(Integer.toString((int)(curGoal.getDistance()))+"m");
 				}
 			}
 			// If no more goals, game over

@@ -3,6 +3,7 @@ package ut.ece1778.campusnaut;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.net.MalformedURLException;
+
 import java.net.URL;
 
 import ut.ece1778.bean.DBHelper;
@@ -66,7 +67,11 @@ public class Checkin extends Activity {
 		gid = bundle.getInt("focus");
 		inRange = bundle.getInt("inRange");
 		// Load the image from web
-		new LoadImage(checkinPic).execute(IMAGE_FOLDER_URL + gid + ".jpg");
+		try{
+			new LoadImage(checkinPic).execute(IMAGE_FOLDER_URL + gid + ".jpg");
+		}catch(Exception e){
+			checkinPic.setImageResource(R.drawable.p20019);
+		}
 		// Load the description from SQLite Database
 		new LoadDescription().execute("");
 
@@ -226,6 +231,10 @@ public class Checkin extends Activity {
 
 	}
 
+	public void onPanuse(){
+		super.onPause();
+		
+	}
 	/**
 	 * Close database connection
 	 */

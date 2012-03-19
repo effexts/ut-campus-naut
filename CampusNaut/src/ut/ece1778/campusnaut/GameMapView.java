@@ -16,7 +16,7 @@ import java.util.TimerTask;
 import ut.ece1778.bean.Game;
 import ut.ece1778.bean.GameData;
 import ut.ece1778.bean.Goal;
-import ut.ece1778.bean.User;
+
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -54,6 +54,7 @@ public class GameMapView extends MapActivity {
 
 	private static final String GPS_URL = "http://ec2-184-73-31-146.compute-1.amazonaws.com:8080/CampusNaut/steve.txt";
 	private static final String UPD_PROG_URL = "http://ec2-184-73-31-146.compute-1.amazonaws.com:8080/CampusNaut/servlet/UpdateProgress";
+	private static final String GAME_INIT_URL = "http://ec2-184-73-31-146.compute-1.amazonaws.com:8080/CampusNaut/servlet/SetupGame";
 	private static final int GPS_UPDATE_TIME = 3000;
 
 	private static final int ZOOM_LEVEL = 19;
@@ -69,7 +70,7 @@ public class GameMapView extends MapActivity {
 	private ArrayList<Goal> goals;
 	private Drawable goalMarker;
 	private Button trigger;
-	private TextView scoreBoard;
+	//private TextView scoreBoard;
 	private SharedPreferences prefs = null;
 	private Editor editor = null;
 	private LocationManager mockLocMgr = null;
@@ -120,14 +121,15 @@ public class GameMapView extends MapActivity {
 		mapView.postInvalidate();
 
 		// tools of map view
-		scoreBoard = (TextView) findViewById(R.id.scoreBoard);
+		//scoreBoard = (TextView) findViewById(R.id.scoreBoard);
 		trigger = (Button) findViewById(R.id.trigge);
 		trigger.setOnClickListener(onTrigger);
 		// Set the current widget
 		TextView header = (TextView) findViewById(R.id.header);
+		TextView distancer = (TextView)findViewById(R.id.distanceBoard);
 		// header.setMovementMethod(new ScrollingMovementMethod());
 		GameData.setCurGoalHeader(header);
-
+		GameData.setCurGoalDistance(distancer);
 		// load marker resource
 		goalMarker = getResources().getDrawable(R.drawable.goal_icon);
 		goalMarker.setBounds(0, 0, goalMarker.getIntrinsicWidth(),
@@ -156,11 +158,27 @@ public class GameMapView extends MapActivity {
 		System.out.println("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF"+goals.get(0).getgID());
 		game.setGoals(goals);
 
-		User curUser = new User(10001, "qwe", 1, 0);
+		//User curUser = new User(10001, "qwe", 1, 0);
 		// Add to temporary data store
-		GameData.setCurUser(curUser);
+		//GameData.setCurUser(curUser);
 		GameData.add(game);
 		GameData.setTempList(goals);
+		
+		String initData = "";
+		// Check if there's checked-in goal
+		for (Goal goal : GameData.getGameList().get(0).getGoals()) {
+			initData += goal.getgID() +"%";
+		}
+		if (initData.equals("")) {
+			Toast.makeText(GameMapView.this,
+					"No goals loaded!", 1000).show();
+		} else {
+			// Update check-in state with server DB
+			GameInitAsyncTask task = new GameInitAsyncTask();
+			task.execute(new String[] { initData.substring(0,
+					initData.length() - 1) });
+		}
+		
 
 		gameOverlay = new CurrentGameOverlay(GameMapView.this, goalMarker,
 				GameData.getGameList().get(0));
@@ -175,7 +193,7 @@ public class GameMapView extends MapActivity {
 	public void onResume() {
 		super.onResume();
 		myLocation.enableMyLocation();
-		scoreBoard.setText("Score: " + GameData.getScores());
+		//scoreBoard.setText("Score: " + GameData.getScores());
 		// Always center the user location on the map
 		myLocation.runOnFirstFix(new Runnable() {
 
@@ -251,7 +269,7 @@ public class GameMapView extends MapActivity {
 	LocationListener locListener = new LocationListener() {
 
 		public void onLocationChanged(Location location) {
-
+			
 		}
 
 		public void onProviderDisabled(String provider) {
@@ -363,6 +381,67 @@ public class GameMapView extends MapActivity {
 		}
 	}
 
+	private class GameInitAsyncTask extends AsyncTask<String, Void, String>{
+		ProgressDialog mProgressDialog;
+
+		@Override
+		protected void onPostExecute(String result) {
+			mProgressDialog.dismiss();
+			if (result == null) {
+				Toast.makeText(
+						GameMapView.this,
+						"Cannot access the server. \nPlease make sure your WI-FI is on.",
+						Toast.LENGTH_LONG).show();
+			} else if (result.equals("Invalid")) {
+				Toast.makeText(GameMapView.this, "Invalid Request.",
+						Toast.LENGTH_LONG).show();
+			} else {
+				Toast.makeText(GameMapView.this, result, Toast.LENGTH_LONG)
+						.show();
+
+			}
+		}
+
+		@Override
+		protected void onPreExecute() {
+			mProgressDialog = ProgressDialog
+					.show(GameMapView.this, "Initializing...",
+							"Please wait for game to be setup...");
+		}
+
+		@Override
+		protected String doInBackground(String... u) {
+			URL url = null;
+			HttpURLConnection httpConn = null;
+			String returnStr = "null";
+			try {
+				url = new URL(GAME_INIT_URL);
+				httpConn = (HttpURLConnection) url.openConnection();
+				httpConn.setDoOutput(true);
+				httpConn.setRequestMethod("POST");
+
+				// Do post request.
+				DataOutputStream out = new DataOutputStream(
+						httpConn.getOutputStream());
+				out.writeUTF("<SETUP>");
+				out.writeUTF(Integer.toString(GameData.getCurUser().getuID()));
+				
+				out.writeUTF(u[0]);
+				out.flush();
+				out.close();
+
+				// Receiving response from server
+				DataInputStream in = new DataInputStream(
+						httpConn.getInputStream());
+				returnStr = in.readUTF();
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return returnStr;
+		}
+	
+	}
 	/**
 	 * Update goal's state with DB on server
 	 * 

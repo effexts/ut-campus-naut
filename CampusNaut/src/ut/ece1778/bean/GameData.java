@@ -28,6 +28,8 @@ public final class GameData {
 	private static ArrayList<Goal> selectedGoals = new ArrayList<Goal>(); // SelectedGoals from goal picker
 	private static Goal nearbyGoal = new Goal();
 	private static TextView curGoalHeader = null; // Closest goal
+	private static TextView curGoalDistance = null;
+
 	private static boolean updateGoal = false; // If check-in, we should update
 												// nearby goal
 	private static boolean firstTime = true; // Check if first time running the
@@ -143,7 +145,13 @@ public final class GameData {
 	public static void setCurUser(User curUser) {
 		GameData.curUser = curUser;
 	}
+	public static TextView getCurGoalDistance() {
+		return curGoalDistance;
+	}
 
+	public static void setCurGoalDistance(TextView curGoalDistance) {
+		GameData.curGoalDistance = curGoalDistance;
+	}
 	/**
 	 * Get a goal object from goal list by ID
 	 * 
