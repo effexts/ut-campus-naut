@@ -115,7 +115,6 @@ public final class GameData {
 	}
 
 
-
 	public static void setNearbyGoal(Goal goal) {
 		nearbyGoal = goal;
 	}

@@ -396,8 +396,8 @@ public class GameMapView extends MapActivity {
 				Toast.makeText(GameMapView.this, "Invalid Request.",
 						Toast.LENGTH_LONG).show();
 			} else {
-				Toast.makeText(GameMapView.this, result, Toast.LENGTH_LONG)
-						.show();
+				//Toast.makeText(GameMapView.this, result, Toast.LENGTH_LONG)
+				//		.show();
 
 			}
 		}
@@ -463,7 +463,7 @@ public class GameMapView extends MapActivity {
 				Toast.makeText(GameMapView.this, "Invalid Request.",
 						Toast.LENGTH_LONG).show();
 			} else {
-				Toast.makeText(GameMapView.this, result, Toast.LENGTH_LONG)
+				Toast.makeText(GameMapView.this, "Update successfully!", Toast.LENGTH_LONG)
 						.show();
 
 			}
