@@ -55,7 +55,7 @@ public class GameMapView extends MapActivity {
 	private static final String GPS_URL = "http://ec2-184-73-31-146.compute-1.amazonaws.com:8080/CampusNaut/steve.txt";
 	private static final String UPD_PROG_URL = "http://ec2-184-73-31-146.compute-1.amazonaws.com:8080/CampusNaut/servlet/UpdateProgress";
 	private static final String GAME_INIT_URL = "http://ec2-184-73-31-146.compute-1.amazonaws.com:8080/CampusNaut/servlet/SetupGame";
-	private static final int GPS_UPDATE_TIME = 3000;
+	private static final int GPS_UPDATE_TIME = 1000;
 
 	private static final int ZOOM_LEVEL = 19;
 	private static final Double INITIAL_LATITUDE = 43.669858 * 1E6;
@@ -309,9 +309,9 @@ public class GameMapView extends MapActivity {
 			break;
 		case R.id.editor:
 			break;
-		case R.id.achievement:
+		//case R.id.achievement:
 			// Future implementation
-			break;
+			//break;
 
 		case R.id.upload: // Positive update goal's state(user drive)
 			String updateData = "";

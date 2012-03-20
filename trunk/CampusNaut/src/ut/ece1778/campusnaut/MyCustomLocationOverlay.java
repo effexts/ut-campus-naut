@@ -196,6 +196,8 @@ public class MyCustomLocationOverlay extends MyLocationOverlay {
 			if (curGoals.size() == 0) {
 				GameData.getCurGoalHeader().setText("Mission Accomplished");
 				GameData.getCurGoalHeader().setTextColor(Color.RED);
+				GameData.getCurGoalDistance().setText("0m");
+				GameData.getCurGoalDistance().setTextColor(Color.RED);
 			}
 		}
 		Point screenPts = mapView.getProjection().toPixels(myLocation, null);
