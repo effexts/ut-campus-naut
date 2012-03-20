@@ -59,7 +59,7 @@ public class GameMapView extends MapActivity {
 
 	private static final int ZOOM_LEVEL = 19;
 	private static final Double INITIAL_LATITUDE = 43.669858 * 1E6;
-	private static final Double INITIAL_LONGITUDE = -79.40727 * 1E6;
+	private static final Double INITIAL_LONGITUDE = -79.400727 * 1E6;
 	private static final Double END_LATITUDE = 43.657859 * 1E6;
 	private static final Double END_LONGITUDE = -79.381928 * 1E6;
 	private MapView mapView = null;
