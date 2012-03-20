@@ -38,6 +38,22 @@ public final class GameData {
 	private static int detector = 0;
 	private static int allGoalCount = 0;
 
+	// Clear the memory
+	public static void clear() {
+		gamesList.clear();
+		tempList.clear();
+		discoveredList.clear();
+		selectedGoals.clear();
+		allGoals.clear();
+		allGoalCount = 0;
+		curUser = null;
+		nearbyGoal = new Goal();
+		curGoalHeader = null;
+		updateGoal = false;
+		scores = 0;
+		detector = 0;
+		
+	}
 	public static TreeMap<String, ArrayList<Goal>> getAllGoals() {
 		return allGoals;
 	}
@@ -98,13 +114,7 @@ public final class GameData {
 		gamesList.remove(game);
 	}
 
-	// Clear the memory
-	public static void clear() {
-		gamesList.clear();
-		nearbyGoal = new Goal();
-		curGoalHeader = null;
-		updateGoal = false;
-	}
+
 
 	public static void setNearbyGoal(Goal goal) {
 		nearbyGoal = goal;
