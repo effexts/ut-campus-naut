@@ -3,9 +3,6 @@
     <item android:id="@+id/upload"
           android:title="Upload My Progress"
           android:icon="@drawable/track" />
-    <item android:id="@+id/achievement"
-          android:icon="@drawable/achievement" 
-          android:title="Achievement"/>   
     <item android:id="@+id/editor"
           android:title="Objectives Editor"
           android:icon="@drawable/editor" />
