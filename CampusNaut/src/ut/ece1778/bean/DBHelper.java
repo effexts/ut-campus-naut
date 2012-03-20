@@ -19,12 +19,14 @@ public class DBHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE t_goals (goal_id INTEGER PRIMARY KEY, title TEXT, description " +
         		"TEXT, latitude TEXT, longitude TEXT, category TEXT, state TEXT, ondisk TEXT);");
+        db.execSQL("CREATE TABLE t_discovered_goals (goal_id INTEGER PRIMARY KEY, state INTEGER);");
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         android.util.Log.w("t_goals", "Upgrading database, which will destroy all old data");
         db.execSQL("DROP TABLE IF EXISTS t_goals");
+        db.execSQL("DROP TABLE IF EXISTS t_discovered_goals");
         onCreate(db);
     }
 }
