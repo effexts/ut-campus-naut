@@ -1,7 +1,6 @@
 package ut.ece1778.campusnaut;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import ut.ece1778.bean.GameData;
 import ut.ece1778.bean.Goal;
@@ -48,7 +47,7 @@ public class MyCustomLocationOverlay extends MyLocationOverlay {
 	private Paint mBitmapPaint;
 	private Paint mPaint;
 	// private GeoPoint myGeoPoint = null;
-	private List<GeoPoint> gpList = new ArrayList<GeoPoint>();
+	//private List<GeoPoint> gpList = new ArrayList<GeoPoint>();
 
 	public MyCustomLocationOverlay(Context context, MapView mapView,
 			Double left, Double top, Double right, Double bottom) {
@@ -91,8 +90,8 @@ public class MyCustomLocationOverlay extends MyLocationOverlay {
 					BlurMaskFilter.Blur.NORMAL);
 			mPaint.setMaskFilter(mBlur);
 			// Retrieve visited Geopoints
-			for (int i = 0; i < gpList.size(); i++) {
-				mapView.getProjection().toPixels(gpList.get(i), point);
+			for (int i = 0; i < GameData.getGpList().size(); i++) {
+				mapView.getProjection().toPixels(GameData.getGpList().get(i), point);
 				mCanvas.drawCircle((float) point.x, (float) point.y, zoomlevel,
 						mPaint);
 			}
@@ -111,18 +110,19 @@ public class MyCustomLocationOverlay extends MyLocationOverlay {
 		int curLat = (int) (loc.getLatitude() * 1E6);
 		int curLong = (int) (loc.getLongitude() * 1E6);
 		GeoPoint myGeoPoint = new GeoPoint(curLat, curLong);
+		//GPSCoordiante gc = new GPSCoordinate(curLat, curLong);
 		mapView.getController().animateTo(myGeoPoint);
 		// record the GPS coordinate if the person move out of certain range.
-		int curGPListSize = gpList.size();
+		int curGPListSize = GameData.getGpList().size();
 		if (curGPListSize == 0) {
-			gpList.add(myGeoPoint);
+			GameData.getGpList().add(myGeoPoint);
 		} else if (curGPListSize > 0
 				&& ((Math.abs(curLat
-						- gpList.get(curGPListSize - 1).getLatitudeE6()) >= DIMENSION) || (Math
+						- GameData.getGpList().get(curGPListSize - 1).getLatitudeE6()) >= DIMENSION) || (Math
 						.abs(curLong
-								- gpList.get(curGPListSize - 1)
+								- GameData.getGpList().get(curGPListSize - 1)
 										.getLongitudeE6()) >= DIMENSION))) {
-			gpList.add(myGeoPoint);
+			GameData.getGpList().add(myGeoPoint);
 		}
 
 		// it's necessary to set update when my location is jumping around
