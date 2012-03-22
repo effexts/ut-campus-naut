@@ -29,6 +29,7 @@ public final class GameOverlayOperation {
 	public static void addGameOverlay(MapView mapView) {
 		mapView.getOverlays().add(gameOverlay);
 	}
+	
 
 	/**
 	 * used for onLocationChange, but it produce exceptions .abandoned

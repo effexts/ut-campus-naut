@@ -22,6 +22,7 @@ import ut.ece1778.bean.User;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.database.Cursor;
@@ -58,7 +59,7 @@ public class GameMapView extends MapActivity {
 	private static final String GPS_URL = "http://ec2-184-73-31-146.compute-1.amazonaws.com:8080/CampusNaut/leo.txt";
 	private static final String UPD_PROG_URL = "http://ec2-184-73-31-146.compute-1.amazonaws.com:8080/CampusNaut/servlet/UpdateProgress";
 	private static final String GAME_INIT_URL = "http://ec2-184-73-31-146.compute-1.amazonaws.com:8080/CampusNaut/servlet/SetupGame";
-	private static final int GPS_UPDATE_TIME = 1000;
+	private static final int GPS_UPDATE_TIME = 3000;
 
 	private static final int ZOOM_LEVEL = 19;
 	private static final Double INITIAL_LATITUDE = 43.669858 * 1E6;
@@ -217,6 +218,7 @@ public class GameMapView extends MapActivity {
 	public void onDestroy() {
 		super.onDestroy();
 		// Save the geopoint list before exit
+		myLocation.disableMyLocation();
 		GameData.saveGpList(this);
 		GameData.clear();
 		GameOverlayOperation.clear();
@@ -302,6 +304,8 @@ public class GameMapView extends MapActivity {
 			// Future implementation
 			break;
 		case R.id.editor:
+			startActivity(new Intent(getApplicationContext(), GoalPicker.class));
+			finish();
 			break;
 		//case R.id.achievement:
 			// Future implementation

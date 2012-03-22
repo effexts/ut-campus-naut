@@ -1,10 +1,12 @@
 package ut.ece1778.bean;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeMap;
@@ -71,7 +73,6 @@ public final class GameData {
 	private static int scores = 0;
 	private static int detector = 0;
 	private static int allGoalCount = 0;
-
 	// Clear the memory
 	public static void clear() {
 		gpList.clear();
@@ -90,70 +91,65 @@ public final class GameData {
 
 	}
 
-	/**
-	 * Serialize GeoPoint coordinate for next load
-	 * 
-	 * @param context
-	 */
+		
 	public static void saveGpList(Context context) {
-		List<GPSCoordinate> gcList = new ArrayList<GPSCoordinate>();
 		// Generate a list of GPSCoordinate to be saved from geopoint list
-		for (int i = 0; i < gpList.size(); i++) {
-			gcList.add(new GPSCoordinate(gpList.get(i).getLatitudeE6(), gpList
-					.get(i).getLongitudeE6()));
-		}
-		if (gcList.size() > 0) {
-			ObjectOutputStream oos = null;
+		
+		if (gpList.size() > 0) {
 			try {
 				OutputStream os = context.openFileOutput(GP_FILE_NAME, 0);
-				// Serialize the coordinate list into file
-				oos = new ObjectOutputStream(os);
-				oos.writeObject(gcList);
-				oos.flush();
-				oos.close();
+				OutputStreamWriter oss=
+		        		new OutputStreamWriter(os);
+				if (oss != null) {
+					// Serialize the coordinate list into file.
+					for (int i = 0; i < gpList.size(); i++) {
+						oss.write(gpList.get(i).getLatitudeE6()+","+gpList
+								.get(i).getLongitudeE6()+"\n");
+					}
+					oss.close();
+				}
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
 	}
+	
+	
 
 	public static List<GeoPoint> getGpList() {
 		return gpList;
 	}
 
+	
 	/**
 	 * Deserialize GeoPoint coordinate to load them to the map
 	 * 
 	 * @param context
 	 */
-	@SuppressWarnings("unchecked")
+
 	public static void loadGpList(Context context) {
-		List<GPSCoordinate> gcList = null;
 		try {
-			InputStream is;
-			is = context.openFileInput(GP_FILE_NAME);
-			// Deserialize the coordinate list object from file
-			ObjectInputStream ois = new ObjectInputStream(is);
-			gcList = (List<GPSCoordinate>) ois.readObject();
-			ois.close();
+			InputStream is = context.openFileInput(GP_FILE_NAME);
+			InputStreamReader tmp=new InputStreamReader(is);
+	        BufferedReader reader=new BufferedReader(tmp);
+	        String str;
+	        gpList.clear();
+	        while ((str = reader.readLine()) != null) {
+				String[] parseData = str.split(",");
+				if (parseData.length == 2)  
+					gpList.add(new GeoPoint(Integer.parseInt(parseData[0]),Integer.parseInt(parseData[1])));
+	        }
+			reader.close();
+			is.close();
+		} catch (FileNotFoundException fn) {
+		 // First time running app so normal
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		// Check if the coordinate is empty
-		if (gcList.size()>0) {
-			// Add the last saved coordinate to the new GeoPoint list
-			for (int i = 0; i < gcList.size(); i++) {
-				gpList.add(new GeoPoint(gcList.get(i).getLatitude(), gcList
-						.get(i).getLongitude()));
-			}
-			gcList.clear();
-		}
-
-
+		System.err.println("GeoPoint count: " + gpList.size());
 	}
-
 	public static TreeMap<String, ArrayList<Goal>> getAllGoals() {
 		return allGoals;
 	}
@@ -208,6 +204,10 @@ public final class GameData {
 
 	public static void add(Game game) {
 		gamesList.add(game);
+	}
+	public static void pauseGame() {
+		gamesList.clear();
+		tempList.clear();
 	}
 
 	public static void remove(Game game) {

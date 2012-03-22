@@ -198,7 +198,7 @@ public class GoalPicker extends ExpandableListActivity {
 									// Field to store whether user has already
 									// check in and
 									// if the image is already on disk.
-									values.put("state", "false");
+									values.put("state", 0);
 									values.put("ondisk", "false");
 									dbHelper.getWritableDatabase().insert(
 											"t_goals", null, values);
