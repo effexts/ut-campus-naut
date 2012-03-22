@@ -99,8 +99,6 @@ public class GameMapView extends MapActivity {
 				INITIAL_LONGITUDE, INITIAL_LATITUDE, END_LONGITUDE,
 				END_LATITUDE);
 		mapView.getOverlays().add(myLocation);
-		myLocation.enableMyLocation();
-
 		// *Mock GPS* Code for mock Location provider
 		mocLocationProvider = LocationManager.NETWORK_PROVIDER;
 		mockLocMgr = (LocationManager) getBaseContext().getSystemService(
@@ -139,23 +137,6 @@ public class GameMapView extends MapActivity {
 		// Instantiate a Game
 		game = new Game();
 		goals = GameData.getSelectedGoal(); // Add the selected goal to our game
-		/*
-		 * Goal goal = new Goal("Robarts Library", 43.664300, -79.399400);
-		 * goals.add(goal); goal = new Goal("Athlete Centre", 43.662700,
-		 * -79.401200); goals.add(goal); goal = new Goal("Grad House",
-		 * 43.663500, -79.401500); goals.add(goal); goal = new Goal("Cedars",
-		 * 43.660000, -79.398500); goals.add(goal);
-		 */
-		/*
-		 * Goal goal = new Goal(20001,"Becca's H, Robert Murray (1973)",
-		 * 43.659955, -79.396584); goals.add(goal); goal = new
-		 * Goal(20002,"Helix of Life, Ted Bieler (1967)", 43.660747,
-		 * -79.393537); goals.add(goal); goal = new
-		 * Goal(20003,"Cedars, Walter Yarwood (1962)", 43.660000, -79.398500);
-		 * goals.add(goal); goal = new Goal(20004,"Untitled, Ron Bard (1964)",
-		 * 43.658387, -79.393516); goals.add(goal);
-		 */
-		System.out.println("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF"+goals.get(0).getgID());
 		game.setGoals(goals);
 
 		//User curUser = new User(10001, "qwe", 1, 0);
@@ -169,6 +150,7 @@ public class GameMapView extends MapActivity {
 		for (Goal goal : GameData.getGameList().get(0).getGoals()) {
 			initData += goal.getgID() +"%";
 		}
+		
 		if (initData.equals("")) {
 			Toast.makeText(GameMapView.this,
 					"No goals loaded!", 1000).show();
