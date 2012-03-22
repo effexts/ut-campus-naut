@@ -1,9 +1,17 @@
 package ut.ece1778.bean;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeMap;
 
+import com.google.android.maps.GeoPoint;
+
+import android.content.Context;
 import android.widget.TextView;
 
 /**
@@ -12,6 +20,7 @@ import android.widget.TextView;
  * @author Steve Chun-Hao Hu, Leo ChenLiang Man
  */
 public final class GameData {
+	private static final String GP_FILE_NAME = "geopoint.log"; // GPSCoordinate Serialized file
 	private static User curUser = new User(); // Current login user
 
 	private static ArrayList<Game> gamesList = new ArrayList<Game>();
@@ -24,9 +33,34 @@ public final class GameData {
 																		// populating
 																		// the
 																		// CurrentGameOverlay
-	private static TreeMap<String, ArrayList<Goal>> allGoals = new TreeMap<String, ArrayList<Goal>>(); // used for mapping the category and goals inside the goal picker 
-	private static ArrayList<Goal> selectedGoals = new ArrayList<Goal>(); // SelectedGoals from goal picker
+	private static TreeMap<String, ArrayList<Goal>> allGoals = new TreeMap<String, ArrayList<Goal>>(); // used
+																										// for
+																										// mapping
+																										// the
+																										// category
+																										// and
+																										// goals
+																										// inside
+																										// the
+																										// goal
+																										// picker
+	private static ArrayList<Goal> selectedGoals = new ArrayList<Goal>(); // SelectedGoals
+																			// from
+																			// goal
+																			// picker
 	private static Goal nearbyGoal = new Goal();
+	private static List<GeoPoint> gpList = null;// List of
+												// GP
+												// that
+												// the
+												// user
+												// has
+												// worked
+												// thru
+												// for
+												// drawing
+												// circle
+
 	private static TextView curGoalHeader = null; // Closest goal
 	private static TextView curGoalDistance = null;
 
@@ -40,6 +74,7 @@ public final class GameData {
 
 	// Clear the memory
 	public static void clear() {
+		gpList.clear();
 		gamesList.clear();
 		tempList.clear();
 		discoveredList.clear();
@@ -52,8 +87,75 @@ public final class GameData {
 		updateGoal = false;
 		scores = 0;
 		detector = 0;
-		
+
 	}
+
+	/**
+	 * Serialize GeoPoint coordinate for next load
+	 * 
+	 * @param context
+	 */
+	public static void saveGpList(Context context) {
+		List<GPSCoordinate> gcList = new ArrayList<GPSCoordinate>();
+		// Generate a list of GPSCoordinate to be saved from geopoint list
+		for (int i = 0; i < gpList.size(); i++) {
+			gcList.add(new GPSCoordinate(gpList.get(i).getLatitudeE6(), gpList
+					.get(i).getLongitudeE6()));
+		}
+		if (gcList.size() > 0) {
+			ObjectOutputStream oos = null;
+			try {
+				OutputStream os = context.openFileOutput(GP_FILE_NAME, 0);
+				// Serialize the coordinate list into file
+				oos = new ObjectOutputStream(os);
+				oos.writeObject(gcList);
+				oos.flush();
+				oos.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public static List<GeoPoint> getGpList() {
+		return gpList;
+	}
+
+	/**
+	 * Deserialize GeoPoint coordinate to load them to the map
+	 * 
+	 * @param context
+	 */
+	@SuppressWarnings("unchecked")
+	public static void loadGpList(Context context) {
+		List<GPSCoordinate> gcList = null;
+		try {
+			InputStream is;
+			is = context.openFileInput(GP_FILE_NAME);
+			// Deserialize the coordinate list object from file
+			ObjectInputStream ois = new ObjectInputStream(is);
+			gcList = (List<GPSCoordinate>) ois.readObject();
+			ois.close();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			gpList = new ArrayList<GeoPoint>();
+		}
+		// Check if the coordinate is empty
+		if (gcList == null || gcList.size() == 0) {
+			gpList = new ArrayList<GeoPoint>();
+		} else {
+			// Add the last saved coordinate to the new GeoPoint list
+			for (int i = 0; i < gcList.size(); i++) {
+				gpList.add(new GeoPoint(gcList.get(i).getLatitude(), gcList
+						.get(i).getLongitude()));
+			}
+		}
+		gcList.clear();
+
+	}
+
 	public static TreeMap<String, ArrayList<Goal>> getAllGoals() {
 		return allGoals;
 	}
@@ -114,7 +216,6 @@ public final class GameData {
 		gamesList.remove(game);
 	}
 
-
 	public static void setNearbyGoal(Goal goal) {
 		nearbyGoal = goal;
 	}
@@ -154,6 +255,7 @@ public final class GameData {
 	public static void setCurUser(User curUser) {
 		GameData.curUser = curUser;
 	}
+
 	public static TextView getCurGoalDistance() {
 		return curGoalDistance;
 	}
@@ -161,6 +263,7 @@ public final class GameData {
 	public static void setCurGoalDistance(TextView curGoalDistance) {
 		GameData.curGoalDistance = curGoalDistance;
 	}
+
 	/**
 	 * Get a goal object from goal list by ID
 	 * 

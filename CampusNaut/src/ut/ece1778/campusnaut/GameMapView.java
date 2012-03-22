@@ -93,7 +93,8 @@ public class GameMapView extends MapActivity {
 
 		mapController = mapView.getController();
 		mapController.setZoom(ZOOM_LEVEL);
-
+		// Load last saved geopoint list to draw transparent circle on the map
+		GameData.loadGpList(this);
 		// User location overlay
 		myLocation = new MyCustomLocationOverlay(this, mapView,
 				INITIAL_LONGITUDE, INITIAL_LATITUDE, END_LONGITUDE,
@@ -174,6 +175,7 @@ public class GameMapView extends MapActivity {
 	@Override
 	public void onResume() {
 		super.onResume();
+		
 		myLocation.enableMyLocation();
 		//scoreBoard.setText("Score: " + GameData.getScores());
 		// Always center the user location on the map
@@ -206,6 +208,8 @@ public class GameMapView extends MapActivity {
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
+		// Save the geopoint list before exit
+		GameData.saveGpList(this);
 		GameData.clear();
 		GameOverlayOperation.clear();
 		mapView.getOverlays().remove(gameOverlay);
