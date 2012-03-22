@@ -3,10 +3,12 @@ package ut.ece1778.campusnaut;
 import java.util.ArrayList;
 import java.util.List;
 
+import ut.ece1778.bean.DBHelper;
 import ut.ece1778.bean.Game;
 import ut.ece1778.bean.GameData;
 import ut.ece1778.bean.Goal;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -50,6 +52,7 @@ public class CurrentGameOverlay extends ItemizedOverlay<OverlayItem> {
 		boundCenterBottom(marker);
 		goals = game.getGoals();
 
+		
 		populate();
 	}
 
@@ -75,8 +78,25 @@ public class CurrentGameOverlay extends ItemizedOverlay<OverlayItem> {
 		location = new Location("myLocation");
 		location.setLatitude(myLocation.getLatitudeE6() * 1E-6);
 		location.setLongitude(myLocation.getLongitudeE6() * 1E-6);
-
-		// System.out.println("SSSSSSSIIIIIIIIIIIIIIIZZZZZZZZZZZZEEEEEEEE-----"+goals.size());
+		
+		if (GameData.getDiscoveredList().size() >0 ){
+			
+			for(Goal goal : GameData.getDiscoveredList()){
+				boolean flag = true;
+					for(OverlayItem item : items){
+						if (item.getSnippet().equals(Integer.toString(goal.getgID()))){
+							flag = false;
+						}
+					}
+					if (flag){
+						items.add(new OverlayItem(goal.getGeoPoint(),goal.getTitle(),""+goal.getgID()));
+					}								
+			}
+			
+		}
+		
+		DBHelper helper = new DBHelper(context);		
+		
 		boolean flag = false;
 		for (Goal sGoal : goals) {
 			// calculate distance between the goal and my location
@@ -106,9 +126,21 @@ public class CurrentGameOverlay extends ItemizedOverlay<OverlayItem> {
 						sGoal.getTitle(), "" + sGoal.getgID()));
 				System.out.println("DISCOVERED-------"
 						+ GameData.getDiscoveredList().size());
+				
+				try{
+						// update local DB, set goal state to discovered
+						ContentValues cv  = new ContentValues();
+						cv.put("state", 1);
+						helper.getWritableDatabase().update("t_goals", cv, "goal_id = ?", new String[]{String.valueOf(sGoal.getgID())});
+						
+				}catch(Exception e){
+					e.printStackTrace();
+				}
 			}
 		}
-
+		
+		helper.getWritableDatabase().close();
+		helper.close();
 		populate();
 	}
 

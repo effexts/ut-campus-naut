@@ -17,7 +17,7 @@ public class Goal {
 	private String category; // Goal Category
 	private double latitude; // Goal's Latitude (eight digit Integer)
 	private double longitude; // Goal's Longitude (eight digit Integer)
-	private boolean state = false; // false = user hasn't checked in, true = user has checked in
+	private int state = 0; //undiscovered(0),uncheck-in(1),checked-in(2)
 	private boolean selected = false; // selected goal in goalpicker
 
 	private String picDir; // picture directory of goal
@@ -61,7 +61,7 @@ public class Goal {
 	}
 
 	public void toFinish() {
-		this.state = true;
+		this.state = 2;
 	}
 
 	public GeoPoint getGeoPoint() {
@@ -101,11 +101,11 @@ public class Goal {
 		this.picDir = picDir;
 	}
 
-	public boolean getState() {
+	public int getState() {
 		return state;
 	}
 
-	public void setState(boolean state) {
+	public void setState(int state) {
 		this.state = state;
 	}
 

@@ -13,15 +13,18 @@ import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import ut.ece1778.bean.DBHelper;
 import ut.ece1778.bean.Game;
 import ut.ece1778.bean.GameData;
 import ut.ece1778.bean.Goal;
+import ut.ece1778.bean.User;
 
 
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.database.Cursor;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
@@ -52,7 +55,7 @@ import com.google.android.maps.MyLocationOverlay;
 public class GameMapView extends MapActivity {
 	// URL for remote GPS location
 
-	private static final String GPS_URL = "http://ec2-184-73-31-146.compute-1.amazonaws.com:8080/CampusNaut/steve.txt";
+	private static final String GPS_URL = "http://ec2-184-73-31-146.compute-1.amazonaws.com:8080/CampusNaut/leo.txt";
 	private static final String UPD_PROG_URL = "http://ec2-184-73-31-146.compute-1.amazonaws.com:8080/CampusNaut/servlet/UpdateProgress";
 	private static final String GAME_INIT_URL = "http://ec2-184-73-31-146.compute-1.amazonaws.com:8080/CampusNaut/servlet/SetupGame";
 	private static final int GPS_UPDATE_TIME = 1000;
@@ -140,6 +143,11 @@ public class GameMapView extends MapActivity {
 		goals = GameData.getSelectedGoal(); // Add the selected goal to our game
 		game.setGoals(goals);
 
+		int uID = prefs.getInt("user_id", 0);
+		User curUser = new User();
+		curUser.setuID(uID);
+		GameData.setCurUser(curUser);
+		
 		//User curUser = new User(10001, "qwe", 1, 0);
 		// Add to temporary data store
 		//GameData.setCurUser(curUser);
@@ -303,7 +311,7 @@ public class GameMapView extends MapActivity {
 			String updateData = "";
 			// Check if there's checked-in goal
 			for (Goal goal : GameData.getDiscoveredList()) {
-				if (goal.getState()) {
+				if (goal.getState()==2) {
 					updateData += goal.getgID() + "%";
 				}
 			}
@@ -382,9 +390,37 @@ public class GameMapView extends MapActivity {
 				Toast.makeText(GameMapView.this, "Invalid Request.",
 						Toast.LENGTH_LONG).show();
 			} else {
-				//Toast.makeText(GameMapView.this, result, Toast.LENGTH_LONG)
-				//		.show();
+				DBHelper helper = new DBHelper(GameMapView.this);
+				Cursor constantsCursor = null;
+				constantsCursor = helper.getReadableDatabase()
+						.rawQuery("SELECT * FROM t_goals WHERE state > ?",new String[]{String.valueOf(0)});
+				if (constantsCursor != null){
+					//clear
+					GameData.getDiscoveredList().clear();
+					
+					constantsCursor.moveToFirst();
+					while (constantsCursor.isAfterLast() == false) {
 
+						Goal goal = new Goal(constantsCursor.getInt(0),
+								constantsCursor.getString(1),
+								Double.parseDouble(constantsCursor.getString(3)),
+								Double.parseDouble(constantsCursor.getString(4)));
+						goal.setState(constantsCursor.getInt(6));
+												
+						//add
+						if(goal.getState()>0){
+							GameData.getDiscoveredList().add(goal);
+							System.out.println(goal.getgID() +":"+goal.getTitle()+":"+ goal.getState());
+						}
+						constantsCursor.moveToNext();
+					}
+					
+					constantsCursor.close();
+				}
+				helper.getReadableDatabase().close();
+				helper.close();
+				GameData.setDetector(GameData.getDiscoveredList().size());
+				System.out.println("SSSSSSSSSSSSSSSSSSSIIIIIIIIIIIIIIIIIIIIIIIIIIIIZZZZZZZZZZZZZZZZZ:"+GameData.getDiscoveredList().size() );
 			}
 		}
 
