@@ -49,7 +49,7 @@ public final class GameData {
 																			// goal
 																			// picker
 	private static Goal nearbyGoal = new Goal();
-	private static List<GeoPoint> gpList = null;// List of
+	private static List<GeoPoint> gpList = new ArrayList<GeoPoint>();// List of
 												// GP
 												// that
 												// the
@@ -140,19 +140,17 @@ public final class GameData {
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			gpList = new ArrayList<GeoPoint>();
 		}
 		// Check if the coordinate is empty
-		if (gcList == null || gcList.size() == 0) {
-			gpList = new ArrayList<GeoPoint>();
-		} else {
+		if (gcList.size()>0) {
 			// Add the last saved coordinate to the new GeoPoint list
 			for (int i = 0; i < gcList.size(); i++) {
 				gpList.add(new GeoPoint(gcList.get(i).getLatitude(), gcList
 						.get(i).getLongitude()));
 			}
+			gcList.clear();
 		}
-		gcList.clear();
+
 
 	}
 
