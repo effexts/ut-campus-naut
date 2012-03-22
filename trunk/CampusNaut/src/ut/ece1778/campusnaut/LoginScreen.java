@@ -38,6 +38,7 @@ public class LoginScreen extends Activity {
 	private Editor editor = null;
 	private String email = null;
 	private String passwd = null;
+	private int uid = 0;
 	private EditText emailinput;
 	private EditText passwdinput;
 
@@ -63,6 +64,9 @@ public class LoginScreen extends Activity {
 		// load email and password from data store
 		email = prefs.getString("email", null);
 		passwd = prefs.getString("password", null);
+		// User id is set here
+		uid = prefs.getInt("user_id", 0);
+		
 
 		Button loginButton = (Button) findViewById(R.id.buttonlogin);
 		loginButton.setOnClickListener(onLoginClick);
