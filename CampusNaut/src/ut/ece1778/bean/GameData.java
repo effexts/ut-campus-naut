@@ -290,9 +290,9 @@ public final class GameData {
 		try {
 			gamesList.get(0).getGoals()
 					.get(getIndex(goal_id, gamesList.get(0).getGoals()))
-					.setState(true);
+					.setState(2);
 			discoveredList.get(getIndex(goal_id, discoveredList))
-					.setState(true);
+					.setState(2);
 			tempList.remove(getIndex(goal_id, tempList));
 			GameData.setScores(GameData.getScores() + 50);
 

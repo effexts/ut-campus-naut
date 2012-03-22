@@ -11,6 +11,7 @@ import ut.ece1778.bean.GameData;
 import ut.ece1778.bean.Goal;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -78,10 +79,10 @@ public class Checkin extends Activity {
 		// Get selected Goal Object
 		tGoal = GameData.findGoalById(gid, GameData.getDiscoveredList());
 		// Check the goal's state and whether in range to be able to check-in
-		if (inRange == 0 && !tGoal.getState()) {
+		if (inRange == 0 && tGoal.getState() != 2) {
 			// Out of range ,disable the check in button
 			checkin.setEnabled(false);
-		} else if (inRange == 1 && !tGoal.getState()) {
+		} else if (inRange == 1 && tGoal.getState() != 2 ) {
 			// Unchecked goal in range
 			// Enable the check in button
 			checkin.setEnabled(true);
@@ -101,7 +102,14 @@ public class Checkin extends Activity {
 
 		public void onClick(View v) {
 
+			DBHelper helper = new DBHelper(Checkin.this);		
 			try {
+				
+				ContentValues cv  = new ContentValues();
+				cv.put("state", 2);
+				helper.getWritableDatabase().update("t_goals", cv, "goal_id = ?", new String[]{String.valueOf(gid)});
+				helper.getWritableDatabase().close();
+				helper.close();
 				// update Goal Lists in GameData
 				GameData.updateState(gid);
 				Toast.makeText(Checkin.this, tGoal.getTitle() + " visited.",
