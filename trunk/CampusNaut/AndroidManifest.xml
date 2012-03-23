@@ -24,8 +24,7 @@
             android:name=".LoginScreen"
             android:label="@string/app_name" 
             android:theme="@android:style/Theme.NoTitleBar"
-            android:screenOrientation="portrait"
-            android:noHistory="true">
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -36,14 +35,14 @@
             android:label="@string/app_name" 
             android:theme="@android:style/Theme.NoTitleBar"
             android:screenOrientation="portrait"
-            android:noHistory="true">
+            >
         </activity>
          <activity
             android:name=".GoalPicker"
             android:label="@string/app_name" 
             android:theme="@android:style/Theme.NoTitleBar"
             android:screenOrientation="portrait"
-            android:noHistory="true">
+            >
         </activity>
         <activity
             android:name=".GameMapView"
@@ -51,14 +50,14 @@
             android:theme="@style/Theme.NoBackground"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait"
-            android:noHistory="true">
+            >
         </activity>
         <activity
             android:name=".Checkin"
             android:label="@string/app_name"
             android:theme="@android:style/Theme.NoTitleBar"
             android:screenOrientation="portrait"
-            android:noHistory="true">
+            >
         </activity>
             
     </application>

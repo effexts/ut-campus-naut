@@ -1,7 +1,10 @@
 package ut.ece1778.campusnaut;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 
 import java.net.URL;
@@ -37,6 +40,7 @@ import android.widget.Toast;
 public class Checkin extends Activity {
 
 	private static final String IMAGE_FOLDER_URL = "http://ec2-184-73-31-146.compute-1.amazonaws.com/photos/";
+	private static final String UPD_PROG_URL = "http://ec2-184-73-31-146.compute-1.amazonaws.com:8080/CampusNaut/servlet/UpdateProgress";
 	private Button checkin;
 	private Button back;
 	private TextView checkinTitle;
@@ -78,6 +82,7 @@ public class Checkin extends Activity {
 
 		// Get selected Goal Object
 		tGoal = GameData.findGoalById(gid, GameData.getDiscoveredList());
+		//Toast.makeText(this, inRange+":"+tGoal.getState(), Toast.LENGTH_LONG).show();
 		// Check the goal's state and whether in range to be able to check-in
 		if (inRange == 0 && tGoal.getState() != 2) {
 			// Out of range ,disable the check in button
@@ -102,6 +107,9 @@ public class Checkin extends Activity {
 
 		public void onClick(View v) {
 
+			// Update Goal Lists in GameData
+			GameData.updateState(gid);
+			//Update state in local DB
 			DBHelper helper = new DBHelper(Checkin.this);		
 			try {
 				
@@ -110,12 +118,23 @@ public class Checkin extends Activity {
 				helper.getWritableDatabase().update("t_goals", cv, "goal_id = ?", new String[]{String.valueOf(gid)});
 				helper.getWritableDatabase().close();
 				helper.close();
-				// update Goal Lists in GameData
-				GameData.updateState(gid);
+				
+				//Make a request data string
+				String updateData = "";				
+				for (Goal goal : GameData.getDiscoveredList()) {
+					if (goal.getState()==2) {
+						updateData += goal.getgID() + "%";
+					}
+				}
+				// Update check-in state with server DB
+				UpdateProgressAsyncTask task = new UpdateProgressAsyncTask();
+				task.execute(new String[] { updateData.substring(0,
+							updateData.length() - 1) });
+								
 				Toast.makeText(Checkin.this, tGoal.getTitle() + " visited.",
 						Toast.LENGTH_LONG).show();
 
-				finish();
+				
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -273,4 +292,68 @@ public class Checkin extends Activity {
 		return (wifi.isConnected() || mobile.isConnected());
 	}
 
+	
+	/**
+	 * Update goal's state with DB on server
+	 * 
+	 * @author LeoMan
+	 */
+	private class UpdateProgressAsyncTask extends
+			AsyncTask<String, Void, String> {
+		ProgressDialog mProgressDialog;
+
+		@Override
+		protected void onPostExecute(String result) {
+			mProgressDialog.dismiss();
+			if (result == null) {
+				Toast.makeText(
+						Checkin.this,
+						"Cannot access the server. \nPlease make sure your WI-FI is on.",
+						Toast.LENGTH_LONG).show();
+			} else if (result.equals("Invalid")) {
+				Toast.makeText(Checkin.this, "Invalid Request.",
+						Toast.LENGTH_LONG).show();
+			} else {
+				Toast.makeText(Checkin.this, "Update successfully!", Toast.LENGTH_LONG)
+						.show();
+				finish();
+			}
+		}
+		@Override
+		protected void onPreExecute() {
+			mProgressDialog = ProgressDialog
+					.show(Checkin.this, "Loading...",
+							"Please wait while connecting to Database...");
+		}
+		@Override
+		protected String doInBackground(String... u) {
+			URL url = null;
+			HttpURLConnection httpConn = null;
+			String returnStr = "null";
+			try {
+				url = new URL(UPD_PROG_URL);
+				httpConn = (HttpURLConnection) url.openConnection();
+				httpConn.setDoOutput(true);
+				httpConn.setRequestMethod("POST");
+				// Do post request.
+				DataOutputStream out = new DataOutputStream(
+						httpConn.getOutputStream());
+				out.writeUTF("<UPDATE>");
+				out.writeUTF(Integer.toString(GameData.getCurUser().getuID()));
+				//System.out.println(Integer.toString(GameData.getCurUser()
+				//		.getuID()));
+				out.writeUTF(u[0]);
+				out.flush();
+				out.close();
+				// Receiving response from server
+				DataInputStream in = new DataInputStream(
+						httpConn.getInputStream());
+				returnStr = in.readUTF();
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return returnStr;
+		}
+	}
 }
