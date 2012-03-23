@@ -72,6 +72,7 @@ public class GoalAdapter extends BaseExpandableListAdapter {
 	static class ViewHolder {
 		protected TextView text;
 		protected CheckBox checkbox;
+		//protected TextView selectedText;
 	}
 
 	/**
@@ -98,7 +99,8 @@ public class GoalAdapter extends BaseExpandableListAdapter {
 					.findViewById(R.id.location);
 			viewHolder.checkbox = (CheckBox) convertView
 					.findViewById(R.id.checkbox);
-
+			/*viewHolder.selectedText = (TextView) convertView
+					.findViewById(R.id.selected);*/
 			viewHolder.checkbox
 					.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 						// Update the goal selected state after user click on check
@@ -120,15 +122,32 @@ public class GoalAdapter extends BaseExpandableListAdapter {
 							}
 						}
 					});
+			// Comment out for spiral 4
+			if (goals.get(groupPosition).get(childPosition).getState() == 1) {
+				viewHolder.checkbox.setButtonDrawable(android.R.drawable.btn_star_big_off);
+			} else if (goals.get(groupPosition).get(childPosition).getState() == 2) {
+				viewHolder.checkbox.setButtonDrawable(android.R.drawable.btn_star_big_on);
+			} else {
+				viewHolder.checkbox.setButtonDrawable(R.drawable.checkbox);
+			}
 			convertView.setTag(viewHolder);
 			viewHolder.checkbox.setTag(goals.get(groupPosition).get(
 					childPosition));
+			
 		} else {// View already exist, restore the state.
 			((ViewHolder) convertView.getTag()).checkbox.setTag(goals.get(
 					groupPosition).get(childPosition));
 		}
 
 		ViewHolder viewHolder = (ViewHolder) convertView.getTag();
+		// Comment out for spiral 4
+		if (goals.get(groupPosition).get(childPosition).getState() == 1) {
+			viewHolder.checkbox.setButtonDrawable(android.R.drawable.btn_star_big_off);
+		} else if (goals.get(groupPosition).get(childPosition).getState() == 2) {
+			viewHolder.checkbox.setButtonDrawable(android.R.drawable.btn_star_big_on);
+		} else {
+			viewHolder.checkbox.setButtonDrawable(R.drawable.checkbox);
+		}
 		viewHolder.text.setText(goals.get(groupPosition).get(childPosition)
 				.getTitle());
 		viewHolder.checkbox.setChecked(goals.get(groupPosition)
@@ -146,7 +165,7 @@ public class GoalAdapter extends BaseExpandableListAdapter {
 	public int getChildrenSelectedCount(int groupPosition) {
 		int count = 0;
 		for (int i = 0; i < goals.get(groupPosition).size(); i++) {
-			if (goals.get(groupPosition).get(i).getSelected())
+			if (goals.get(groupPosition).get(i).getSelected() && goals.get(groupPosition).get(i).getState() == 0)
 				count++;
 		}
 		return count;

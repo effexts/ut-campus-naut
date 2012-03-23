@@ -73,6 +73,7 @@ public final class GameData {
 	private static int scores = 0;
 	private static int detector = 0;
 	private static int allGoalCount = 0;
+	public static boolean onPause = false;
 	// Clear the memory
 	public static void clear() {
 		gpList.clear();
@@ -88,6 +89,7 @@ public final class GameData {
 		updateGoal = false;
 		scores = 0;
 		detector = 0;
+		onPause = false;
 
 	}
 

@@ -91,9 +91,11 @@ public class GoalPicker extends ExpandableListActivity {
 				@SuppressWarnings("unchecked")
 				ArrayList<Goal> gList = (ArrayList<Goal>) entry.getValue();
 				for (int i = 0; i < gList.size(); i++) {
-					if (gList.get(i).getSelected()
+					if ((gList.get(i).getSelected()
 							&& !GameData.getSelectedGoal().contains(
-									gList.get(i)))
+									gList.get(i))&&gList.get(i).getState()==0) || (gList.get(i).getState()==1
+									&& !GameData.getSelectedGoal().contains(
+											gList.get(i))))
 						GameData.getSelectedGoal().add(gList.get(i));
 				}
 			}
@@ -103,8 +105,13 @@ public class GoalPicker extends ExpandableListActivity {
 			} else {
 				Toast.makeText(GoalPicker.this, "You have " + GameData.getSelectedGoal().size() + " objectives to complete.",
 						Toast.LENGTH_LONG).show();
-				startActivity(new Intent(getApplicationContext(), GameMapView.class));
-				finish();
+				if (!GameData.onPause) {
+					startActivity(new Intent(getApplicationContext(), GameMapView.class));
+					finish();
+				} else {
+					GameData.onPause = false;
+					finish();
+				}
 			}
 		}
 	};
@@ -278,6 +285,8 @@ public class GoalPicker extends ExpandableListActivity {
 							constantsCursor.getString(1),
 							Double.parseDouble(constantsCursor.getString(3)),
 							Double.parseDouble(constantsCursor.getString(4)));
+					// Comment out for spiral 4
+					g.setState(constantsCursor.getInt(6));
 					if (!GameData.getAllGoals().get(category).contains(g)) {
 						GameData.getAllGoals().get(category).add(g);
 						GameData.setAllGoalCount(++count);
