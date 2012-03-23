@@ -304,7 +304,7 @@ public class GameMapView extends MapActivity {
 			// Future implementation
 			break;
 		case R.id.editor:
-			GameData.onPause = true;
+			GameData.setOnPause(true);
 			Intent intent = new Intent(this, GoalPicker.class);
 			startActivity(intent);
 			break;
