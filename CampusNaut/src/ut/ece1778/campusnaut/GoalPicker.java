@@ -105,11 +105,11 @@ public class GoalPicker extends ExpandableListActivity {
 			} else {
 				Toast.makeText(GoalPicker.this, "You have " + GameData.getSelectedGoal().size() + " objectives to complete.",
 						Toast.LENGTH_LONG).show();
-				if (!GameData.onPause) {
+				if (!GameData.getOnPause()) {
 					startActivity(new Intent(getApplicationContext(), GameMapView.class));
 					finish();
 				} else {
-					GameData.onPause = false;
+					GameData.setOnPause(false);
 					finish();
 				}
 			}

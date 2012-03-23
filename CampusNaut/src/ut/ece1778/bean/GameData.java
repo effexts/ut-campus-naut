@@ -73,7 +73,7 @@ public final class GameData {
 	private static int scores = 0;
 	private static int detector = 0;
 	private static int allGoalCount = 0;
-	public static boolean onPause = false;
+	private static boolean onPause = false; // Used for goal editor reenter from mapview
 	// Clear the memory
 	public static void clear() {
 		gpList.clear();
@@ -122,7 +122,12 @@ public final class GameData {
 	public static List<GeoPoint> getGpList() {
 		return gpList;
 	}
-
+	public static boolean getOnPause() {
+		return onPause;
+	}
+	public static void setOnPause(boolean pause) {
+		onPause = pause;
+	}
 	
 	/**
 	 * Deserialize GeoPoint coordinate to load them to the map
