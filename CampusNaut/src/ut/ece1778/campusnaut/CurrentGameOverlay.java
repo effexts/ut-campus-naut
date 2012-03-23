@@ -14,6 +14,7 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 
+
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.ItemizedOverlay;
 import com.google.android.maps.OverlayItem;
@@ -172,11 +173,15 @@ public class CurrentGameOverlay extends ItemizedOverlay<OverlayItem> {
 	 */
 	protected boolean onTap(int i) {
 
-		Goal tapGoal = GameData.getDiscoveredList().get(i);
+		//Get current onTap goal
+		int gID = Integer.parseInt(items.get(i).getSnippet());
+		Goal tapGoal = GameData.findGoalById(gID, GameData.getDiscoveredList());
 		tapGoal.calculateDistance(location);
 
+		//Toast.makeText(context, tapGoal.getTitle()+":"+i+":"+gID, Toast.LENGTH_LONG).show();
+		//Pass value to check-in activity
 		Intent intent = new Intent(context, Checkin.class);
-		intent.putExtra("focus", Integer.parseInt(items.get(i).getSnippet()));
+		intent.putExtra("focus", gID);
 		if (tapGoal.getDistance() < VISUAL_FIELD) {
 			intent.putExtra("inRange", 1);
 		} else {

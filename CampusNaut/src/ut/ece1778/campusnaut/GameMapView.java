@@ -57,7 +57,6 @@ public class GameMapView extends MapActivity {
 	// URL for remote GPS location
 
 	private static final String GPS_URL = "http://ec2-184-73-31-146.compute-1.amazonaws.com:8080/CampusNaut/leo.txt";
-	private static final String UPD_PROG_URL = "http://ec2-184-73-31-146.compute-1.amazonaws.com:8080/CampusNaut/servlet/UpdateProgress";
 	private static final String GAME_INIT_URL = "http://ec2-184-73-31-146.compute-1.amazonaws.com:8080/CampusNaut/servlet/SetupGame";
 	private static final int GPS_UPDATE_TIME = 3000;
 
@@ -149,7 +148,6 @@ public class GameMapView extends MapActivity {
 		curUser.setuID(uID);
 		GameData.setCurUser(curUser);
 		
-		//User curUser = new User(10001, "qwe", 1, 0);
 		// Add to temporary data store
 		//GameData.setCurUser(curUser);
 		GameData.add(game);
@@ -311,24 +309,9 @@ public class GameMapView extends MapActivity {
 			// Future implementation
 			//break;
 
-		case R.id.upload: // Positive update goal's state(user drive)
-			String updateData = "";
-			// Check if there's checked-in goal
-			for (Goal goal : GameData.getDiscoveredList()) {
-				if (goal.getState()==2) {
-					updateData += goal.getgID() + "%";
-				}
-			}
-			if (updateData.equals("")) {
-				Toast.makeText(GameMapView.this,
-						"Go exploring! You don't have anything!", 1000).show();
-			} else {
-				// Update check-in state with server DB
-				UpdateProgressAsyncTask task = new UpdateProgressAsyncTask();
-				task.execute(new String[] { updateData.substring(0,
-						updateData.length() - 1) });
-			}
-			break;
+		//case R.id.upload: // Positive update goal's state(user drive)
+			
+			//break;
 		}
 		return true;
 	}
@@ -468,71 +451,5 @@ public class GameMapView extends MapActivity {
 		}
 	
 	}
-	/**
-	 * Update goal's state with DB on server
-	 * 
-	 * @author LeoMan
-	 */
-	private class UpdateProgressAsyncTask extends
-			AsyncTask<String, Void, String> {
-		ProgressDialog mProgressDialog;
-
-		@Override
-		protected void onPostExecute(String result) {
-			mProgressDialog.dismiss();
-			if (result == null) {
-				Toast.makeText(
-						GameMapView.this,
-						"Cannot access the server. \nPlease make sure your WI-FI is on.",
-						Toast.LENGTH_LONG).show();
-			} else if (result.equals("Invalid")) {
-				Toast.makeText(GameMapView.this, "Invalid Request.",
-						Toast.LENGTH_LONG).show();
-			} else {
-				Toast.makeText(GameMapView.this, "Update successfully!", Toast.LENGTH_LONG)
-						.show();
-
-			}
-		}
-
-		@Override
-		protected void onPreExecute() {
-			mProgressDialog = ProgressDialog
-					.show(GameMapView.this, "Loading...",
-							"Please wait while connecting to Database...");
-		}
-
-		@Override
-		protected String doInBackground(String... u) {
-			URL url = null;
-			HttpURLConnection httpConn = null;
-			String returnStr = "null";
-			try {
-				url = new URL(UPD_PROG_URL);
-				httpConn = (HttpURLConnection) url.openConnection();
-				httpConn.setDoOutput(true);
-				httpConn.setRequestMethod("POST");
-
-				// Do post request.
-				DataOutputStream out = new DataOutputStream(
-						httpConn.getOutputStream());
-				out.writeUTF("<UPDATE>");
-				out.writeUTF(Integer.toString(GameData.getCurUser().getuID()));
-				System.out.println(Integer.toString(GameData.getCurUser()
-						.getuID()));
-				out.writeUTF(u[0]);
-				out.flush();
-				out.close();
-
-				// Receiving response from server
-				DataInputStream in = new DataInputStream(
-						httpConn.getInputStream());
-				returnStr = in.readUTF();
-
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			return returnStr;
-		}
-	}
+	
 }
