@@ -97,6 +97,7 @@ public class GameMapView extends MapActivity {
 		mapController = mapView.getController();
 		mapController.setZoom(ZOOM_LEVEL);
 		// Load last saved geopoint list to draw transparent circle on the map
+		// Comment out for spiral 4
 		GameData.loadGpList(this);
 		// User location overlay
 		myLocation = new MyCustomLocationOverlay(this, mapView,
@@ -217,6 +218,7 @@ public class GameMapView extends MapActivity {
 		super.onDestroy();
 		// Save the geopoint list before exit
 		myLocation.disableMyLocation();
+		// Comment out for spiral 4
 		GameData.saveGpList(this);
 		GameData.clear();
 		GameOverlayOperation.clear();
@@ -302,8 +304,9 @@ public class GameMapView extends MapActivity {
 			// Future implementation
 			break;
 		case R.id.editor:
-			startActivity(new Intent(getApplicationContext(), GoalPicker.class));
-			finish();
+			GameData.onPause = true;
+			Intent intent = new Intent(this, GoalPicker.class);
+			startActivity(intent);
 			break;
 		//case R.id.achievement:
 			// Future implementation
