@@ -123,13 +123,13 @@ public class GoalAdapter extends BaseExpandableListAdapter {
 						}
 					});
 			// Comment out for spiral 4
-			if (goals.get(groupPosition).get(childPosition).getState() == 1) {
+			/*if (goals.get(groupPosition).get(childPosition).getState() == 1) {
 				viewHolder.checkbox.setButtonDrawable(android.R.drawable.btn_star_big_off);
 			} else if (goals.get(groupPosition).get(childPosition).getState() == 2) {
 				viewHolder.checkbox.setButtonDrawable(android.R.drawable.btn_star_big_on);
 			} else {
 				viewHolder.checkbox.setButtonDrawable(R.drawable.checkbox);
-			}
+			}*/
 			convertView.setTag(viewHolder);
 			viewHolder.checkbox.setTag(goals.get(groupPosition).get(
 					childPosition));
@@ -141,13 +141,13 @@ public class GoalAdapter extends BaseExpandableListAdapter {
 
 		ViewHolder viewHolder = (ViewHolder) convertView.getTag();
 		// Comment out for spiral 4
-		if (goals.get(groupPosition).get(childPosition).getState() == 1) {
+		/*if (goals.get(groupPosition).get(childPosition).getState() == 1) {
 			viewHolder.checkbox.setButtonDrawable(android.R.drawable.btn_star_big_off);
 		} else if (goals.get(groupPosition).get(childPosition).getState() == 2) {
 			viewHolder.checkbox.setButtonDrawable(android.R.drawable.btn_star_big_on);
 		} else {
 			viewHolder.checkbox.setButtonDrawable(R.drawable.checkbox);
-		}
+		}*/
 		viewHolder.text.setText(goals.get(groupPosition).get(childPosition)
 				.getTitle());
 		viewHolder.checkbox.setChecked(goals.get(groupPosition)

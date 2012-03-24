@@ -286,7 +286,7 @@ public class GoalPicker extends ExpandableListActivity {
 							Double.parseDouble(constantsCursor.getString(3)),
 							Double.parseDouble(constantsCursor.getString(4)));
 					// Comment out for spiral 4
-					g.setState(constantsCursor.getInt(6));
+					// g.setState(constantsCursor.getInt(6));
 					if (!GameData.getAllGoals().get(category).contains(g)) {
 						GameData.getAllGoals().get(category).add(g);
 						GameData.setAllGoalCount(++count);

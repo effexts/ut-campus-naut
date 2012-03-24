@@ -58,7 +58,7 @@ public class GameMapView extends MapActivity {
 
 	private static final String GPS_URL = "http://ec2-184-73-31-146.compute-1.amazonaws.com:8080/CampusNaut/leo.txt";
 	private static final String GAME_INIT_URL = "http://ec2-184-73-31-146.compute-1.amazonaws.com:8080/CampusNaut/servlet/SetupGame";
-	private static final int GPS_UPDATE_TIME = 3000;
+	private static final int GPS_UPDATE_TIME = 2000;
 
 	private static final int ZOOM_LEVEL = 19;
 	private static final Double INITIAL_LATITUDE = 43.669858 * 1E6;
@@ -98,7 +98,7 @@ public class GameMapView extends MapActivity {
 		mapController.setZoom(ZOOM_LEVEL);
 		// Load last saved geopoint list to draw transparent circle on the map
 		// Comment out for spiral 4
-		GameData.loadGpList(this);
+		//GameData.loadGpList(this);
 		// User location overlay
 		myLocation = new MyCustomLocationOverlay(this, mapView,
 				INITIAL_LONGITUDE, INITIAL_LATITUDE, END_LONGITUDE,
@@ -220,7 +220,7 @@ public class GameMapView extends MapActivity {
 		// Save the geopoint list before exit
 		myLocation.disableMyLocation();
 		// Comment out for spiral 4
-		GameData.saveGpList(this);
+		//GameData.saveGpList(this);
 		GameData.clear();
 		GameOverlayOperation.clear();
 		mapView.getOverlays().remove(gameOverlay);
@@ -301,9 +301,9 @@ public class GameMapView extends MapActivity {
 			editor.commit();
 			finish();
 			break;
-		case R.id.setting:
+		//case R.id.setting:
 			// Future implementation
-			break;
+			//break;
 		case R.id.editor:
 			GameData.setOnPause(true);
 			Intent intent = new Intent(this, GoalPicker.class);
@@ -411,7 +411,6 @@ public class GameMapView extends MapActivity {
 				helper.getReadableDatabase().close();
 				helper.close();
 				GameData.setDetector(GameData.getDiscoveredList().size());
-				System.out.println("SSSSSSSSSSSSSSSSSSSIIIIIIIIIIIIIIIIIIIIIIIIIIIIZZZZZZZZZZZZZZZZZ:"+GameData.getDiscoveredList().size() );
 			}
 		}
 
