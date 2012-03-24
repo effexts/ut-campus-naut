@@ -25,11 +25,11 @@ import com.google.android.maps.OverlayItem;
  * 
  * @author Steve Chun-Hao Hu, Leo ChenLiang Man
  */
-public class CurrentGameOverlay extends ItemizedOverlay<OverlayItem> {
+public class CurrentGameOverlay extends ItemizedOverlay<CustomItem> {
 
 	private Context context;
 
-	private List<OverlayItem> items = new ArrayList<OverlayItem>();
+	private List<CustomItem> items = new ArrayList<CustomItem>();
 	private ArrayList<Goal> goals = new ArrayList<Goal>();
 	private Location location;
 	// private Game game;
@@ -90,7 +90,11 @@ public class CurrentGameOverlay extends ItemizedOverlay<OverlayItem> {
 						}
 					}
 					if (flag){
-						items.add(new OverlayItem(goal.getGeoPoint(),goal.getTitle(),""+goal.getgID()));
+						if(goal.getState()==2){
+							items.add(new CustomItem(goal.getGeoPoint(),goal.getTitle(),""+goal.getgID(), getMarker(R.drawable.goal_gold)));
+						}else{
+							items.add(new CustomItem(goal.getGeoPoint(),goal.getTitle(),""+goal.getgID(), getMarker(R.drawable.goal_blue)));
+						}
 					}								
 			}
 			
@@ -123,8 +127,8 @@ public class CurrentGameOverlay extends ItemizedOverlay<OverlayItem> {
 			}
 			if (flag) {
 				GameData.getDiscoveredList().add(sGoal);
-				items.add(new OverlayItem(sGoal.getGeoPoint(),
-						sGoal.getTitle(), "" + sGoal.getgID()));
+				items.add(new CustomItem(sGoal.getGeoPoint(),
+						sGoal.getTitle(), "" + sGoal.getgID(),getMarker(R.drawable.goal_blue)));
 				System.out.println("DISCOVERED-------"
 						+ GameData.getDiscoveredList().size());
 				
@@ -156,7 +160,7 @@ public class CurrentGameOverlay extends ItemizedOverlay<OverlayItem> {
 	}
 
 	@Override
-	protected OverlayItem createItem(int i) {
+	protected CustomItem createItem(int i) {
 		// TODO Auto-generated method stub
 		return (items.get(i));
 	}
@@ -182,6 +186,7 @@ public class CurrentGameOverlay extends ItemizedOverlay<OverlayItem> {
 		//Pass value to check-in activity
 		Intent intent = new Intent(context, Checkin.class);
 		intent.putExtra("focus", gID);
+		intent.putExtra("counter", i);
 		if (tapGoal.getDistance() < VISUAL_FIELD) {
 			intent.putExtra("inRange", 1);
 		} else {
@@ -193,12 +198,21 @@ public class CurrentGameOverlay extends ItemizedOverlay<OverlayItem> {
 		return (true);
 	}
 
-	public List<OverlayItem> getItems() {
+	public List<CustomItem> getItems() {
 		return items;
 	}
 
-	public void setItems(List<OverlayItem> items) {
+	public void setItems(List<CustomItem> items) {
 		this.items = items;
 	}
 
+	public Drawable getMarker(int resource) {
+	      Drawable marker=context.getResources().getDrawable(resource);
+	      
+	      marker.setBounds(0, 0, marker.getIntrinsicWidth(),
+	                        marker.getIntrinsicHeight());
+	      boundCenter(marker);
+
+	      return(marker);
+	    }
 }

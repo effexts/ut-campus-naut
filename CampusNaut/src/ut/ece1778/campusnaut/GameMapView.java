@@ -145,10 +145,11 @@ public class GameMapView extends MapActivity {
 		game.setGoals(goals);
 
 		int uID = prefs.getInt("user_id", 0);
-		User curUser = new User();
-		curUser.setuID(uID);
-		GameData.setCurUser(curUser);
-		
+		if(uID != 0){
+			User curUser = new User();
+			curUser.setuID(uID);
+			GameData.setCurUser(curUser);
+		}
 		// Add to temporary data store
 		//GameData.setCurUser(curUser);
 		GameData.add(game);
