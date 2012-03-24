@@ -48,6 +48,7 @@ public class Checkin extends Activity {
 	private ImageView checkinPic;
 	private int gid;
 	private int inRange;
+	private int counter;
 	private Goal tGoal = new Goal();
 	private DBHelper dbHelper = null;
 	private Cursor constantsCursor = null;
@@ -70,6 +71,7 @@ public class Checkin extends Activity {
 		// Get values passed from Main Activity
 		Bundle bundle = getIntent().getExtras();
 		gid = bundle.getInt("focus");
+		counter = bundle.getInt("counter");
 		inRange = bundle.getInt("inRange");
 		// Load the image from web
 		try {
@@ -119,6 +121,8 @@ public class Checkin extends Activity {
 				helper.getWritableDatabase().close();
 				helper.close();
 				
+				GameOverlayOperation.getGameOverlay().getItem(counter)
+					.setMarker(GameOverlayOperation.getGameOverlay().getMarker(R.drawable.goal_gold));
 				//Make a request data string
 				String updateData = "";				
 				for (Goal goal : GameData.getDiscoveredList()) {
