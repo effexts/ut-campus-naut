@@ -171,7 +171,7 @@ public class GameMapView extends MapActivity {
 					initData.length() - 1) });
 		}
 		
-
+		//Load Overlay of goals on map
 		gameOverlay = new CurrentGameOverlay(GameMapView.this, goalMarker,
 				GameData.getGameList().get(0));
 		GameOverlayOperation.setGameOverlay(gameOverlay);
@@ -186,7 +186,7 @@ public class GameMapView extends MapActivity {
 		super.onResume();
 		
 		myLocation.enableMyLocation();
-		//scoreBoard.setText("Score: " + GameData.getScores());
+		
 		// Always center the user location on the map
 		myLocation.runOnFirstFix(new Runnable() {
 
@@ -366,6 +366,13 @@ public class GameMapView extends MapActivity {
 		}
 	}
 
+	
+	/**
+	 *Initialize game,  insert user selections into t_user_games
+	 *acquire discovered goal from local DB 
+	 * @author LeoMan
+	 *
+	 */
 	private class GameInitAsyncTask extends AsyncTask<String, Void, String>{
 		ProgressDialog mProgressDialog;
 

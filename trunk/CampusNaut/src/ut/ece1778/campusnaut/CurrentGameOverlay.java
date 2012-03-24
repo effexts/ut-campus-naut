@@ -33,7 +33,7 @@ public class CurrentGameOverlay extends ItemizedOverlay<CustomItem> {
 	private ArrayList<Goal> goals = new ArrayList<Goal>();
 	private Location location;
 	// private Game game;
-	public static final double VISUAL_FIELD = 80.0; // unit meter. any goal out
+	public static final double VISUAL_FIELD = 50.0; // unit meter. any goal out
 													// of this range will not be
 													// shown.
 
@@ -80,6 +80,8 @@ public class CurrentGameOverlay extends ItemizedOverlay<CustomItem> {
 		location.setLatitude(myLocation.getLatitudeE6() * 1E-6);
 		location.setLongitude(myLocation.getLongitudeE6() * 1E-6);
 		
+		/*=============Comment out for spiral 4================
+		//Load previous discovered goal onto current overlay
 		if (GameData.getDiscoveredList().size() >0 ){
 			
 			for(Goal goal : GameData.getDiscoveredList()){
@@ -91,14 +93,16 @@ public class CurrentGameOverlay extends ItemizedOverlay<CustomItem> {
 					}
 					if (flag){
 						if(goal.getState()==2){
-							items.add(new CustomItem(goal.getGeoPoint(),goal.getTitle(),""+goal.getgID(), getMarker(R.drawable.goal_gold)));
+							items.add(new CustomItem(goal.getGeoPoint(),goal.getTitle(),
+								""+goal.getgID(), getMarker(R.drawable.goal_gold)));
 						}else{
-							items.add(new CustomItem(goal.getGeoPoint(),goal.getTitle(),""+goal.getgID(), getMarker(R.drawable.goal_blue)));
+							items.add(new CustomItem(goal.getGeoPoint(),goal.getTitle(),
+								""+goal.getgID(), getMarker(R.drawable.goal_blue)));
 						}
 					}								
 			}
 			
-		}
+		}*/
 		
 		DBHelper helper = new DBHelper(context);		
 		
@@ -127,8 +131,10 @@ public class CurrentGameOverlay extends ItemizedOverlay<CustomItem> {
 			}
 			if (flag) {
 				GameData.getDiscoveredList().add(sGoal);
+				//==============================Comment out for spiral 4
+				//getMarker() need to be changed back to R.drawable.goal_blue
 				items.add(new CustomItem(sGoal.getGeoPoint(),
-						sGoal.getTitle(), "" + sGoal.getgID(),getMarker(R.drawable.goal_blue)));
+						sGoal.getTitle(), "" + sGoal.getgID(),getMarker(R.drawable.goal_gold)));
 				System.out.println("DISCOVERED-------"
 						+ GameData.getDiscoveredList().size());
 				
@@ -136,7 +142,8 @@ public class CurrentGameOverlay extends ItemizedOverlay<CustomItem> {
 						// update local DB, set goal state to discovered
 						ContentValues cv  = new ContentValues();
 						cv.put("state", 1);
-						helper.getWritableDatabase().update("t_goals", cv, "goal_id = ?", new String[]{String.valueOf(sGoal.getgID())});
+						helper.getWritableDatabase()
+							.update("t_goals", cv, "goal_id = ?", new String[]{String.valueOf(sGoal.getgID())});
 						
 				}catch(Exception e){
 					e.printStackTrace();
