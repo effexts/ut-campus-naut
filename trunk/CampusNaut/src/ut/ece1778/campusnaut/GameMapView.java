@@ -404,12 +404,13 @@ public class GameMapView extends MapActivity {
 								Double.parseDouble(constantsCursor.getString(3)),
 								Double.parseDouble(constantsCursor.getString(4)));
 						goal.setState(constantsCursor.getInt(6));
-												
-						//add
+						
+						//=======================Comment out for spiral 4						
+						/*add 
 						if(goal.getState()>0){
 							GameData.getDiscoveredList().add(goal);
 							System.out.println(goal.getgID() +":"+goal.getTitle()+":"+ goal.getState());
-						}
+						}*/
 						constantsCursor.moveToNext();
 					}
 					
