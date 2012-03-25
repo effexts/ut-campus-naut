@@ -19,8 +19,8 @@ public class GPSControllerActivity extends Activity {
 	private final String OUR_URL = "http://ec2-184-73-31-146.compute-1.amazonaws.com:8080/CampusNaut/servlet/GPSInjection";
 
 	// Start location which is near to where we do our presentation
-	private static double longitude = 43.661271;
-	private static double laptitude = -79.398413;
+	private static double longitude = 43.660242;
+	private static double laptitude = -79.397914;
 	private static final double RANGE = 0.000500;
 	private static String user="steve";
 
@@ -131,8 +131,8 @@ public class GPSControllerActivity extends Activity {
 				} else if (u[0].equals("down")) {
 					longitude -= RANGE;
 				} else {
-					longitude = 43.661271;
-					laptitude = -79.398413;
+					longitude = 43.660242;
+					laptitude = -79.397914;
 				}
 				DecimalFormat myFormatter = new DecimalFormat("#0.0000000");
 				String output = myFormatter.format(longitude) + ","
