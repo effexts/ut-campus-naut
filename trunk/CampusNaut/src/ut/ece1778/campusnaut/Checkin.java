@@ -39,7 +39,7 @@ import android.widget.Toast;
 
 public class Checkin extends Activity {
 
-	private static final String IMAGE_FOLDER_URL = "http://ec2-184-73-31-146.compute-1.amazonaws.com/photos/";
+	private static final String IMAGE_FOLDER_URL = "https://s3.amazonaws.com/campusnaut/";
 	private static final String UPD_PROG_URL = "http://ec2-184-73-31-146.compute-1.amazonaws.com:8080/CampusNaut/servlet/UpdateProgress";
 	private Button checkin;
 	private Button back;
