@@ -56,7 +56,7 @@ import com.google.android.maps.MyLocationOverlay;
 public class GameMapView extends MapActivity {
 	// URL for remote GPS location
 
-	private static final String GPS_URL = "http://ec2-184-73-31-146.compute-1.amazonaws.com:8080/CampusNaut/leo.txt";
+	private static final String GPS_URL = "http://ec2-184-73-31-146.compute-1.amazonaws.com:8080/CampusNaut/steve.txt";
 	private static final String GAME_INIT_URL = "http://ec2-184-73-31-146.compute-1.amazonaws.com:8080/CampusNaut/servlet/SetupGame";
 	private static final int GPS_UPDATE_TIME = 2000;
 
@@ -97,8 +97,7 @@ public class GameMapView extends MapActivity {
 		mapController = mapView.getController();
 		mapController.setZoom(ZOOM_LEVEL);
 		// Load last saved geopoint list to draw transparent circle on the map
-		// Comment out for spiral 4
-		//GameData.loadGpList(this);
+		GameData.loadGpList(this);
 		// User location overlay
 		myLocation = new MyCustomLocationOverlay(this, mapView,
 				INITIAL_LONGITUDE, INITIAL_LATITUDE, END_LONGITUDE,
@@ -219,8 +218,7 @@ public class GameMapView extends MapActivity {
 		super.onDestroy();
 		// Save the geopoint list before exit
 		myLocation.disableMyLocation();
-		// Comment out for spiral 4
-		//GameData.saveGpList(this);
+		GameData.saveGpList(this);
 		GameData.clear();
 		GameOverlayOperation.clear();
 		mapView.getOverlays().remove(gameOverlay);
