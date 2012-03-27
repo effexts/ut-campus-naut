@@ -7,7 +7,7 @@
         android:id="@+id/myMap"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:apiKey="@string/leo_key"
+        android:apiKey="@string/steve_key"
         android:clickable="true" />
 
     <LinearLayout
