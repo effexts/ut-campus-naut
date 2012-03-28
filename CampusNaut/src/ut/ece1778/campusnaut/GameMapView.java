@@ -56,7 +56,7 @@ import com.google.android.maps.MyLocationOverlay;
 public class GameMapView extends MapActivity {
 	// URL for remote GPS location
 
-	private static final String GPS_URL = "http://ec2-184-73-31-146.compute-1.amazonaws.com:8080/CampusNaut/steve.txt";
+	private static final String GPS_URL = "http://ec2-184-73-31-146.compute-1.amazonaws.com:8080/CampusNaut/leo.txt";
 	private static final String GAME_INIT_URL = "http://ec2-184-73-31-146.compute-1.amazonaws.com:8080/CampusNaut/servlet/SetupGame";
 	private static final int GPS_UPDATE_TIME = 2000;
 
@@ -403,12 +403,11 @@ public class GameMapView extends MapActivity {
 								Double.parseDouble(constantsCursor.getString(4)));
 						goal.setState(constantsCursor.getInt(6));
 						
-						//=======================Comment out for spiral 4						
-						/*add 
+						//Get discovered goal from local DB
 						if(goal.getState()>0){
 							GameData.getDiscoveredList().add(goal);
 							System.out.println(goal.getgID() +":"+goal.getTitle()+":"+ goal.getState());
-						}*/
+						}
 						constantsCursor.moveToNext();
 					}
 					

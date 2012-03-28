@@ -80,7 +80,7 @@ public class CurrentGameOverlay extends ItemizedOverlay<CustomItem> {
 		location.setLatitude(myLocation.getLatitudeE6() * 1E-6);
 		location.setLongitude(myLocation.getLongitudeE6() * 1E-6);
 		
-		/*=============Comment out for spiral 4================
+		
 		//Load previous discovered goal onto current overlay
 		if (GameData.getDiscoveredList().size() >0 ){
 			
@@ -102,7 +102,7 @@ public class CurrentGameOverlay extends ItemizedOverlay<CustomItem> {
 					}								
 			}
 			
-		}*/
+		}
 		
 		DBHelper helper = new DBHelper(context);		
 		
@@ -131,10 +131,10 @@ public class CurrentGameOverlay extends ItemizedOverlay<CustomItem> {
 			}
 			if (flag) {
 				GameData.getDiscoveredList().add(sGoal);
-				//==============================Comment out for spiral 4
-				//getMarker() need to be changed back to R.drawable.goal_blue
+				
+				
 				items.add(new CustomItem(sGoal.getGeoPoint(),
-						sGoal.getTitle(), "" + sGoal.getgID(),getMarker(R.drawable.goal_gold)));
+						sGoal.getTitle(), "" + sGoal.getgID(),getMarker(R.drawable.goal_blue)));
 				System.out.println("DISCOVERED-------"
 						+ GameData.getDiscoveredList().size());
 				
@@ -189,7 +189,7 @@ public class CurrentGameOverlay extends ItemizedOverlay<CustomItem> {
 		Goal tapGoal = GameData.findGoalById(gID, GameData.getDiscoveredList());
 		tapGoal.calculateDistance(location);
 
-		//Toast.makeText(context, tapGoal.getTitle()+":"+i+":"+gID, Toast.LENGTH_LONG).show();
+		
 		//Pass value to check-in activity
 		Intent intent = new Intent(context, Checkin.class);
 		intent.putExtra("focus", gID);
