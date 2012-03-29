@@ -137,6 +137,9 @@ public class CurrentGameOverlay extends ItemizedOverlay<CustomItem> {
 						sGoal.getTitle(), "" + sGoal.getgID(),getMarker(R.drawable.goal_blue)));
 				System.out.println("DISCOVERED-------"
 						+ GameData.getDiscoveredList().size());
+				//Set discovered state to 1
+				int i = GameData.getIndex(sGoal.getgID(), GameData.getGameList().get(0).getGoals());
+				GameData.getGameList().get(0).getGoals().get(i).setState(1);
 				
 				try{
 						// update local DB, set goal state to discovered
@@ -144,6 +147,7 @@ public class CurrentGameOverlay extends ItemizedOverlay<CustomItem> {
 						cv.put("state", 1);
 						helper.getWritableDatabase()
 							.update("t_goals", cv, "goal_id = ?", new String[]{String.valueOf(sGoal.getgID())});
+						
 						
 				}catch(Exception e){
 					e.printStackTrace();
