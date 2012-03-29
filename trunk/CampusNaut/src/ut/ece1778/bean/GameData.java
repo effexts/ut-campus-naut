@@ -301,7 +301,7 @@ public final class GameData {
 			discoveredList.get(getIndex(goal_id, discoveredList))
 					.setState(2);
 			tempList.remove(getIndex(goal_id, tempList));
-			GameData.setScores(GameData.getScores() + 50);
+			//GameData.setScores(GameData.getScores() + 50);
 
 		} catch (Exception e) {
 			e.printStackTrace();
