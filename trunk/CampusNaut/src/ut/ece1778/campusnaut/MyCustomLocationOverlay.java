@@ -189,15 +189,16 @@ public class MyCustomLocationOverlay extends MyLocationOverlay {
 					minDistance = curGoal.getDistance();
 					GameData.setNearbyGoal(curGoal);
 					GameData.getCurGoalHeader().setText(curGoal.getTitle());
+					GameData.getCurGoalHeader().setTextColor(Color.parseColor("#00aeff"));
 					GameData.getCurGoalDistance().setText(Integer.toString((int)(curGoal.getDistance()))+"m");
 				}
 			}
 			// If no more goals, game over
 			if (curGoals.size() == 0) {
 				GameData.getCurGoalHeader().setText("Mission Accomplished");
-				GameData.getCurGoalHeader().setTextColor(Color.RED);
+				GameData.getCurGoalHeader().setTextColor(Color.GREEN);
 				GameData.getCurGoalDistance().setText("0m");
-				GameData.getCurGoalDistance().setTextColor(Color.RED);
+				
 			}
 		}
 		Point screenPts = mapView.getProjection().toPixels(myLocation, null);
