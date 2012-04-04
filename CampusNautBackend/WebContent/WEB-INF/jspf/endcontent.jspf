@@ -1,0 +1,10 @@
+<%-- any content can be specified here e.g.: --%>
+<%@ page pageEncoding="UTF-8" %>		
+				<div class="baktotop">
+				<p>
+					<a href="#layout">Back to top</a>
+				</p>
+			</div>
+		</div>
+	</div>
+</div>
