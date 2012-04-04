@@ -244,12 +244,9 @@ public class GameMapView extends MapActivity {
 	 * only center user's location
 	 */
 	OnClickListener onTrigger = new OnClickListener() {
-
 		public void onClick(View v) {
-
-			if (myLocation.getMyLocation() != null) { // make sure location is
-														// available before
-														// calling method
+			if (myLocation.getMyLocation() != null) { 
+				// Make sure location is available before calling method
 				mapController.setZoom(19);
 				mapController.animateTo(myLocation.getMyLocation());
 			}

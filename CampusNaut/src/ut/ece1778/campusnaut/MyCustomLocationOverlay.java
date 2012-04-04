@@ -124,7 +124,6 @@ public class MyCustomLocationOverlay extends MyLocationOverlay {
 		int curLat = (int) (loc.getLatitude() * 1E6);
 		int curLong = (int) (loc.getLongitude() * 1E6);
 		GeoPoint myGeoPoint = new GeoPoint(curLat, curLong);
-		//GPSCoordiante gc = new GPSCoordinate(curLat, curLong);
 		mapView.getController().animateTo(myGeoPoint);
 		// record the GPS coordinate if the person move out of certain range.
 		int curGPListSize = GameData.getGpList().size();
@@ -134,11 +133,8 @@ public class MyCustomLocationOverlay extends MyLocationOverlay {
 		if (curGPListSize == 0) {
 			GameData.getGpList().add(myGeoPoint);
 		} else if (curGPListSize > 0
-				&& ((Math.abs(curLat
-						- GameData.getGpList().get(curGPListSize - 1).getLatitudeE6()) >= DIMENSION) || (Math
-						.abs(curLong
-								- GameData.getGpList().get(curGPListSize - 1)
-										.getLongitudeE6()) >= DIMENSION))) {
+				&& ((Math.abs(curLat - GameData.getGpList().get(curGPListSize - 1).getLatitudeE6()) >= DIMENSION) || 
+					(Math.abs(curLong - GameData.getGpList().get(curGPListSize - 1).getLongitudeE6()) >= DIMENSION))) {
 			GameData.getGpList().add(myGeoPoint);
 		}
 		// Set update when my location is jumping around
@@ -147,8 +143,7 @@ public class MyCustomLocationOverlay extends MyLocationOverlay {
 		try {
 			// auto detect if there's new goals nearby
 			GameOverlayOperation.getGameOverlay().loadItem(myGeoPoint);
-			// acquire size of discoverdList, if size changed then new goal
-			// found
+			// acquire size of discoverdList, if size changed then new goal found
 			int newSize = GameData.getDiscoveredList().size();
 			if (GameData.getDetector() < newSize) {
 				// when new goal found ,inform with alert
@@ -242,7 +237,7 @@ public class MyCustomLocationOverlay extends MyLocationOverlay {
 		userBitmap = Bitmap.createScaledBitmap(userBitmap, newWidth, newHeight,
 				true);
 
-		// rotated bitmap with stretched size
+		// Rotate bitmap with stretched size
 		Bitmap rotatedBitmap = Bitmap.createBitmap(userBitmap, 0, 0,
 				userBitmap.getWidth(), userBitmap.getHeight(), matrix, true);
 
