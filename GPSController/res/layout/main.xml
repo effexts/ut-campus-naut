@@ -4,11 +4,6 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
-
-
-
-
-
     <RelativeLayout
         android:id="@+id/relativeLayout1"
         android:layout_width="match_parent"
@@ -21,7 +16,7 @@
             android:layout_height="100dp"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:text="Up" />
+            android:text="@string/up" />
 
         <Button
             android:id="@+id/down"
@@ -30,7 +25,7 @@
             android:layout_alignLeft="@+id/top"
             android:layout_below="@+id/reset"
             android:layout_marginBottom="20dp"
-            android:text="Down" />
+            android:text="@string/down" />
 
         <Button
             android:id="@+id/right"
@@ -38,7 +33,7 @@
             android:layout_height="100dp"
             android:layout_alignParentRight="true"
             android:layout_below="@+id/top"
-            android:text="Right" />
+            android:text="@string/right" />
 
         <Button
             android:id="@+id/left"
@@ -46,7 +41,7 @@
             android:layout_height="100dp"
             android:layout_alignParentLeft="true"
             android:layout_below="@+id/top"
-            android:text="Left" />
+            android:text="@string/left" />
         <Button
             android:id="@+id/reset"
             android:layout_width="100dp"
@@ -54,7 +49,7 @@
             android:layout_alignLeft="@+id/top"
             android:layout_toRightOf="@+id/left"
             android:layout_below="@+id/top"
-            android:text="Reset" />
+            android:text="@string/reset" />
 
         <RadioGroup
             android:id="@+id/user"
@@ -71,13 +66,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:checked="true"
-                android:text="Steve Who" />
+                android:text="@string/steve" />
 
             <RadioButton
                 android:id="@+id/leo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Leo Man" />
+                android:text="@string/leo" />
 
         </RadioGroup>
 

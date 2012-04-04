@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <string name="hello">Hello World, GPSControllerActivity!</string>
     <string name="app_name">GPSController</string>
-
+    <string name="steve">Steve Who</string>
+    <string name="leo">Leo Man</string>
+    <string name="left">Left</string>
+    <string name="right">Right</string>
+    <string name="down">Down</string>
+    <string name="up">Up</string>
+    <string name="reset">Reset</string>
 </resources>
