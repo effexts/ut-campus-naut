@@ -30,20 +30,26 @@ import android.widget.ExpandableListView;
 import android.widget.Toast;
 
 /**
- * This activity loads goal from either server or local db and let user pick
- * goals for the game.
+ * This activity allows the user to pick goals for the journey. 
+ * It loads goals from backend server first time then 
+ * store them to local database for subsequence access.
  * 
  * @author Steve Chun-Hao Hu, Leo ChenLiang Man
  */
 public class GoalPicker extends ExpandableListActivity {
+	// Backend servlet which is used to communicate with MySQL database.
 	private static final String SYNC_DB_URL = "http://ec2-184-73-31-146.compute-1.amazonaws.com:8080/CampusNaut/servlet/RetrieveGoals";
+
+	// Message protocol used to communicate with backend 
 	private static final String SERVER_MSG_BEGIN = "<BEGIN>";
 	private static final String SERVER_MSG_FAIL = "<FAILED>";
 	private static final String SERVER_MSG_DONE = "<DONE>";
 	private static final String SERVER_MSG_NOTHING = "<NOTHING>";
+
 	private DBHelper dbHelper = null;
 	private Cursor constantsCursor = null;
 	private GoalAdapter expListAdapter;
+	
 	ArrayList<ArrayList<Goal>> goals = new ArrayList<ArrayList<Goal>>();
 	ArrayList<String> categories = new ArrayList<String>();
 
@@ -62,8 +68,6 @@ public class GoalPicker extends ExpandableListActivity {
 		Button goButton = (Button) findViewById(R.id.buttonStart);
 		goButton.setOnClickListener(onGoClick);
 
-		// Button updateButton = (Button) findViewById(R.id.button2);
-		// updateButton.setOnClickListener(onUpdateClick);
 		// if first time running the game, auto load from server
 		if (GameData.getFirstTime()) {
 			new DBAsyncTask().execute();
@@ -115,6 +119,7 @@ public class GoalPicker extends ExpandableListActivity {
 			}
 		}
 	};
+	
 	/**
 	 * This method will be used in the future
 	private OnClickListener onUpdateClick = new OnClickListener() {

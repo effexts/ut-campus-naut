@@ -32,7 +32,7 @@ import android.widget.Toast;
 
 /**
  * This activity allows the user to create a account on local datastore and
- * MySQL database.
+ * sync with MySQL database.
  * 
  * @author Steve Chun-Hao Hu, Leo ChenLiang Man
  */
@@ -193,7 +193,6 @@ public class CreateAccount extends Activity {
 				returnStr = in.readUTF();
 				User curUser = new User();
 				int uID = Integer.parseInt(in.readUTF());
-				System.out.println("CurRRRRRRRRRRRRUUUUUUUUUUUUU"+uID);
 				curUser.setuID(uID);
 				GameData.setCurUser(curUser);
 				

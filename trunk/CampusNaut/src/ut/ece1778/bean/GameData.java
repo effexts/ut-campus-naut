@@ -17,64 +17,41 @@ import android.content.Context;
 import android.widget.TextView;
 
 /**
- * Temporary Datastore for all the Game data.
+ * This class store and buffer all the current game data such as
+ * list of selected goals, visited goals, discovered goals in memory.
  * 
  * @author Steve Chun-Hao Hu, Leo ChenLiang Man
  */
 public final class GameData {
 	private static final String GP_FILE_NAME = "geopoint.log"; // GPSCoordinate Serialized file
 	private static User curUser = new User(); // Current login user
-
-	private static ArrayList<Game> gamesList = new ArrayList<Game>();
-	private static List<Goal> tempList = new ArrayList<Goal>(); // used for
-																// keeping
-																// uncheck-in
-																// goals
-	private static List<Goal> discoveredList = new ArrayList<Goal>(); // used
-																		// for
-																		// populating
-																		// the
-																		// CurrentGameOverlay
-	private static TreeMap<String, ArrayList<Goal>> allGoals = new TreeMap<String, ArrayList<Goal>>(); // used
-																										// for
-																										// mapping
-																										// the
-																										// category
-																										// and
-																										// goals
-																										// inside
-																										// the
-																										// goal
-																										// picker
-	private static ArrayList<Goal> selectedGoals = new ArrayList<Goal>(); // SelectedGoals
-																			// from
-																			// goal
-																			// picker
 	private static Goal nearbyGoal = new Goal();
-	private static List<GeoPoint> gpList = new ArrayList<GeoPoint>();// List of
-												// GP
-												// that
-												// the
-												// user
-												// has
-												// worked
-												// thru
-												// for
-												// drawing
-												// circle
+	
+	private static ArrayList<Game> gamesList = new ArrayList<Game>();
+	// Selected goals from goal picker
+	private static ArrayList<Goal> selectedGoals = new ArrayList<Goal>(); 
+	// For keeping uncheck-in goals
+	private static List<Goal> tempList = new ArrayList<Goal>(); 
+	// For populating the CurrentGameOverlay
+	private static List<Goal> discoveredList = new ArrayList<Goal>(); 
+	// List of GP that the user has worked thru for drawing circle
+	private static List<GeoPoint> gpList = new ArrayList<GeoPoint>();
+	// For mapping the category and goals inside the goal picker
+	private static TreeMap<String, ArrayList<Goal>> allGoals = new TreeMap<String, ArrayList<Goal>>(); 
 
 	private static TextView curGoalHeader = null; // Closest goal
 	private static TextView curGoalDistance = null;
 
-	private static boolean updateGoal = false; // If check-in, we should update
-												// nearby goal
-	private static boolean firstTime = true; // Check if first time running the
-												// game
+	private static boolean updateGoal = false; // If check-in, we should update nearby goal
+	private static boolean firstTime = true; // Check if first time running the game
+	private static boolean onPause = false; // Used for goal editor reenter from mapview
 	private static int scores = 0;
 	private static int detector = 0;
 	private static int allGoalCount = 0;
-	private static boolean onPause = false; // Used for goal editor reenter from mapview
-	// Clear the memory
+	
+	/**
+	 * Clear the memory
+	 */
 	public static void clear() {
 		gpList.clear();
 		gamesList.clear();
@@ -93,10 +70,11 @@ public final class GameData {
 
 	}
 
-		
+	/**
+	 * Generate a list of GPSCoordinate to be saved from geopoint list
+	 * @param context
+	 */
 	public static void saveGpList(Context context) {
-		// Generate a list of GPSCoordinate to be saved from geopoint list
-		
 		if (gpList.size() > 0) {
 			try {
 				OutputStream os = context.openFileOutput(GP_FILE_NAME, 0);
@@ -115,18 +93,6 @@ public final class GameData {
 				e.printStackTrace();
 			}
 		}
-	}
-	
-	
-
-	public static List<GeoPoint> getGpList() {
-		return gpList;
-	}
-	public static boolean getOnPause() {
-		return onPause;
-	}
-	public static void setOnPause(boolean pause) {
-		onPause = pause;
 	}
 	
 	/**
@@ -156,7 +122,79 @@ public final class GameData {
 			e.printStackTrace();
 		}
 		System.err.println("GeoPoint count: " + gpList.size());
+	}	
+	/**
+	 * Get a goal object from goal list by ID
+	 * 
+	 * @param goal_id
+	 * @param goal_list
+	 * @return Goal Object
+	 */
+	public static Goal findGoalById(int goal_id, List<Goal> goal_list) {
+
+		for (Goal goal : goal_list) {
+			if (goal.getgID() == goal_id) {
+				return goal;
+			}
+		}
+		return null;
 	}
+
+	/**
+	 * Update goal's check in state in main gameList and discoveredList Remove
+	 * goal in tempList by goal ID
+	 * 
+	 * @param goal_id
+	 */
+	public static void updateState(int goal_id) {
+
+		try {
+			gamesList.get(0).getGoals()
+					.get(getIndex(goal_id, gamesList.get(0).getGoals()))
+					.setState(2);
+			discoveredList.get(getIndex(goal_id, discoveredList))
+					.setState(2);
+			tempList.remove(getIndex(goal_id, tempList));
+			//GameData.setScores(GameData.getScores() + 50);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Get index of goal in a goal list
+	 * 
+	 * @param goal_id
+	 * @param goal_list
+	 * @return index of goal
+	 */
+	public static int getIndex(int goal_id, List<Goal> goal_list) {
+		int index = -1;
+		for (Goal goal : goal_list) {
+			if (goal.getgID() == goal_id) {
+				index = goal_list.indexOf(goal);
+			}
+		}
+		return index;
+	}
+	
+	/**
+	 * Getters and setters for all static variables 
+	 */
+	public static List<GeoPoint> getGpList() {
+		return gpList;
+	}
+	
+	public static boolean getOnPause() {
+		return onPause;
+	}
+	
+	public static void setOnPause(boolean pause) {
+		onPause = pause;
+	}
+	
+
 	public static TreeMap<String, ArrayList<Goal>> getAllGoals() {
 		return allGoals;
 	}
@@ -268,60 +306,5 @@ public final class GameData {
 	public static void setCurGoalDistance(TextView curGoalDistance) {
 		GameData.curGoalDistance = curGoalDistance;
 	}
-
-	/**
-	 * Get a goal object from goal list by ID
-	 * 
-	 * @param goal_id
-	 * @param goal_list
-	 * @return Goal Object
-	 */
-	public static Goal findGoalById(int goal_id, List<Goal> goal_list) {
-
-		for (Goal goal : goal_list) {
-			if (goal.getgID() == goal_id) {
-				return goal;
-			}
-		}
-		return null;
-	}
-
-	/**
-	 * Update goal's check in state in main gameList and discoveredList Remove
-	 * goal in tempList by goal ID
-	 * 
-	 * @param goal_id
-	 */
-	public static void updateState(int goal_id) {
-
-		try {
-			gamesList.get(0).getGoals()
-					.get(getIndex(goal_id, gamesList.get(0).getGoals()))
-					.setState(2);
-			discoveredList.get(getIndex(goal_id, discoveredList))
-					.setState(2);
-			tempList.remove(getIndex(goal_id, tempList));
-			//GameData.setScores(GameData.getScores() + 50);
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	/**
-	 * Get index of goal in a goal list
-	 * 
-	 * @param goal_id
-	 * @param goal_list
-	 * @return index of goal
-	 */
-	public static int getIndex(int goal_id, List<Goal> goal_list) {
-		int index = -1;
-		for (Goal goal : goal_list) {
-			if (goal.getgID() == goal_id) {
-				index = goal_list.indexOf(goal);
-			}
-		}
-		return index;
-	}
+	
 }
