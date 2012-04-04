@@ -28,48 +28,57 @@ import com.google.android.maps.MyLocationOverlay;
 import com.google.android.maps.Projection;
 
 /**
- * Custom location overlay to display user location with a external image
- * instead of blue dot on the map.
+ * Custom location overlay to draw the fog of war effect as the user moves
+ * around and rotates user icon to point at the closest goal on the map.
  * 
  * @author Steve Chun-Hao Hu, Leo ChenLiang Man
  */
 public class MyCustomLocationOverlay extends MyLocationOverlay {
 
+	// Scale down user icon image
 	private static final double IMAGE_SCALE = 5.0;
+	// Dimension used to determine when to draw the next transparent circle
 	private static final int DIMENSION = 400;
 	private MapView mapView = null;
 	private Context context = null;
 	private Matrix matrix = new Matrix();
+	// Store the coordinate for the UofT boundary.
 	private GeoPoint gpTopLeft = null;
 	private GeoPoint gpBottomRight = null;
+	// Fog of war effect drawing components
 	private Bitmap mBitmap;
 	private Canvas mCanvas;
 	private Paint mBitmapPaint;
 	private Paint mPaint;
-	// private GeoPoint myGeoPoint = null;
-	//private List<GeoPoint> gpList = new ArrayList<GeoPoint>();
 
+	/**
+	 * Constructor - used to setup and initialize the fog of war drawing canvas  
+	 */
 	public MyCustomLocationOverlay(Context context, MapView mapView,
 			Double left, Double top, Double right, Double bottom) {
 		super(context, mapView);
 		this.context = context;
 		this.mapView = mapView;
+		// UofT Boundary
 		this.gpTopLeft = new GeoPoint(top.intValue(), left.intValue());
 		this.gpBottomRight = new GeoPoint(bottom.intValue(), right.intValue());
 		mBitmapPaint = new Paint();
+		// Eraser paint
 		mPaint = new Paint();
-
 		mPaint.setColor(0x30000000);
 		mPaint.setStyle(Paint.Style.FILL_AND_STROKE);
 		mPaint.setStrokeJoin(Paint.Join.ROUND);
 		mPaint.setStrokeCap(Paint.Cap.ROUND);
 		mPaint.setStrokeWidth(12);
 		mPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
+		// 2nd layer for creating transparent bitmap
 		mBitmap = Bitmap.createBitmap(800, 1280, Bitmap.Config.ARGB_8888);
 		mCanvas = new Canvas(mBitmap);
-
 	}
 
+	/**
+	 * Draw the visited path on the fog of war layer on the map.
+	 */
 	@Override
 	public boolean draw(Canvas canvas, MapView mapView, boolean shadow,
 			long when) {
@@ -80,21 +89,26 @@ public class MyCustomLocationOverlay extends MyLocationOverlay {
 			projection.toPixels(gpTopLeft, point);
 			float zoomlevel = point.x;
 			projection.toPixels(gpBottomRight, point);
+
 			// Resize the radius of transparent circle according to the zoom
 			zoomlevel = (point.x - zoomlevel) / 40.00f;
+
 			// Radius of blur edge
 			float blursize = zoomlevel / 2f;
-
 			mCanvas.drawColor(Color.BLACK);
+			
+			// Blur the edge of transparent circle to make better effect
 			MaskFilter mBlur = new BlurMaskFilter(blursize,
 					BlurMaskFilter.Blur.NORMAL);
 			mPaint.setMaskFilter(mBlur);
-			// Retrieve visited Geopoints
+			
+			// Retrieve visited Geopoints and draw transparent circle path 
 			for (int i = 0; i < GameData.getGpList().size(); i++) {
 				mapView.getProjection().toPixels(GameData.getGpList().get(i), point);
 				mCanvas.drawCircle((float) point.x, (float) point.y, zoomlevel,
 						mPaint);
 			}
+			// Redraw the fog of war
 			canvas.drawBitmap(mBitmap, 0, 0, mBitmapPaint);
 			super.draw(canvas, mapView, false, when);
 		}
@@ -114,6 +128,9 @@ public class MyCustomLocationOverlay extends MyLocationOverlay {
 		mapView.getController().animateTo(myGeoPoint);
 		// record the GPS coordinate if the person move out of certain range.
 		int curGPListSize = GameData.getGpList().size();
+		
+		// Only store the gps coordinate if the user move at least .0004 GPS distance
+		// This is used to prevent overloading coordinates in-memory since GPS jump small distance frequently
 		if (curGPListSize == 0) {
 			GameData.getGpList().add(myGeoPoint);
 		} else if (curGPListSize > 0
@@ -124,8 +141,7 @@ public class MyCustomLocationOverlay extends MyLocationOverlay {
 										.getLongitudeE6()) >= DIMENSION))) {
 			GameData.getGpList().add(myGeoPoint);
 		}
-
-		// it's necessary to set update when my location is jumping around
+		// Set update when my location is jumping around
 		GameData.setUpdateGoal(false);
 
 		try {
@@ -168,7 +184,8 @@ public class MyCustomLocationOverlay extends MyLocationOverlay {
 	}
 
 	/**
-	 * Override the built-in blue pin with a PNG user_icon and set the rotation.
+	 * Override the built-in blue pin with a PNG user_icon and set the rotation to
+	 * point at the closest objective.
 	 */
 	@Override
 	protected void drawMyLocation(Canvas canvas, MapView mapView,
@@ -178,7 +195,6 @@ public class MyCustomLocationOverlay extends MyLocationOverlay {
 		if (!GameData.getUpdateGoal()) {
 			GameData.setUpdateGoal(true); // disable update until next check in
 
-			// Game curGame = GameData.getGameList().get(0);
 			ArrayList<Goal> curGoals = (ArrayList<Goal>) GameData.getTempList();
 			// Keep track of minimum distance goal
 			double minDistance = Double.MAX_VALUE;
@@ -207,8 +223,8 @@ public class MyCustomLocationOverlay extends MyLocationOverlay {
 		double dlon = goalPts.x - screenPts.x;
 		double dlat = goalPts.y - screenPts.y;
 		float angle = (float) (Math.atan2(dlat, dlon) * 180.00 / Math.PI);
-		// Set up the rotation matrix to point user at the goal
 
+		// Set up the rotation matrix to point user at the goal
 		matrix.reset();
 		matrix.postTranslate(-screenPts.x, -screenPts.y);
 		matrix.postRotate(angle);

@@ -10,7 +10,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
-import java.util.Timer;
+
 import java.util.TimerTask;
 
 import ut.ece1778.bean.DBHelper;
@@ -19,16 +19,13 @@ import ut.ece1778.bean.GameData;
 import ut.ece1778.bean.Goal;
 import ut.ece1778.bean.User;
 
-
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.database.Cursor;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
 import android.location.LocationProvider;
 import android.os.AsyncTask;
@@ -47,24 +44,29 @@ import com.google.android.maps.MapController;
 import com.google.android.maps.MapView;
 import com.google.android.maps.MyLocationOverlay;
 
+// Uncomment the following two imports if Mock GPS is used.
+//import java.util.Timer;
+//import android.content.Context;
+
 /**
- * In-Game Map view activity that automatically locates the current user on the
- * map and point the user in the direction of the goal.
+ * The main Map view activity that is used to coordinate all components on 
+ * top of google map such as current user location, check-in, and fog of war overlay. 
  * 
  * @author Steve Chun-Hao Hu, Leo ChenLiang Man
  */
 public class GameMapView extends MapActivity {
-	// URL for remote GPS location
-
+	// URL for mock GPS location
 	private static final String GPS_URL = "http://ec2-184-73-31-146.compute-1.amazonaws.com:8080/CampusNaut/steve.txt";
+	// Update time for polling mock GPS (Uncomment if Mock GPS is used)
+	// private static final int GPS_UPDATE_TIME = 2000;
+	
 	private static final String GAME_INIT_URL = "http://ec2-184-73-31-146.compute-1.amazonaws.com:8080/CampusNaut/servlet/SetupGame";
-	private static final int GPS_UPDATE_TIME = 2000;
-
 	private static final int ZOOM_LEVEL = 19;
 	private static final Double INITIAL_LATITUDE = 43.669858 * 1E6;
 	private static final Double INITIAL_LONGITUDE = -79.400727 * 1E6;
 	private static final Double END_LATITUDE = 43.657859 * 1E6;
 	private static final Double END_LONGITUDE = -79.381928 * 1E6;
+	
 	private MapView mapView = null;
 	private MapController mapController = null;
 	private MyLocationOverlay myLocation = null;
@@ -73,7 +75,6 @@ public class GameMapView extends MapActivity {
 	private ArrayList<Goal> goals;
 	private Drawable goalMarker;
 	private Button trigger;
-	//private TextView scoreBoard;
 	private SharedPreferences prefs = null;
 	private Editor editor = null;
 	private LocationManager mockLocMgr = null;
@@ -104,7 +105,7 @@ public class GameMapView extends MapActivity {
 				END_LATITUDE);
 		mapView.getOverlays().add(myLocation);
 		
-		/*** *Mock GPS* Code for mock Location provider -Uncomment this to use MockGPS Controller ***/
+		// Mock GPS* Code for mock Location provider Uncomment the following to use MockGPS Controller
 		/*mocLocationProvider = LocationManager.NETWORK_PROVIDER;
 		mockLocMgr = (LocationManager) getBaseContext().getSystemService(
 				Context.LOCATION_SERVICE);
@@ -124,16 +125,18 @@ public class GameMapView extends MapActivity {
 		// Must call this to show user location overlay on map
 		mapView.postInvalidate();
 
-		// tools of map view
-		//scoreBoard = (TextView) findViewById(R.id.scoreBoard);
+		// Tools of map view
 		trigger = (Button) findViewById(R.id.trigge);
 		trigger.setOnClickListener(onTrigger);
+		
 		// Set the current widget
 		TextView header = (TextView) findViewById(R.id.header);
 		TextView distancer = (TextView)findViewById(R.id.distanceBoard);
+		
 		// header.setMovementMethod(new ScrollingMovementMethod());
 		GameData.setCurGoalHeader(header);
 		GameData.setCurGoalDistance(distancer);
+		
 		// load marker resource
 		goalMarker = getResources().getDrawable(R.drawable.goal_icon);
 		goalMarker.setBounds(0, 0, goalMarker.getIntrinsicWidth(),
@@ -152,7 +155,6 @@ public class GameMapView extends MapActivity {
 			GameData.setCurUser(curUser);
 		}
 		// Add to temporary data store
-		//GameData.setCurUser(curUser);
 		GameData.add(game);
 		GameData.setTempList(goals);
 		
@@ -185,16 +187,12 @@ public class GameMapView extends MapActivity {
 	@Override
 	public void onResume() {
 		super.onResume();
-		
 		myLocation.enableMyLocation();
-		
 		// Always center the user location on the map
 		myLocation.runOnFirstFix(new Runnable() {
-
 			public void run() {
 				try {
 					mapController.setCenter(myLocation.getMyLocation());
-
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -209,11 +207,10 @@ public class GameMapView extends MapActivity {
 	public void onPause() {
 		super.onPause();
 		myLocation.disableMyLocation();
-
 	}
 
 	/**
-	 * Disable location tracker upon exit map.
+	 * Disable location tracker and clear some memory upon exiting map.
 	 */
 	@Override
 	public void onDestroy() {
@@ -261,25 +258,6 @@ public class GameMapView extends MapActivity {
 	};
 
 	/**
-	 * Unused
-	 */
-	LocationListener locListener = new LocationListener() {
-
-		public void onLocationChanged(Location location) {
-			
-		}
-
-		public void onProviderDisabled(String provider) {
-		}
-
-		public void onProviderEnabled(String provider) {
-		}
-
-		public void onStatusChanged(String provider, int status, Bundle extras) {
-		}
-	};
-
-	/**
 	 * Create the Icon menu from menu/context.xml
 	 */
 	@Override
@@ -312,21 +290,17 @@ public class GameMapView extends MapActivity {
 		//case R.id.achievement:
 			// Future implementation
 			//break;
-
-		//case R.id.upload: // Positive update goal's state(user drive)
-			
+		//case R.id.upload: 
+			// Future implementation
 			//break;
 		}
 		return true;
 	}
 
 	/**
-	 * Mock GPS signal timer task
-	 * 
-	 * @author SteveWho
+	 * Mock GPS signal timer task to pull GPS coordinate from backend.
 	 * 
 	 */
-
 	class MockGPSUpdateTimeTask extends TimerTask {
 		public void run() {
 			try {
@@ -368,10 +342,8 @@ public class GameMapView extends MapActivity {
 
 	
 	/**
-	 *Initialize game,  insert user selections into t_user_games
-	 *acquire discovered goal from local DB 
-	 * @author LeoMan
-	 *
+	 * Initialize game,  insert user selections into t_user_games
+	 * acquire discovered goal from local DB 
 	 */
 	private class GameInitAsyncTask extends AsyncTask<String, Void, String>{
 		ProgressDialog mProgressDialog;
@@ -408,11 +380,9 @@ public class GameMapView extends MapActivity {
 						//Get discovered goal from local DB
 						if(goal.getState()>0){
 							GameData.getDiscoveredList().add(goal);
-							System.out.println(goal.getgID() +":"+goal.getTitle()+":"+ goal.getState());
 						}
 						constantsCursor.moveToNext();
 					}
-					
 					constantsCursor.close();
 				}
 				helper.getReadableDatabase().close();

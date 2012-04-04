@@ -25,16 +25,17 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 /**
- * This activity allows the user to login with account. The activity is skipped
- * if the user has previously logged in.
+ * This activity allows the user to login with account. 
+ * The activity is skipped if the user has previously logged in.
  * 
  * @author Steve Chun-Hao Hu, Leo ChenLiang Man
  */
 public class LoginScreen extends Activity {
-
+	// Account validation servlet URL
 	private static final String ACC_VALI_URL = "http://ec2-184-73-31-146.compute-1.amazonaws.com:8080/CampusNaut/servlet/AccountValidation";
-
-	private SharedPreferences prefs = null; // Used for local datastore
+	
+	// Local datastore to store user account info
+	private SharedPreferences prefs = null; 
 	private Editor editor = null;
 	private String email = null;
 	private String passwd = null;
@@ -63,7 +64,6 @@ public class LoginScreen extends Activity {
 		// load email and password from data store
 		email = prefs.getString("email", null);
 		passwd = prefs.getString("password", null);
-		// User id is set here
 
 		Button loginButton = (Button) findViewById(R.id.buttonlogin);
 		loginButton.setOnClickListener(onLoginClick);
@@ -97,25 +97,18 @@ public class LoginScreen extends Activity {
 					editor.commit();
 					startActivity(new Intent(LoginScreen.this, GoalPicker.class));
 					finish();
-				} else if (!email.equals(emailinput.getText().toString())) { // Email
-																				// does
-																				// not
-																				// match
-																				// local
-																				// stored
-																				// one
-					// ***NOTE*** can validate email with MySQL database here.
+				} else if (!email.equals(emailinput.getText().toString())) { 
+					// Email does not match local stored one
 					Toast.makeText(LoginScreen.this,
 							"Email address is not registered!",
 							Toast.LENGTH_SHORT).show();
-				} else if (!passwd.equals(passwdinput.getText().toString())) { // Invalid
-																				// password
+				} else if (!passwd.equals(passwdinput.getText().toString())) {
+					// Invalid password
 					Toast.makeText(LoginScreen.this, "Wrong password!",
 							Toast.LENGTH_SHORT).show();
 				}
-			} else { // ***NOTE*** Add the account validation with MySQL
-						// database feature here.
-
+			} else {
+				// database feature here.
 				emailinput = (EditText) findViewById(R.id.emailinput);
 				passwdinput = (EditText) findViewById(R.id.pwinput);
 				if (isInternetOn()) {
@@ -195,7 +188,6 @@ public class LoginScreen extends Activity {
 				returnStr = in.readUTF();
 				User curUser = new User();
 				int uID = Integer.parseInt(in.readUTF());
-				System.out.println("CurRRRRRRRRRRRRUUUUUUUUUUUUU"+uID);
 				curUser.setuID(uID);
 				GameData.setCurUser(curUser);
 

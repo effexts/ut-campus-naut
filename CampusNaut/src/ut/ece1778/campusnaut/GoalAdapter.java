@@ -14,7 +14,8 @@ import java.util.ArrayList;
 import ut.ece1778.bean.Goal;
 
 /**
- * Custom BaseExpandableLIstAdapter for the goalpicker.
+ * Custom-defined two levels drilled down checkbox inflater 
+ * for the goalpicker.
  * 
  * @author Steve Chun-Hao Hu, Leo ChenLiang Man
  */
@@ -25,6 +26,7 @@ public class GoalAdapter extends BaseExpandableListAdapter {
 	private ArrayList<String> categories;
 	private ArrayList<ArrayList<Goal>> goals;
 	private LayoutInflater inflater;
+	
 	// Used to enforce memorizing the checkbox states.
 	private int checkBoxCounter = 0;
 	private int checkBoxInitialized = 0;
@@ -99,8 +101,7 @@ public class GoalAdapter extends BaseExpandableListAdapter {
 					.findViewById(R.id.location);
 			viewHolder.checkbox = (CheckBox) convertView
 					.findViewById(R.id.checkbox);
-			/*viewHolder.selectedText = (TextView) convertView
-					.findViewById(R.id.selected);*/
+
 			viewHolder.checkbox
 					.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 						// Update the goal selected state after user click on check
