@@ -2,54 +2,49 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    >
-    
-	<TextView
-	            android:id="@+id/checkinTitle"
-	            
-	            android:layout_width="match_parent"
-	            android:layout_height="wrap_content"
-	            android:layout_marginBottom="10dp"
-	            android:paddingLeft="10dp"
-	            android:textColor="#222222"
-	            android:textSize="20dp"
-	            android:background="#00aeff"
-	            />	<ScrollView
-            android:id="@+id/scrollView1"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/checkinTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:background="#00aeff"
+        android:paddingLeft="10dp"
+        android:textColor="#222222"
+        android:textSize="20dp" />
+
+    <ScrollView
+        android:id="@+id/scrollView1"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="90" >
+
+        <LinearLayout
+            android:id="@+id/linearLayout1"
             android:layout_width="match_parent"
-            android:layout_height="0dp" 
-            android:layout_weight="90">
-	    <LinearLayout
-	        android:id="@+id/linearLayout1"
-	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content"
-	        android:layout_marginTop="5dp"
-	        android:orientation="vertical"
-	        >
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:orientation="vertical" >
 
-	        <ImageView
-	            android:id="@+id/checkinPic"
-	            android:layout_width="match_parent"
-	            android:layout_height="wrap_content"
-	            android:src="@drawable/trans"
-	            android:layout_marginBottom="10dp" />
+            <ImageView
+                android:id="@+id/checkinPic"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:src="@drawable/trans" />
 
-	        <TextView
-	            android:id="@+id/checkinIntro"
-	            
-	            android:layout_width="match_parent"
-	            android:layout_height="wrap_content"
-	            android:textColor="#00aeff"
-	            android:textSize="18dp"
-	            android:layout_marginBottom="10dp"
-	            android:layout_marginLeft="5dp"
-	            android:layout_marginRight="5dp"
-	            />
-	
-	    </LinearLayout>
+            <TextView
+                android:id="@+id/checkinIntro"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:textColor="#00aeff"
+                android:textSize="18dp" />
+        </LinearLayout>
     </ScrollView>
-    
 
     <LinearLayout
         android:id="@+id/linearLayout2"
@@ -57,20 +52,20 @@
         android:layout_height="0dp"
         android:layout_weight="10"
         android:orientation="horizontal" >
-		<Button
-	        android:id="@+id/CK"
-	        android:layout_width="wrap_content"
-	        android:layout_weight="65"
-	        android:layout_height="50dp"        
-	        
-	        android:text="@string/button_checkin" />
-	
-	    <Button
-	        android:id="@+id/BK"
-	        android:layout_width="wrap_content"
-	        android:layout_weight="35"
-	        android:layout_height="50dp" 
-	        android:text="@string/button_cancel" />
+
+        <Button
+            android:id="@+id/CK"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_weight="65"
+            android:text="@string/button_checkin" />
+
+        <Button
+            android:id="@+id/BK"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_weight="35"
+            android:text="@string/button_cancel" />
     </LinearLayout>
 
 </LinearLayout>

@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:id="@+id/relativeLayout1"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:orientation="vertical"
-                android:background="@drawable/login_bg">
+    android:id="@+id/relativeLayout1"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/login_bg"
+    android:orientation="vertical" >
 
     <EditText
         android:id="@+id/emailinput"
@@ -15,38 +13,42 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="192dp"
-        android:inputType="textEmailAddress" 
-        android:hint="@string/email">
+        android:hint="@string/email"
+        android:inputType="textEmailAddress" >
+
         <requestFocus />
     </EditText>
 
     <EditText
         android:id="@+id/pwinput"
-        android:layout_below="@id/emailinput"
-        android:layout_marginTop="20dp"
         android:layout_width="300sp"
         android:layout_height="50sp"
+        android:layout_below="@id/emailinput"
         android:layout_centerHorizontal="true"
-        android:inputType="textPassword" 
-        android:hint="@string/password"/>
+        android:layout_marginTop="20dp"
+        android:hint="@string/password"
+        android:inputType="textPassword" />
 
-    <Button android:id="@+id/buttonlogin"
-            android:layout_below="@id/pwinput"
-            android:layout_centerHorizontal="true"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="60dp"
-            android:layout_width="300sp"
-            android:text="@string/login"
-            android:background="@drawable/buttonselector"
-            style="@style/buttontext"/>
-    <Button android:id="@+id/buttonsignup"
-            android:layout_below="@id/buttonlogin"
-            android:layout_centerHorizontal="true"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_width="300sp"
-            android:text="@string/newacc"
-            android:background="@drawable/buttonselector"
-            style="@style/buttontext"/>
+    <Button
+        android:id="@+id/buttonlogin"
+        style="@style/buttontext"
+        android:layout_width="300sp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/pwinput"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="60dp"
+        android:background="@drawable/buttonselector"
+        android:text="@string/login" />
+
+    <Button
+        android:id="@+id/buttonsignup"
+        style="@style/buttontext"
+        android:layout_width="300sp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/buttonlogin"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/buttonselector"
+        android:text="@string/newacc" />
+
 </RelativeLayout>
-

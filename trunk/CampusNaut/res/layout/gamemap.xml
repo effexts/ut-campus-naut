@@ -21,45 +21,41 @@
 
         <TextView
             android:id="@+id/header"
-            android:singleLine="true"
-            android:ellipsize="marquee"
-            android:marqueeRepeatLimit ="marquee_forever"
-        	android:focusableInTouchMode="true"
-        	android:focusable="true"
-        	android:scrollX="1dp"
-            android:scrollHorizontally="true"
             android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="10dp"
+            android:ellipsize="marquee"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:scrollHorizontally="true"
+            android:scrollX="1dp"
+            android:singleLine="true"
             android:text="@string/goal_header"
-            android:textSize="20dp"
             android:textColor="#00aeff"
-            />
+            android:textSize="20dp" />
     </LinearLayout>
 
-    <SlidingDrawer    
-     android:id="@+id/slidingdrawer"    
-     android:layout_width="fill_parent"    
-     android:layout_height="fill_parent"    
-     android:orientation="horizontal"    
-     android:handle="@+id/handle"    
-     android:content="@+id/content"
-     android:visibility="invisible">    
-      <Button    
-             android:id="@+id/handle"    
-             android:layout_width="wrap_content"    
-             android:layout_height="fill_parent"    
-                 
-        />   
-       <ListView  
-             android:id="@+id/content"   
-             android:layout_width="fill_parent"    
-             android:layout_height="wrap_content"   
-       />  
- 	</SlidingDrawer>  
-    
-    
+    <SlidingDrawer
+        android:id="@+id/slidingdrawer"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:content="@+id/content"
+        android:handle="@+id/handle"
+        android:orientation="horizontal"
+        android:visibility="invisible" >
+
+        <Button
+            android:id="@+id/handle"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent" />
+
+        <ListView
+            android:id="@+id/content"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" />
+    </SlidingDrawer>
 
     <Button
         android:id="@+id/trigge"
@@ -67,44 +63,43 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/headerLayout"
-        android:layout_marginTop="20dp"
         android:layout_marginRight="20dp"
+        android:layout_marginTop="20dp"
         android:background="@drawable/trigger" />
 
     <LinearLayout
         android:id="@+id/bottomLayout"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_alignParentLeft="true"
         android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
         android:background="@drawable/bottom_bar" >
-        
+
         <TextView
-	        android:id="@+id/scoreBoard"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:paddingLeft="20dp"
-	        android:layout_marginTop="5dp"
-	        android:layout_weight="50"
-	        android:text="@string/score_board"
-	        android:textColor="#00aeff"
-	        android:textSize="30dp"
-	        android:textAppearance="?android:attr/textAppearanceMedium" />
+            android:id="@+id/scoreBoard"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_weight="50"
+            android:paddingLeft="20dp"
+            android:text="@string/score_board"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="#00aeff"
+            android:textSize="30dp" />
+
         <TextView
-	        android:id="@+id/distanceBoard"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:layout_weight="50"
-	        android:paddingLeft="20dp"
-	        android:layout_marginTop="5dp"
-	        
-	        android:text="@string/level_board"
-	        android:textColor="#00aeff"
-	        android:textSize="30dp"
-	        android:textAppearance="?android:attr/textAppearanceMedium" />
+            android:id="@+id/distanceBoard"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_weight="50"
+            android:paddingLeft="20dp"
+            android:text="@string/level_board"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="#00aeff"
+            android:textSize="30dp" />
     </LinearLayout>
 
-    
     <LinearLayout
         android:id="@+id/messageLayout"
         android:layout_width="wrap_content"
@@ -136,15 +131,14 @@
                 android:id="@+id/checkin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                
                 android:text="@string/button_checkin" />
 
             <Button
                 android:id="@+id/cancelCheckin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                
                 android:text="@string/button_cancel" />
         </LinearLayout>
     </LinearLayout>
+
 </RelativeLayout>

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:id="@+id/relativeLayout1"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:background="@drawable/account_bg"
-                android:orientation="vertical" >
+    android:id="@+id/relativeLayout1"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/account_bg"
+    android:orientation="vertical" >
 
     <EditText
         android:id="@+id/accnameinput"
@@ -39,25 +39,28 @@
         android:layout_marginTop="10dp"
         android:hint="@string/password"
         android:inputType="textPassword" />
+
     <EditText
         android:id="@+id/cfpwinput"
         android:layout_width="300sp"
         android:layout_height="40sp"
         android:layout_alignLeft="@+id/pwinput"
         android:layout_below="@id/pwinput"
-        android:layout_marginTop="10dp"
-        android:inputType="textPassword" 
         android:layout_centerHorizontal="true"
-        android:hint="@string/cfpassword"/>
+        android:layout_marginTop="10dp"
+        android:hint="@string/cfpassword"
+        android:inputType="textPassword" />
+
     <EditText
         android:id="@+id/ageinput"
         android:layout_width="100sp"
         android:layout_height="40sp"
+        android:layout_alignLeft="@+id/pwinput"
         android:layout_below="@id/cfpwinput"
         android:layout_marginTop="10dp"
-        android:inputType="number" 
         android:hint="@string/age"
-        android:layout_alignLeft="@+id/pwinput" />
+        android:inputType="number" />
+
     <RadioGroup
         android:id="@+id/gender"
         android:layout_width="fill_parent"
@@ -79,16 +82,14 @@
             android:textAppearance="?android:attr/textAppearanceMedium" />
     </RadioGroup>
 
-
     <TextView
         android:id="@+id/ethnicity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/pwinput"
         android:layout_below="@+id/gender"
         android:text="@string/ethnicity"
-        android:textAppearance="?android:attr/textAppearanceMedium" 
-        android:layout_alignLeft="@+id/pwinput"/>
-
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <Spinner
         android:id="@+id/ethnicityspinner"
@@ -98,16 +99,15 @@
         android:layout_below="@+id/ethnicity"
         android:drawSelectorOnTop="true" />
 
-     <Button
+    <Button
         android:id="@+id/buttonCreate"
         style="@style/buttontext"
-        android:layout_below="@+id/ethnicityspinner"
         android:layout_width="300sp"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/ethnicityspinner"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="60dp"
         android:background="@drawable/buttonselector"
         android:text="@string/create" />
-
 
 </RelativeLayout>
