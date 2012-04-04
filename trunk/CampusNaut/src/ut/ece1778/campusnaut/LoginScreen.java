@@ -86,8 +86,8 @@ public class LoginScreen extends Activity {
 	 */
 	private OnClickListener onLoginClick = new OnClickListener() {
 		public void onClick(View v) {
-			if (email != null && passwd != null) {// email and password exists
-													// in local datastore
+			if (email != null && passwd != null) {
+				// email and password exists in local datastore
 				emailinput = (EditText) findViewById(R.id.emailinput);
 				passwdinput = (EditText) findViewById(R.id.pwinput);
 				// perform account validation and modify logged in state to true
