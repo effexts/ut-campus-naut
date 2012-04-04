@@ -7,8 +7,8 @@
 <%@ page import="campusnaut.util.MysqlConnection" %>
 <%@ page import="campusnaut.bean.DataRow" %>
 <%
-String path = request.getContextPath();
-String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
+	String path = request.getContextPath();
+	String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -32,9 +32,8 @@ window.onload = function draw(){
 	drawBar2();
 }
 
+// Top Graph initialization 
 function drawBar1(){
-	
-	
 	if (window.XMLHttpRequest)
 	{// code for IE7+, Firefox, Chrome, Opera, Safari
 		xmlHttp=new XMLHttpRequest();
@@ -103,13 +102,11 @@ function callback(){
 		bar1.Set('chart.title.yaxis', '# of Users');
 		bar1.Set('chart.title.yaxis.pos', 0.1);
 		bar1.Set('chart.text.size', 11);
-		//bar1.Draw();
-		//RGraph.Effects.Bar.Wave2(bar1);
 		RGraph.Effects.jQuery.Slide.In(bar1,{'from': 'bottom'});
 	}
 }
 
-//Same to previous drawBar1()
+// Bottom Graph initialization
 function drawBar2(){
 	
 	
@@ -125,7 +122,7 @@ function drawBar2(){
 	xmlHttpa.onreadystatechange = callbacka;
 	var eth = document.getElementById("ethSelectbar2").value;
 	var ip = "http://<%=request.getServerName()+":"+request.getServerPort() %>/CampusNaut/servlet/GetJsonByEth?eth="+eth;
-	//alert(ip);
+
 	xmlHttpa.open("GET",ip,true);
 	xmlHttpa.setRequestHeader("Content-Type","application/x-www-form-urlencoded;charset=UTF-8");
 	xmlHttpa.send();
@@ -150,8 +147,6 @@ function callbacka(){
 			data[i] = jsonObj[i].countg;
 		}
 		document.getElementById("info").innerHTML="&nbsp;";
-		//var oldbar = document.getElementById("bar2");
-		//RGraph.Effects.jQuery.Slide.Out(document.getElementById("bar2").__oj,{'to': 'top'});
 		RGraph.Clear(document.getElementById("bar2"));
 	 	if (typeof(bar2) == 'object') RGraph.ObjectRegistry.Remove(bar2);
 		var bar2 = new RGraph.Bar('bar2',
@@ -178,12 +173,8 @@ function callbacka(){
 		bar2.Set('chart.title.yaxis', '# of Users');
 		bar2.Set('chart.title.yaxis.pos', 0.1);
 		bar2.Set('chart.text.size', 11);
-		//bar2.Draw();
 		RGraph.Effects.jQuery.Slide.In(bar2,{'from': 'bottom'});
-		//RGraph.Effects.Bar.Wave(bar2);
-		
-
-		 
+	 
 	}
 }
 </script>

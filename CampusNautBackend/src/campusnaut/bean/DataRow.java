@@ -1,18 +1,29 @@
 package campusnaut.bean;
 
+/**
+ * This class is used to store the data read from the MySQL database
+ * and as a data source feed for the JavaScript RGraph.
+ * 
+ * @author Steve Chun-Hao Hu, Leo ChenLiang Man
+ */
 public class DataRow {
-
 	private int count = 0;
 	private String gender = "";
 	private String category = "";
 	private String ethnicity = "";
 
+	/**
+	 * Constructor for gender vs category
+	 */
 	public DataRow(int count, String gender, String category) {
 		this.count = count;
 		this.gender = gender;
 		this.category = category;
 	}
 
+	/**
+	 * Constructor for gender vs category and ethnicity
+	 */
 	public DataRow(int count, String gender, String category, String ethnicity) {
 		this.count = count;
 		this.gender = gender;
@@ -60,6 +71,9 @@ public class DataRow {
 		this.ethnicity = ethnicity;
 	}
 
+	/**
+	 * Define the HTML table row data be shown on the page.
+	 */
 	public String toString() {
 		String result;
 		if (ethnicity.isEmpty()) {

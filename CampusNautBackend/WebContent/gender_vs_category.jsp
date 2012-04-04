@@ -15,10 +15,14 @@
 </head>
 <!-- include javascript library -->
 <%@ include file="WEB-INF/jspf/jslibrary.jspf" %>
-<!-- custom graph script starts here -->
+<!-- custom script used to draw the gender & category graph-->
 <script type='text/javascript'>
 window.onload = function draw(){
 	<%
+		/**
+		 * Use JDBC to read data from MySQL database and create the 
+		 * data source feed for JavaScript RGraph.
+		 */
 		List<DataRow> drow = new ArrayList<DataRow>();
 		try{
 			final String QUERY = "SELECT COUNT(gender) AS countg , gender, category " +
@@ -76,7 +80,7 @@ window.onload = function draw(){
 		//Set Key's value
 		out.println("bar1.Set('chart.key', ['"+drow.get(0).getGender()+"', '"+drow.get(1).getGender()+"']);");
 	%>
-	
+	// Graph setting
 	bar1.Set('chart.background.barcolor1', 'white');
 	bar1.Set('chart.background.barcolor2', 'white');
 	bar1.Set('chart.key.position.y', 5);
@@ -95,7 +99,6 @@ window.onload = function draw(){
 	bar1.Set('chart.title.yaxis', '# of Users');
 	bar1.Set('chart.title.yaxis.pos', 0.3);
 	bar1.Set('chart.text.size', 11);
-	//bar1.Draw();
 	RGraph.Effects.Bar.Wave(bar1);
 	
 }
@@ -117,6 +120,9 @@ window.onload = function draw(){
 			<th># of Users</th>
 		</tr>
 		<%
+			/**
+			 * Shows the category & gender data on the table.
+			 */
 			for (int i = 0; i < drow.size(); i++ ) {
 				out.println(drow.get(i).toString());
 			}
