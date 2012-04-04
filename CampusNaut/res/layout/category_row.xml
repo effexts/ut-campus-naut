@@ -1,30 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
     android:layout_width="fill_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:orientation="horizontal" >
 
-    <TextView android:id="@+id/category"
-         android:paddingLeft="50sp"
-	     android:paddingTop="10sp"
-	     android:paddingBottom="10sp"
-         android:textSize="24sp"
-         android:textColor= "#ffffff"  
-         android:shadowColor="#00ccff" 
-         android:shadowRadius="2"  
-         android:shadowDx="1"  
-         android:shadowDy="1" 
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"/>
-    <TextView android:id="@+id/selected"
-         android:layout_toRightOf="@+id/category"
-	     android:paddingTop="12sp"
-	     android:paddingBottom="12sp"
-         android:textSize="20sp"
-         android:textStyle="italic"
-         android:textColor= "#AED996"  
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-	/>
+    <TextView
+        android:id="@+id/category"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingBottom="10sp"
+        android:paddingLeft="50sp"
+        android:paddingTop="10sp"
+        android:shadowColor="#00ccff"
+        android:shadowDx="1"
+        android:shadowDy="1"
+        android:shadowRadius="2"
+        android:textColor="#ffffff"
+        android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/selected"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/category"
+        android:paddingBottom="12sp"
+        android:paddingTop="12sp"
+        android:textColor="#AED996"
+        android:textSize="20sp"
+        android:textStyle="italic" />
+
 </RelativeLayout>
-
