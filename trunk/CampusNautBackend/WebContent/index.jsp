@@ -28,6 +28,10 @@
 							<th>Ethnic Categories</th>
 						</tr>
 						<%
+						/**
+						 * Retrieves the user data from MySQL database and show them 
+						 * on the table.
+						 */
 						try{
 							MysqlConnection myconn = new MysqlConnection();
 						    Connection con = myconn.getConnection();

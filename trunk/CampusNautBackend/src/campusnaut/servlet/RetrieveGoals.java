@@ -14,11 +14,16 @@ import javax.servlet.http.HttpServletResponse;
 
 import campusnaut.util.MysqlConnection;
 
+/**
+ * This servlet handle request from android GoalPicker activity to
+ * read the goals from the MySQL database and send it to the 
+ * android device if the list of goals reside in the phone does 
+ * not have the latest copy.
+ * 
+ * @author Steve Chun-Hao Hu, Leo ChenLiang Man
+ */
 public class RetrieveGoals extends HttpServlet {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response) {
@@ -34,7 +39,6 @@ public class RetrieveGoals extends HttpServlet {
 			// Compare the local database count vs online one to see if
 			// downloading is necessary
 			String localCount = in.readUTF();
-
 			int lCount = 0;
 			if (localCount != null)
 				lCount = Integer.parseInt(localCount);
@@ -59,12 +63,11 @@ public class RetrieveGoals extends HttpServlet {
 				}
 				// Android need to sync with DB for goals
 				if (count > 0 && count != lCount) {
-					// Only need record not available from app db
+					// Only need record not available from APP db
 					sql = "SELECT * FROM t_goals where goal_id >="
 							+ (20000 + lCount);
 					rs = stmt.executeQuery(sql);
-					// out.writeUTF(""+count);/*
-					// goal_id title description latitude longitude category
+					// Get goal_id title description latitude longitude category
 					out.writeUTF("<BEGIN>");
 					while (rs.next()) {
 						out.writeUTF(rs.getInt(1) + "%" + rs.getString(2) + "%"
@@ -72,10 +75,9 @@ public class RetrieveGoals extends HttpServlet {
 								+ rs.getDouble(5) + "%" + rs.getString(6));
 					}
 					out.writeUTF("<DONE>");
-				} else if (count == lCount) { // tell android app u got nothing
-												// new from me
+				} else if (count == lCount) { // tell android app there is no new goals to be downloaded
 					out.writeUTF("<NOTHING>");
-				} else { // tell android i fail
+				} else { // tell android goal loading failed
 					out.writeUTF("<FAILED>");
 				}
 
