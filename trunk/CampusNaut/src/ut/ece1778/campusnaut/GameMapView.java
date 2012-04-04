@@ -56,7 +56,7 @@ import com.google.android.maps.MyLocationOverlay;
 public class GameMapView extends MapActivity {
 	// URL for remote GPS location
 
-	private static final String GPS_URL = "http://ec2-184-73-31-146.compute-1.amazonaws.com:8080/CampusNaut/leo.txt";
+	private static final String GPS_URL = "http://ec2-184-73-31-146.compute-1.amazonaws.com:8080/CampusNaut/steve.txt";
 	private static final String GAME_INIT_URL = "http://ec2-184-73-31-146.compute-1.amazonaws.com:8080/CampusNaut/servlet/SetupGame";
 	private static final int GPS_UPDATE_TIME = 2000;
 
@@ -103,8 +103,9 @@ public class GameMapView extends MapActivity {
 				INITIAL_LONGITUDE, INITIAL_LATITUDE, END_LONGITUDE,
 				END_LATITUDE);
 		mapView.getOverlays().add(myLocation);
-		// *Mock GPS* Code for mock Location provider
-		mocLocationProvider = LocationManager.NETWORK_PROVIDER;
+		
+		/*** *Mock GPS* Code for mock Location provider -Uncomment this to use MockGPS Controller ***/
+		/*mocLocationProvider = LocationManager.NETWORK_PROVIDER;
 		mockLocMgr = (LocationManager) getBaseContext().getSystemService(
 				Context.LOCATION_SERVICE);
 		// mockLocMgr.clearTestProviderEnabled(mocLocationProvider);
@@ -118,7 +119,8 @@ public class GameMapView extends MapActivity {
 		Timer timer = new Timer();
 		timer.schedule(new MockGPSUpdateTimeTask(), 500, GPS_UPDATE_TIME);
 		// End of *Mock GPS* code
-
+		*/
+		
 		// Must call this to show user location overlay on map
 		mapView.postInvalidate();
 
