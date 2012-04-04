@@ -1,0 +1,11 @@
+<%-- any content can be specified here e.g.: --%>
+<%@ page pageEncoding="UTF-8" %>
+<div>
+	<ul id="menu">
+		<li><a href="./index.jsp" target="_self">Home</a></li>
+		<li><a href="gender_vs_category.jsp" target="_self">Gender & Category</a></li>
+		<li><a href="ethnicity.jsp" target="_self">Ethnicity</a></li>
+		<li><a href="http://ec2-184-73-31-146.compute-1.amazonaws.com/phpMyAdmin/" target="_blank">phpMyAdmin</a></li>
+	</ul>
+	<img src="images/bg_menu_bottom.jpg" alt="">
+</div>

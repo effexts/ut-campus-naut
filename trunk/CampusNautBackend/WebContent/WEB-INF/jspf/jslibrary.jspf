@@ -1,0 +1,10 @@
+<%-- any content can be specified here e.g.: --%>
+<%@ page pageEncoding="UTF-8" %>
+<script type='text/javascript' src='https://apis.google.com/js/plusone.js'></script>
+<script src='./libraries/RGraph.common.core.js' ></script>
+<script src='./libraries/RGraph.common.effects.js' ></script>
+<script src='./libraries/RGraph.common.tooltips.js' ></script>
+<script src='./libraries/RGraph.common.key.js' ></script>
+<script src='./libraries/RGraph.bar.js' ></script>
+<script src="./libraries/RGraph.common.context.js" ></script>
+<script src="./libraries/jquery.min.js" ></script>
