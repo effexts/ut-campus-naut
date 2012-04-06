@@ -104,9 +104,11 @@ public class GameMapView extends MapActivity {
 				INITIAL_LONGITUDE, INITIAL_LATITUDE, END_LONGITUDE,
 				END_LATITUDE);
 		mapView.getOverlays().add(myLocation);
+
 		
 		// Mock GPS* Code for mock Location provider Uncomment the following to use MockGPS Controller
 		/*mocLocationProvider = LocationManager.NETWORK_PROVIDER;
+
 		mockLocMgr = (LocationManager) getBaseContext().getSystemService(
 				Context.LOCATION_SERVICE);
 		// mockLocMgr.clearTestProviderEnabled(mocLocationProvider);
@@ -340,7 +342,8 @@ public class GameMapView extends MapActivity {
 	
 	/**
 	 * Initialize game,  insert user selections into t_user_games
-	 * acquire discovered goal from local DB 
+	 * Load previous check-in state from local DB into objective list
+	 * Acquire discovered goal from local DB 
 	 */
 	private class GameInitAsyncTask extends AsyncTask<String, Void, String>{
 		ProgressDialog mProgressDialog;
@@ -384,6 +387,7 @@ public class GameMapView extends MapActivity {
 				}
 				helper.getReadableDatabase().close();
 				helper.close();
+				//Update the goal detector
 				GameData.setDetector(GameData.getDiscoveredList().size());
 			}
 		}
@@ -401,6 +405,7 @@ public class GameMapView extends MapActivity {
 			HttpURLConnection httpConn = null;
 			String returnStr = "null";
 			try {
+				//Open Http connection
 				url = new URL(GAME_INIT_URL);
 				httpConn = (HttpURLConnection) url.openConnection();
 				httpConn.setDoOutput(true);

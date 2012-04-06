@@ -5,7 +5,7 @@ import android.location.Location;
 import com.google.android.maps.GeoPoint;
 
 /**
- * Entity Class Goal
+ * Entity Class Goal A.K.A. Objective
  * 
  * @author Steve Chun-Hao Hu, Leo ChenLiang Man
  */
@@ -25,6 +25,13 @@ public class Goal {
 	private double distance = 0; // Distance to the user
 	private Location location; // Location for calculating distance
 
+	/**
+	 * Standard Constructor
+	 * @param gID
+	 * @param title
+	 * @param latitude
+	 * @param longitude
+	 */
 	public Goal(int gID, String title, double latitude, double longitude) {
 		this.gID = gID;
 		this.title = title;

@@ -10,7 +10,8 @@ import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapView;
 
 /**
- * CurrentGameOverlay Operator
+ * CurrentGameOverlay Operator.
+ * This class Maintains the overlay which draws goal markers on the map.
  * 
  * @author Steve Chun-Hao Hu, Leo ChenLiang Man
  */
@@ -23,7 +24,7 @@ public final class GameOverlayOperation {
 	private static GeoPoint myLocation = null;
 
 	/**
-	 * 
+	 * Add an ItemizedOverlay into MapView
 	 * @param mapView
 	 */
 	public static void addGameOverlay(MapView mapView) {
@@ -42,21 +43,16 @@ public final class GameOverlayOperation {
 	public static void updateGameOverlay(Context context, MapView mapView,
 			Location loc) {
 
-		// mapView.getOverlays().remove(gameOverlay);
+		
 		GeoPoint myGeoPoint = new GeoPoint((int) (loc.getLatitude() * 1E6),
 				(int) (loc.getLongitude() * 1E6));
-		/*
-		 * gameOverlay = new CurrentGameOverlay( context ,goalMarker
-		 * ,checkinLayout,goalTitle,GameData.getGameList().get(0), myGeoPoint);
-		 */
-		// mapView.getOverlays().add(gameOverlay );
+		
 		if (gameOverlay != null) {
-			// gameOverlay.removeAll();
+			
 			gameOverlay.loadItem(myGeoPoint);
 
 			if (gameOverlay.getItems().size() > 0) {
-				// Toast.makeText(context, "Goal found!",
-				// Toast.LENGTH_SHORT).show();
+				
 			}
 		}
 
@@ -72,12 +68,7 @@ public final class GameOverlayOperation {
 	public static void updateGameOverlay(Context context, MapView mapView,
 			GeoPoint myLocation) {
 
-		/*
-		 * mapView.getOverlays().remove(gameOverlay); gameOverlay = new
-		 * CurrentGameOverlay( context ,goalMarker
-		 * ,checkinLayout,goalTitle,GameData.getGameList().get(0), myLocation);
-		 * mapView.getOverlays().add(gameOverlay );
-		 */
+		
 		if (gameOverlay != null) {
 			gameOverlay.removeAll();
 			gameOverlay.loadItem(myLocation);
