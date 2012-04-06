@@ -79,7 +79,7 @@ public class Checkin extends Activity {
 		try {
 			new LoadImage(checkinPic).execute(IMAGE_FOLDER_URL + gid + ".jpg");
 		} catch (Exception e) {
-			checkinPic.setImageResource(R.drawable.p20019);
+			e.printStackTrace();
 		}
 		// Load the description from SQLite Database
 		new LoadDescription().execute("");
