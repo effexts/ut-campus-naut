@@ -39,7 +39,9 @@ import android.widget.Toast;
 
 public class Checkin extends Activity {
 
+	//AWS S3 url to fetch image data
 	private static final String IMAGE_FOLDER_URL = "https://s3.amazonaws.com/campusnaut/";
+	//Servlet URL to post check-in request
 	private static final String UPD_PROG_URL = "http://ec2-184-73-31-146.compute-1.amazonaws.com:8080/CampusNaut/servlet/UpdateProgress";
 	private Button checkin;
 	private Button back;
@@ -84,7 +86,6 @@ public class Checkin extends Activity {
 
 		// Get selected Goal Object
 		tGoal = GameData.findGoalById(gid, GameData.getDiscoveredList());
-		//Toast.makeText(this, inRange+":"+tGoal.getState(), Toast.LENGTH_LONG).show();
 		// Check the goal's state and whether in range to be able to check-in
 		if (inRange == 0 && tGoal.getState() != 2) {
 			// Out of range ,disable the check in button
@@ -156,6 +157,11 @@ public class Checkin extends Activity {
 
 	};
 
+	/**
+	 * background thread to load required image
+	 * @author LeoMan
+	 *
+	 */
 	private class LoadImage extends AsyncTask<String, Void, Bitmap> {
 		ProgressDialog mProgressDialog;
 		private String url;
@@ -343,9 +349,7 @@ public class Checkin extends Activity {
 				DataOutputStream out = new DataOutputStream(
 						httpConn.getOutputStream());
 				out.writeUTF("<UPDATE>");
-				out.writeUTF(Integer.toString(GameData.getCurUser().getuID()));
-				//System.out.println(Integer.toString(GameData.getCurUser()
-				//		.getuID()));
+				out.writeUTF(Integer.toString(GameData.getCurUser().getuID()));				
 				out.writeUTF(u[0]);
 				out.flush();
 				out.close();

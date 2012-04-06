@@ -20,9 +20,10 @@ import com.google.android.maps.ItemizedOverlay;
 import com.google.android.maps.OverlayItem;
 
 /**
- * Customized ItemizedOverlay<OverlayItem> Set VISUAL_FIELD to determine the
- * maximum distance of visible goals
- * 
+ * Customized ItemizedOverlay<OverlayItem>. 
+ * Set VISUAL_FIELD to determine the
+ * maximum distance of visible goals.
+ * Load markers into ItemizedOverlay. 
  * @author Steve Chun-Hao Hu, Leo ChenLiang Man
  */
 public class CurrentGameOverlay extends ItemizedOverlay<CustomItem> {
@@ -32,10 +33,8 @@ public class CurrentGameOverlay extends ItemizedOverlay<CustomItem> {
 	private List<CustomItem> items = new ArrayList<CustomItem>();
 	private ArrayList<Goal> goals = new ArrayList<Goal>();
 	private Location location;
-	// private Game game;
-	public static final double VISUAL_FIELD = 50.0; // unit meter. any goal out
-													// of this range will not be
-													// shown.
+	// Unit meter, any goal out of this range will not be shown.
+	public static final double VISUAL_FIELD = 50.0; 
 
 	/**
 	 * CurrentGameOverlay constructor create a new layer contains visible goals
@@ -53,13 +52,12 @@ public class CurrentGameOverlay extends ItemizedOverlay<CustomItem> {
 		boundCenterBottom(marker);
 		goals = game.getGoals();
 
-		
+		//Must populate in order to show markers
 		populate();
 	}
 
 	/**
-	 * Unused for now
-	 * 
+	 * Set my location up-to-date
 	 * @param myLocation
 	 */
 	public void setMyLocation(GeoPoint myLocation) {
@@ -76,10 +74,8 @@ public class CurrentGameOverlay extends ItemizedOverlay<CustomItem> {
 	 * @param myLocation
 	 */
 	public void loadItem(GeoPoint myLocation) {
-		location = new Location("myLocation");
-		location.setLatitude(myLocation.getLatitudeE6() * 1E-6);
-		location.setLongitude(myLocation.getLongitudeE6() * 1E-6);
 		
+		setMyLocation(myLocation);
 		
 		//Load previous discovered goal onto current overlay
 		if (GameData.getDiscoveredList().size() >0 ){
@@ -129,14 +125,14 @@ public class CurrentGameOverlay extends ItemizedOverlay<CustomItem> {
 			} else {
 				flag = false;
 			}
+			//if it is a fresh discovery
 			if (flag) {
 				GameData.getDiscoveredList().add(sGoal);
 				
 				
 				items.add(new CustomItem(sGoal.getGeoPoint(),
 						sGoal.getTitle(), "" + sGoal.getgID(),getMarker(R.drawable.goal_blue)));
-				System.out.println("DISCOVERED-------"
-						+ GameData.getDiscoveredList().size());
+				
 				//Set discovered state to 1
 				int i = GameData.getIndex(sGoal.getgID(), GameData.getGameList().get(0).getGoals());
 				GameData.getGameList().get(0).getGoals().get(i).setState(1);
@@ -154,13 +150,15 @@ public class CurrentGameOverlay extends ItemizedOverlay<CustomItem> {
 				}
 			}
 		}
-		
+		//Close local DB
 		helper.getWritableDatabase().close();
 		helper.close();
 		populate();
 	}
 
-	// remove all items
+	/**
+	 *  remove all items
+	 */
 	public void removeAll() {
 
 		if (this.size() > 0) {
@@ -170,12 +168,18 @@ public class CurrentGameOverlay extends ItemizedOverlay<CustomItem> {
 		populate();
 	}
 
+	/**
+	 * Must override this
+	 */
 	@Override
 	protected CustomItem createItem(int i) {
 		// TODO Auto-generated method stub
 		return (items.get(i));
 	}
 
+	/**
+	 * Must override this
+	 */
 	@Override
 	public int size() {
 		return (items.size());
@@ -203,7 +207,7 @@ public class CurrentGameOverlay extends ItemizedOverlay<CustomItem> {
 		} else {
 			intent.putExtra("inRange", 0);
 		}
-
+		//Start new Activity
 		context.startActivity(intent);
 
 		return (true);
@@ -217,6 +221,11 @@ public class CurrentGameOverlay extends ItemizedOverlay<CustomItem> {
 		this.items = items;
 	}
 
+	/**
+	 * Get drawable resource by R.drawable.id
+	 * @param resource
+	 * @return
+	 */
 	public Drawable getMarker(int resource) {
 	      Drawable marker=context.getResources().getDrawable(resource);
 	      
