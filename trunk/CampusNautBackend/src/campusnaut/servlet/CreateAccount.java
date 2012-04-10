@@ -16,8 +16,8 @@ import campusnaut.util.MysqlConnection;
 
 /**
  * This servlet handles account creation requests.
- * 
- * @author LeoMan
+ * Collects user's demographic data and create a CampusNaut account for user.
+ * @author Steve Chun-Hao Hu, Leo ChenLiang Man
  * 
  */
 public class CreateAccount extends HttpServlet {
@@ -44,7 +44,6 @@ public class CreateAccount extends HttpServlet {
 			int age = Integer.parseInt(in.readUTF());
 			String gender = in.readUTF();
 			String ethnicity = in.readUTF();
-			System.out.println(username);
 
 			Connection con = null;
 			Statement stmt = null;

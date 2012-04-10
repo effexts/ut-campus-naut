@@ -13,11 +13,14 @@ import javax.servlet.http.HttpServletResponse;
 
 import campusnaut.util.MysqlConnection;
 
+/**
+ * This Servlet get the post of a user's current goals list
+ * and store them in CampusNaut database.
+ * @author Steve Chun-Hao Hu, Leo ChenLiang Man
+ */
 public class SetupGame extends HttpServlet {
 
-	/**
-	 * 
-	 */
+	
 	private static final String DELIMITER = "%";
 	private static final long serialVersionUID = 1L;
 
@@ -36,11 +39,10 @@ public class SetupGame extends HttpServlet {
 			int uid = Integer.parseInt(in.readUTF());
 			String data = in.readUTF();
 
-			System.out.println(uid);
-			System.out.println(data);
 			DataOutputStream out = new DataOutputStream(
 					response.getOutputStream());
 
+			//identify request type
 			if (authentic.equals("<SETUP>")) {
 				Connection con = null;
 				Statement stmt = null;
