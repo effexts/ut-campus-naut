@@ -15,11 +15,15 @@ import javax.servlet.http.HttpServletResponse;
 
 import campusnaut.util.MysqlConnection;
 
+
+/**
+ * THis Servlet handles check-in state updating request 
+ * for a goal of a certain user 
+ * @author Steve Chun-Hao Hu, Leo ChenLiang Man
+ */
 public class UpdateProgress extends HttpServlet {
 
-	/**
-	 * 
-	 */
+	
 	private static final String DELIMITER = "%";
 
 	private static final long serialVersionUID = 1L;
@@ -39,12 +43,11 @@ public class UpdateProgress extends HttpServlet {
 			String authentic = in.readUTF();
 			int uid = Integer.parseInt(in.readUTF());
 			String data = in.readUTF();
-
-			System.out.println(uid);
-			System.out.println(data);
+			
 			DataOutputStream out = new DataOutputStream(
 					response.getOutputStream());
 
+			//identify request type
 			if (authentic.equals("<UPDATE>")) {
 				Connection con = null;
 				Statement stmt = null;
@@ -59,6 +62,7 @@ public class UpdateProgress extends HttpServlet {
 					StringTokenizer token = new StringTokenizer(data, DELIMITER);
 					while (token.hasMoreTokens()) {
 						int gid = Integer.parseInt(token.nextToken());
+						//find if the record is existed
 						String search = "SELECT COUNT(user_id) FROM t_user_games "
 								+ "WHERE user_id = "
 								+ uid
@@ -70,11 +74,13 @@ public class UpdateProgress extends HttpServlet {
 							count = rs.getInt(1);
 						}
 						if (count == 1) {
+							//update the check-in state for user
 							String sql = "UPDATE t_user_games SET state = 2 "
 									+ "WHERE user_id = " + uid
 									+ " AND goal_id = " + gid + ";";
 							stmt.execute(sql);
 						} else {
+							//insert new records in t_user_games
 							String insert = "INSERT INTO t_user_games (user_id, goal_id, state)"
 									+ "VALUES (" + uid + ", " + gid + ", 2);";
 							stmt.execute(insert);

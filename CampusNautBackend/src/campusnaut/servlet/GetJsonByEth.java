@@ -17,7 +17,9 @@ import campusnaut.bean.DataRow;
 import campusnaut.util.MysqlConnection;
 
 /**
- * Servlet implementation class GetJsonByEth
+ * This Servlet generates a Json buffer for a certain ethnicity 
+ * from the request of generating graph data in ethnicity.jsp 
+ * @author Steve Chun-Hao Hu, Leo ChenLiang Man
  */
 public class GetJsonByEth extends HttpServlet {
 	private static final long serialVersionUID = 1L;

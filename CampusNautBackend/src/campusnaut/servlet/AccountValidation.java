@@ -14,11 +14,15 @@ import javax.servlet.http.HttpServletResponse;
 
 import campusnaut.util.MysqlConnection;
 
+/**
+ * This Servlet handles campusnaut user login request
+ * validate email and password informations of user 
+ * @author Steve Chun-Hao Hu, Leo ChenLiang Man
+ *
+ */
 public class AccountValidation extends HttpServlet {
 
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1L;
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response) {
@@ -35,8 +39,6 @@ public class AccountValidation extends HttpServlet {
 
 			String email = in.readUTF();
 			String password = in.readUTF();
-
-			System.out.println(email);
 
 			Connection con = null;
 			Statement stmt = null;
@@ -57,7 +59,7 @@ public class AccountValidation extends HttpServlet {
 				while (rs.next()) {
 					user_id = rs.getInt(1);
 				}
-				System.out.println(user_id);
+				
 				if (user_id == 0) {
 					out.writeUTF("Failed");
 				} else {
