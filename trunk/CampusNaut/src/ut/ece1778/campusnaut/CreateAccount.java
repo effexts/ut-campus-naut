@@ -37,7 +37,7 @@ import android.widget.Toast;
  * @author Steve Chun-Hao Hu, Leo ChenLiang Man
  */
 public class CreateAccount extends Activity {
-	private static final String CREATE_ACC_URL = "http://ec2-184-73-31-146.compute-1.amazonaws.com:8080/CampusNaut/servlet/CreateAccount";
+	private static final String CREATE_ACC_URL = "http://ec2-50-16-100-246.compute-1.amazonaws.com:8080/CampusNaut/servlet/CreateAccount";
 	private static final String[] ETHNICITY = {"Aboriginal origins",
 		"African origins",
 		"Arab origins",

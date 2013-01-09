@@ -56,11 +56,11 @@ import com.google.android.maps.MyLocationOverlay;
  */
 public class GameMapView extends MapActivity {
 	// URL for mock GPS location
-	private static final String GPS_URL = "http://ec2-184-73-31-146.compute-1.amazonaws.com:8080/CampusNaut/steve.txt";
+	private static final String GPS_URL = "http://ec2-50-16-100-246.compute-1.amazonaws.com:8080/CampusNaut/steve.txt";
 	// Update time for polling mock GPS (Uncomment if Mock GPS is used)
 	// private static final int GPS_UPDATE_TIME = 2000;
 	
-	private static final String GAME_INIT_URL = "http://ec2-184-73-31-146.compute-1.amazonaws.com:8080/CampusNaut/servlet/SetupGame";
+	private static final String GAME_INIT_URL = "http://ec2-50-16-100-246.compute-1.amazonaws.com:8080/CampusNaut/servlet/SetupGame";
 	private static final int ZOOM_LEVEL = 19;
 	private static final Double INITIAL_LATITUDE = 43.669858 * 1E6;
 	private static final Double INITIAL_LONGITUDE = -79.400727 * 1E6;

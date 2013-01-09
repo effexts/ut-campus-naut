@@ -38,7 +38,7 @@ import android.widget.Toast;
  */
 public class GoalPicker extends ExpandableListActivity {
 	// Backend servlet which is used to communicate with MySQL database.
-	private static final String SYNC_DB_URL = "http://ec2-184-73-31-146.compute-1.amazonaws.com:8080/CampusNaut/servlet/RetrieveGoals";
+	private static final String SYNC_DB_URL = "http://ec2-50-16-100-246.compute-1.amazonaws.com:8080/CampusNaut/servlet/RetrieveGoals";
 
 	// Message protocol used to communicate with backend 
 	private static final String SERVER_MSG_BEGIN = "<BEGIN>";

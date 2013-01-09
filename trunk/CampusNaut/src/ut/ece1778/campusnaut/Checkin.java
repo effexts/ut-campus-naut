@@ -42,7 +42,7 @@ public class Checkin extends Activity {
 	//AWS S3 url to fetch image data
 	private static final String IMAGE_FOLDER_URL = "https://s3.amazonaws.com/campusnaut/";
 	//Servlet URL to post check-in request
-	private static final String UPD_PROG_URL = "http://ec2-184-73-31-146.compute-1.amazonaws.com:8080/CampusNaut/servlet/UpdateProgress";
+	private static final String UPD_PROG_URL = "http://ec2-50-16-100-246.compute-1.amazonaws.com:8080/CampusNaut/servlet/UpdateProgress";
 	private Button checkin;
 	private Button back;
 	private TextView checkinTitle;
