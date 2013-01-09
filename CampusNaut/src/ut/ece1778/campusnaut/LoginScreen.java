@@ -32,7 +32,7 @@ import android.widget.Toast;
  */
 public class LoginScreen extends Activity {
 	// Account validation servlet URL
-	private static final String ACC_VALI_URL = "http://ec2-184-73-31-146.compute-1.amazonaws.com:8080/CampusNaut/servlet/AccountValidation";
+	private static final String ACC_VALI_URL = "http://ec2-50-16-100-246.compute-1.amazonaws.com:8080/CampusNaut/servlet/AccountValidation";
 	
 	// Local datastore to store user account info
 	private SharedPreferences prefs = null; 
